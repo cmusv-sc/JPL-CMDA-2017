@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/regridded/clw_Amon_IPSL-CM5A-LR_amip_r1i1p1_plevRegridded_197901-200912.nc

@@ -1,0 +1,6 @@
+home=/home/svc
+export LD_LIBRARY_PATH=$home/anaconda2/lib:$LD_LIBRARY_PATH 
+export PATH=$home/anaconda2/bin:$PATH 
+#exec $home/anaconda2/bin/python2 updateData1
+#exec $home/anaconda2/bin/python2 updateData2
+exec $home/anaconda2/bin/python2 updateData3

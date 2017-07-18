@@ -1,0 +1,138 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'NOAA GFDL GFDL-ESM2G, historical (run 1) experiment output for CMIP5 AR5',
+   D_T0TIME      = '01-Jan-1861 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_199501-199512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 48925.5000,
+   S_END         = 49259.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_199601-199612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 49290.5000,
+   S_END         = 49624.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_199701-199712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 49655.5000,
+   S_END         = 49989.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_199801-199812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 50020.5000,
+   S_END         = 50354.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_199901-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 50385.5000,
+   S_END         = 50719.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_200001-200012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 50750.5000,
+   S_END         = 51084.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_200101-200112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 51115.5000,
+   S_END         = 51449.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_200201-200212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 51480.5000,
+   S_END         = 51814.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_200301-200312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 51845.5000,
+   S_END         = 52179.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_200401-200412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 52210.5000,
+   S_END         = 52544.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/esm2g/break/rlutcs_Amon_GFDL-ESM2G_historical_r1i1p1_200501-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 52575.5000,
+   S_END         = 52909.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

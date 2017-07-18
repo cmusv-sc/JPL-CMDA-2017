@@ -1,0 +1,178 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'IPSL-CM5A-LR model output prepared for CMIP5 AMIP',
+   D_T0TIME      = '01-Jan-1979 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_199501-199512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  5855.5000,
+   S_END         =  6189.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_199601-199612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  6220.5000,
+   S_END         =  6554.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_199701-199712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  6585.5000,
+   S_END         =  6919.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_199801-199812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  6950.5000,
+   S_END         =  7284.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_199901-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  7315.5000,
+   S_END         =  7649.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200001-200012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  7680.5000,
+   S_END         =  8014.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200101-200112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  8045.5000,
+   S_END         =  8379.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200201-200212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  8410.5000,
+   S_END         =  8744.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200301-200312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  8775.5000,
+   S_END         =  9109.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200401-200412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9140.5000,
+   S_END         =  9474.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200501-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9505.5000,
+   S_END         =  9839.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200601-200612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9870.5000,
+   S_END         = 10204.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200701-200712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 10235.5000,
+   S_END         = 10569.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200801-200812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 10600.5000,
+   S_END         = 10934.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/break/lai_Lmon_IPSL-CM5A-LR_amip_r1i1p1_200901-200912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 10965.5000,
+   S_END         = 11299.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

@@ -1,0 +1,59 @@
+Short Name,Long Name,Standard Name,units,CMDA Name,Dimension
+cct,Air Pressure at Convective Cloud Top,air_pressure_at_convective_cloud_top,Pa,Cloud Top Pressure,2
+cl,Cloud Area Fraction,cloud_area_fraction_in_atmosphere_layer,%,Cloud Area Fraction,3
+cli,Mass Fraction of Cloud Ice,mass_fraction_of_cloud_ice_in_air,1,Cloud Ice Water Content,3
+clt,Total Cloud Fraction,cloud_area_fraction,%,Total Cloud Fraction,2
+cltcalipso,CALIPSO Total Cloud Fraction,cloud_area_fraction,%,CALIPSO Total Cloud Fraction,2
+cltisccp,ISCCP Total Cloud Fraction (daytime only),cloud_area_fraction,%,ISCCP Total Cloud Fraction (daytime only),2
+cltday,Daytime Total Cloud Area Fraction,daytime_total_cloud_area_fraction,1,Daytime Total Cloud Area Fraction,2
+cltiday,Daytime Total Ice Cloud Area Fraction,daytime_total_ice_cloud_area_fraction,1,Daytime Total Ice Cloud Area Fraction,2
+cltlday,Daytime Total Liquid Cloud Area Fraction,daytime_total_liquid_cloud_area_fraction,1,Daytime Total Liquid Cloud Area Fraction,2
+clw,Mass Fraction of Cloud Liquid Water,mass_fraction_of_cloud_liquid_water_in_air,1,Cloud Liquid Water Content,3
+ctpday,Daytime Cloud Top Pressure,daytime_cloud_top_pressure,hPa,Daytime Cloud Top Pressure,2
+cttday,Daytime Cloud Top Temperature,daytime_cloud_top_temperature,K,Daytime Cloud Top Temperature,2
+gz,Geopotential,geopotential,m**2 s**-2,Geopotential,3
+hur,Relative Humidity,relative_humidity,%,Relative Humidity,3
+hurs,Near-Surface Relative Humidity,relative_humidity,%,Near-Surface Relative Humidity,2
+hus,Specific Humidity,specific_humidity,1,Specific Humidity,3
+lai,Leaf Area Index,leaf_area_index,1,Leaf Area Index,2
+lst_day,daytime land surface temperature,,K,Daytime Land Surface Temperature,2
+lst_night,nighttime land surface temperature,,K,Nighttime Land Surface Temperature,2
+od550aer,Ambient Aerosol Optical Thickness at 550 nm,atmosphere_optical_thickness_due_to_ambient_aerosol,1,Ambient Aerosol Optical Thickness at 550 nm,2
+ohc2000,Ocean Heat Content Anomaly within 2000 m Depth,ocean heat content anomaly,1e18 joules,Ocean Heat Content Anomaly within 2000 m Depth,2
+ohc700,Ocean Heat Content Anomaly within 700 m Depth,ocean heat content anomaly,1e18 joules,Ocean Heat Content Anomaly within 700 m Depth,2
+os,Ocean Salinity,ocean salinity,psu,Ocean Salinity,3
+ot,Ocean Temperature,ocean temperature,K,Ocean Temperature,3
+pr,Precipitation,precipitation_flux,kg m-2 s-1,Precipitation Flux,2
+prw,Water Vapor Path,atmosphere_water_vapor_content,kg m-2,Water Vapor Path,2
+reflciday,Daytime Cirrus Reflectance,daytime_cirrus_reflectance,1,Daytime Cirrus Reflectance,2
+rlds,Surface Downwelling Longwave Radiation,surface_downwelling_longwave_flux_in_air,W m-2,Surface Downwelling Longwave Radiation,2
+rldscs,Surface Downwelling Clear-Sky Longwave Radiation,surface_downwelling_longwave_flux_in_air_assuming_clear_sky,W m-2,Surface Downwelling Clear-Sky Longwave Radiation,2
+rlus,Surface Upwelling Longwave Radiation,surface_upwelling_longwave_flux_in_air,W m-2,Surface Upwelling Longwave Radiation,2
+rlut,TOA Outgoing Longwave Radiation,toa_outgoing_longwave_flux,W m-2,TOA Outgoing Longwave Radiation,2
+rlutcs,TOA Outgoing Clear-Sky Longwave Radiation,toa_outgoing_longwave_flux_assuming_clear_sky,W m-2,TOA Outgoing Clear-Sky Longwave Radiation,2
+rsds,Surface Downwelling Shortwave Radiation,surface_downwelling_shortwave_flux_in_air,W m-2,Surface Downwelling Shortwave Radiation,2
+rsdscs,Surface Downwelling Clear-Sky Shortwave Radiation,surface_downwelling_shortwave_flux_in_air_assuming_clear_sky,W m-2,Surface Downwelling Clear-Sky Shortwave Radiation,2
+rsdt,TOA Incident Shortwave Radiation,toa_incoming_shortwave_flux,W m-2,TOA Incident Shortwave Radiation,2
+rsus,Surface Upwelling Shortwave Radiation,surface_upwelling_shortwave_flux_in_air,W m-2,Surface Upwelling Shortwave Radiation,2
+rsuscs,Surface Upwelling Clear-Sky Shortwave Radiation,surface_upwelling_shortwave_flux_in_air_assuming_clear_sky,W m-2,Surface Upwelling Clear-Sky Shortwave Radiation,2
+rsut,TOA Outgoing Shortwave Radiation,toa_outgoing_shortwave_flux,W m-2,TOA Outgoing Shortwave Radiation,2
+rsutcs,TOA Outgoing Clear-Sky Shortwave Radiation,toa_outgoing_shortwave_flux_assuming_clear_sky,W m-2,TOA Outgoing Clear-Sky Shortwave Radiation,2
+sfcWind,Near-Surface Wind Speed,wind_speed,m s-1,Near-Surface Wind Speed,2
+ta,Air Temperature,air_temperature,K,Air Temperature,3
+tas,Near-Surface Air Temperature,air_temperature,K,Near-Surface Air Temperature,2
+taucday,Daytime Ice/Liquid Combined Cloud Optical Thickness,daytime_ice_liquid_combined_cloud_optical_thickness,1,Daytime Ice/Liquid Combined Cloud Optical Thickness,2
+tauiday,Daytime Ice Cloud Optical Thickness,daytime_ice_cloud_optical_thickness,1,Daytime Ice Cloud Optical Thickness,2
+taulday,Daytime Liquid Cloud Optical Thickness,daytime_liquid_cloud_optical_thickness,1,Daytime Liquid Cloud Optical Thickness,2
+th,Potential Temperature,potential temperature,K,Potential Temperature,3
+tos,Sea Surface Temperature,sea_surface_temperature,K,Sea Surface Temperature,2
+ts,Surface Temperature,surface_temperature,K,Surface Temperature,2
+ua,Eastward Wind,eastward_wind,m s-1,Eastward Wind,3
+uas,Eastward Near-Surface Wind,eastward_wind,m s-1,Eastward Near-Surface Wind,2
+va,Northward Wind,northward_wind,m s-1,Northward Wind,3
+vas,Northward Near-Surface Wind,northward_wind,m s-1,Northward Near-Surface Wind,2
+w,Vertical Wind (=dz/dt),vertical_wind,m s-1,Vertical Wind Velocity,3
+wap,omega (=dp/dt),lagrangian_tendency_of_air_pressure,Pa s-1,Vertical Wind Velocity in Pressure,3
+zg,Geopotential Height,geopotential_height,m,Geopotential Height,3
+zl,equivalent water height,,cm,Equivalent Water Height Over Land,2
+zo,equivalent water height,,cm,Equivalent Water Height Over Ocean,2
+zos,Sea Surface Height Above Geoid,sea_surface_height_above_geoid,m,Sea Surface Height,2

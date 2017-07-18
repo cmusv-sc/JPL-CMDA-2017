@@ -1,0 +1,60 @@
+#!/usr/bin/octave -q
+addpath([pwd()  '/../util/']);
+
+pkg load netcdf;
+
+arg_list = argv();
+printf ("%s:\n", program_name());
+
+narg = length(arg_list);
+for ii = 1:narg
+  printf("%s\n", arg_list{ii})
+end
+
+if narg < 10
+  error('Insufficient argument, need a model and a variable name!'); 
+elseif mod(narg-2, 8)
+  error('Missing or extra argument!');
+end
+
+nVars = (narg - 2)/8;
+
+dataInfo = [];
+for ii = 1:nVars
+  dataInfo(ii).sourceName = lower(arg_list{(ii-1)*8+1});
+  dataInfo(ii).varName = arg_list{(ii-1)*8+2};
+  dataInfo(ii).plev = str2num(arg_list{(ii-1)*8+3});
+  dataInfo(ii).lonRange = str2num(arg_list{(ii-1)*8+4});
+  dataInfo(ii).latRange = str2num(arg_list{(ii-1)*8+5});
+  dataInfo(ii).startTime = str2date(arg_list{(ii-1)*8+6});
+  dataInfo(ii).endTime = str2date(arg_list{(ii-1)*8+7});
+  dataInfo(ii).monthIdx = str2num(arg_list{(ii-1)*8+8});
+end
+
+output_dir = arg_list{8*nVars+1};
+displayOpt = str2num(arg_list{8*nVars + 2});
+
+figFile = [];
+for ii = 1:nVars
+  dataInfo(ii).dataFile = getDataFilePaths(dataInfo(ii).sourceName, dataInfo(ii).varName, dataInfo(ii).startTime, dataInfo(ii).endTime);
+%  lonStr = ['lon' num2str(dataInfo(ii).lonRange(1)) '-' num2str(dataInfo(ii).lonRange(2)) 'deg'];
+%  latStr = ['lat' num2str(dataInfo(ii).latRange(1)) '-' num2str(dataInfo(ii).latRange(2)) 'deg'];
+  if ii == 1
+%    figFile = [dataInfo(ii).sourceName '_' dataInfo(ii).varName '_' lonStr '_' latStr];
+    figFile = [dataInfo(ii).sourceName '_' dataInfo(ii).varName];
+  else
+%    figFile = [figFile ':' dataInfo(ii).sourceName '_' dataInfo(ii).varName '_' lonStr '_' latStr];
+%    figFile = [figFile ':' dataInfo(ii).sourceName '_' dataInfo(ii).varName];
+    figFile = [figFile '-v' num2str(ii)]; 
+  end
+end
+dataFile = [figFile '.nc'];
+figFile = [figFile '.jpeg'];
+
+figFilePath = [output_dir '/' figFile];
+dataFilePath = [output_dir '/' dataFile];
+printf("figFile: %s\n", figFile)
+printf("figFilePath: %s\n", figFilePath)
+printf("dataFile: %s\n", dataFile)
+printf("dataFilePath: %s\n", dataFilePath)
+displayMaps(dataInfo, figFilePath, dataFilePath, displayOpt);

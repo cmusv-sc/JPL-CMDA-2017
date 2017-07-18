@@ -1,0 +1,142 @@
+#!/home/svc/install/bin/ana
+
+
+'''
+This script scans the data directories, to form a dict with all the relevant info.
+
+execfile('/home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/src/updateData/updateData1') 
+
+'''
+
+if 1:
+  # Python
+  import os, sys, string, time, glob
+  import pickle
+  import re
+  #import btang
+
+  # numpy
+  import numpy as np
+
+# def_calcTimeBounds
+def calcTimeBounds(fn):
+  p1 = re.compile( r'_(\d*)-(\d*).nc')
+  # find the start of the time bounds
+  m1 = p1.search(fn)
+  if not m1:
+    return [0, 0]
+
+  g1 =  m1.groups()
+  if len(g1)!=2:
+    return [0, 0]
+
+  #print fn, g1
+  year1 = int(g1[0])
+  year2 = int(g1[1])
+
+  return [year1, year2]
+
+if 1:
+
+  '''
+structure of varDict:
+{ model:{'root':{'ta':[199501, 200112]}, ... } }
+'''
+
+  dir0 = '/mnt/data_2016'
+  dir00 = '%s/cmip5'%(dir0)
+  os.chdir(dir00)
+
+  dirs9 = ['regridded', 'break', '.']
+  #dirs9 = ['regridded', '.']
+
+  # the format of varDic: {model: {dir9:{varName:[timeS, timeE]}} }
+  #  where dir9 is one of dirs9.
+  varDict = {}
+  dirs1 = os.listdir(dir00)
+
+  modelCount = 0
+  # loop centers
+  for dir1 in dirs1:
+    dir1a = os.path.join(dir00, dir1) 
+    if not os.path.isdir(dir1a):
+      continue
+
+    dirs2 = os.listdir(dir1a)
+    # loop models
+    for dir2 in dirs2:
+
+      # for test
+      if 0:
+        if modelCount>10:
+          break
+
+      dir2a = os.path.join(dir1a, dir2) 
+
+      if not os.path.isdir(dir2a):
+        continue
+
+      modelCount += 1
+      print dir1+'/'+dir2
+
+      dict1 = {}
+      count1 = 0
+      # loop model subdirs
+      for dir9 in dirs9:
+        dir2b = os.path.join(dir2a, dir9) 
+        # if there is such dir
+        if not os.path.isdir(dir2b):
+          continue
+
+        dirs3 = glob.glob(dir2b + '/*_*.nc')
+        dirs3 = [os.path.split(file1)[1] for file1 in dirs3]
+
+        varL = {}
+        # loop nc files
+        for file1 in dirs3:
+          # whether it is a cmip5 file format
+          temp0 = file1.find('_') 
+          if temp0==-1:
+            continue
+
+          var11 = file1[:temp0]
+
+          bounds = calcTimeBounds(file1)
+
+          if bounds[0]==0:
+            continue
+
+          try:
+            bounds2 = varL[var11]
+            bounds2[0] = min(bounds2[0], bounds[0])
+            bounds2[1] = max(bounds2[1], bounds[1])
+          except KeyError:
+            varL[var11] = bounds
+
+          count1 += 1
+
+        dict1[dir9] = varL
+
+      # store the meta data only if the model dir has any nc files 
+      if count1>0:
+        varDict[dir1+'/'+dir2] = dict1
+
+  if 1:
+    import pickle
+    fn9 = '%s/des/varDict.pickle'%(dir0)
+    pickle.dump(varDict, open(fn9, 'w'))
+
+  # test the saved pickle file.
+  if 1:
+    import pickle
+    fn9 = '%s/des/varDict.pickle'%(dir0)
+
+    dict9 = pickle.load( open(fn9) )
+
+    dict9.keys()
+
+    dict9['cccma/canam4']['.'].keys()
+
+    dict9['cccma/canam4']['.']['ts']
+
+

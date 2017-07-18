@@ -1,0 +1,81 @@
+#!/usr/local/bin/octave -q
+
+arg_list = argv();
+printf ("%s:\n", program_name());
+
+narg = length(arg_list);
+
+if narg < 2
+  error('Insufficient argument, need a model and a variable name!'); 
+end
+modelName = lower(arg_list{1});
+varName = arg_list{2};
+
+startTime = struct('year', 1980, 'month', 1);
+stopTime = struct('year', 2004, 'month', 12);
+
+printf("%s", arg_list{1})
+printf("%s", arg_list{2})
+
+if narg > 2
+  startTimeStr = arg_list{3};
+  startTime = struct('year', str2num(startTimeStr(1:4)), 'month', str2num(startTimeStr(5:6)));
+  printf("%s", arg_list{3})
+end
+
+if narg > 3
+  stopTimeStr = arg_list{4};
+  stopTime = struct('year', str2num(stopTimeStr(1:4)), 'month', str2num(stopTimeStr(5:6)));
+  printf("%s", arg_list{4})
+end
+
+plev = 50000; % default to be 500hPa
+
+if narg > 4
+  plev = str2num(arg_list{5});
+  printf("%s", arg_list{5})
+end
+
+lonRange = [0, 360];
+
+if narg > 5
+  lonRange = str2num(arg_list{6});
+  printf("%s", arg_list{6})
+end
+
+latRange = 90*[-1,1];
+
+if narg > 6
+  latRange = str2num(arg_list{7});
+  printf("%s", arg_list{7})
+end
+
+[center,model] = strtok(modelName, '_');
+model = model(2:end); % get rid of '_'
+
+dataDir = ['/export/data1/data/cmip5/'  center '/' model '/']; 
+
+dataFiles = dir([dataDir '/' varName '_*.nc']);
+
+nDataFiles = length(dataFiles);
+
+if nDataFiles < 1
+  error(['Variable: ' varName ' for data source: ' modelName ' not found!']); 
+end
+
+dataFileFullPath = [];
+idx = 1;
+for ii = 1:nDataFiles
+  thisFile = [dataDir '/' dataFiles(ii).name];
+  if dataFileRelevant(thisFile, startTime, stopTime)
+    dataFileFullPath{idx} = thisFile;
+    idx = idx + 1;
+  end
+end
+
+lonStr = ['lon' num2str(lonRange(1)) '_' num2str(lonRange(2)) 'deg'];
+latStr = ['lat' num2str(latRange(1)) '_' num2str(latRange(2)) 'deg'];
+pStr = [num2str(round(plev/100)) 'hPa'];
+
+figFile = [modelName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_' pStr '_' lonStr '_' latStr  '.jpeg'];
+displayTimeSeriesThreeDim(dataFileFullPath, figFile, varName, startTime, stopTime, plev, lonRange, latRange);

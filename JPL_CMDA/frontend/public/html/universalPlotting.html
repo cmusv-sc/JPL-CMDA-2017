@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+<!-- 
+/home/btang/projects/cmac/git2/CMDA0/JPL_CMDA/frontend/public/html/universalPlotting2.html
+
+// dList__
+// inputs__
+// mappting__
+  <script src='https://vuejs.org/js/vue.js'></script>
+  <script src='js2/vue.js'></script>
+-->
+
+<!-- input_source -->
+<!-- upload_data -->
+  
+<!-- 
+// vue__
+-->
+
+<!-- storage__ 
+
+-->
+
+
+  <!-- for Bootstrap -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- /<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+-->
+
+  <script src="js2/jquery.min.js"></script>
+  <link rel="stylesheet" href="js2/bootstrap.min.css">
+  <script src="js2/bootstrap.min.js"></script>
+
+  <!-- cmac related -->
+  <link rel="stylesheet" href="common.css">
+  <script src='js2/dataList2.js'></script>
+  <script src='js2/varList.js'></script>
+  <script src='js2/common-v4.js'></script>
+  <script src='js2/js.cookie-2.1.3.min.js'></script>
+
+  <title>A Universal Plotting Tool</title>
+
+  <script>
+
+  // because they are used in common.js
+  var isNVar = 0;
+  var nVar0 = 1;
+  var nVar = nVar0;
+  var nVarP = 0; 
+  //if ( isNVar==0 ) { nVar = nVar0; }
+  var useQueryStr = 1; 
+
+  var includeDataUrl = true;
+  var DataUrl = "";
+
+var dList = [
+{  "name": "Data", 
+   "isPressure": 0, 
+   "pressure2url": 0, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+];
+
+// format: RestFulName: [htmlId, functionName, additionalParams]
+var inputs = {
+'purpose': ['purpose', 'url2escape'],
+'pres1': ['vpres1', 'urlPres'],
+'pres1a': ['vpres1a', 'urlPres'],
+'lonMethod': ['lonMethod', 'urlDirect'],
+'latMethod': ['latMethod', 'urlDirect'],
+'presMethod': ['presMethod', 'urlDirect'],
+'timeMethod': ['timeMethod', 'urlDirect'],
+'lonS': ['lonS', 'urlDirect'],
+'lonE': ['lonE', 'urlDirect'],
+'latS': ['latS', 'urlDirect'],
+'latE': ['latE', 'urlDirect'],
+'timeS': ['timeS', 'urlTime', 'timeFull', 'f', 'anomaly', 'a'],
+'timeE': ['timeE', 'urlTime'],
+'ferretLevel': ['ferretLevel', 'urlDirect'],
+'colorMap': ['colorMap', 'urlDirect'],
+'plotTitle': ['plotTitle', 'urlEscape'],
+'userData': ['userData', 'urlCheckbox'],
+'userDataFile': ['userDataFile', 'urlEscape'],
+'userDataVar': ['userDataVar', 'urlDirect'],
+'userDataOpendap': ['userDataOpendap', 'urlCheckbox'],
+'uploadData': ['uploadData', 'urlCheckbox'],
+'uploadDataFilename': ['uploadDataFilename', 'urlDirect'],
+'uploadDataVar': ['uploadDataVar', 'urlDirect'],
+};
+
+var mapping = {};
+var key99;
+var arg99;
+for (var k in inputs) {
+  key99 = k;
+  arg99 = inputs[k];
+  mapping[k] = eval('new ' + inputs[k][1] + '()');
+}
+
+
+
+function showLon2() {
+  var aa=$("#lonMethod").val();
+  if (aa=="1") {
+    $("#lon2a").hide();
+  } else {
+    $("#lon2a").show();
+  }
+}
+
+function showLat2() {
+  var aa=$("#latMethod").val();
+  if (aa=="1") {
+    $("#lat2a").hide();
+  } else {
+    $("#lat2a").show();
+  }
+}
+
+function showPres2() {
+  var aa=$("#presMethod").val();
+  if (aa=="1") {
+    $("#pres2a").hide();
+  } else {
+    $("#pres2a").show();
+  }
+}
+
+function showTime2() {
+  var aa=$("#timeMethod").val();
+  if (aa=="1") {
+    $("#time2a").hide();
+  } else {
+    $("#time2a").show();
+  }
+}
+
+function checkAxisNum() {
+  var goBack = 0;
+  var aa=$("#lonMethod").val()+$("#latMethod").val()+$("#timeMethod").val();
+  if (is3D(1)) {
+    aa = aa+$("#presMethod").val();
+  }
+  //console.log( '2 3 d: ' +  (aa.match(/3/g)||[]).length );
+  if ( ((aa.match(/3/g)||[]).length < 1 ) || ((aa.match(/3/g)||[]).length > 2 ) ) {
+    alert('Please specify 1 or 2 axises.');
+    goBack = 1;
+  } 
+  return goBack;
+}
+
+// checkTimeL_() {
+function checkTimeL(timeAffix) {
+  if (typeof timeAffix === 'undefined') { timeAffix = "";}
+
+  var t1a = parseTime($("#timeS"+timeAffix).val());
+  $("#timeS").val(t1a);
+  var t1 = Number( t1a.replace("-", "") );
+
+  var t0S = $("#startYear"+timeAffix).data("time");
+  var t0Sa = String(t0S);
+  t0Sa = t0Sa.slice(0,4) + "-" + t0Sa.slice(4,6);
+
+  var t0E = $("#endYear"+timeAffix).data("time");
+  var t0Ea = String(t0E);
+  t0Ea = t0Ea.slice(0,4) + "-" + t0Ea.slice(4,6);
+
+  if ( t1a=="" ) {
+    $("#timeS"+timeAffix).val(t0Sa);
+    return;
+  }
+
+  if ( t1 < t0S ) {
+    alert("The entered time " + t1a + " is beyond the left time bound." + "\nThe start time will be set to " + t0Sa + ".");
+
+    $("#timeS"+timeAffix).val(t0Sa);
+  }
+
+  if ( t1 > t0E ) {
+    alert("The entered time " + t1a + " is beyond the right time bound." + "\nThe start time will be set to " + t0Ea + ".");
+
+    $("#timeS"+timeAffix).val(t0Ea);
+    $("#timeE"+timeAffix).val(t0Ea);
+  }
+}
+
+
+
+
+window.onload = function() {
+ addDataList(1); 
+ addVarList(1); 
+ addPres(1); 
+
+
+
+
+  disableButton("download_data");
+  enableButton("action1"); 
+
+
+  if (isNVar==1) {
+    hideVar();
+  }
+
+  if ($("#purpose").val()==" ") {
+    $("#purpose").val("");
+  }
+
+
+
+$("#ferretLevel0").change();
+
+$("#lonMethod").val('3');
+$("#latMethod").val('3');
+
+$("#presMethod").change();
+$("#timeMethod").change();
+
+$("#userData").change();
+$("#uploadData").change();
+
+
+$("#var"+1).change();
+
+processQS4();
+
+}  // onload = function()
+
+$(document).ready(function(){
+
+// remember the last picked variable
+$(".var").click( function() {
+  //console.log(this.id);
+  var id1 = this.id;
+  $("#"+id1).change( function() {
+    $("#"+id1).data("aa", $("#"+id1).val()); 
+  });
+});
+
+$(".inputChange").change(function(event){
+event.stopPropagation();
+displayUrl4();
+disableButton("download_data");
+includeDataUrl = false;
+
+
+
+
+
+
+});
+
+
+$("#data1").change( function() {
+  $("#var1").change();
+});
+
+$("#var1").change( function() {
+  if (is3D(1)) {
+    $("#pressureRow").show();
+  } else {
+    $("#pressureRow").hide();
+  }
+});
+
+$("#uploadDataFileBrowse").change( function(){
+  // save them for future use
+  $("#uploadDataFileBrowse").data("size", this.files[0].size);
+  $("#uploadDataFileBrowse").data("name", this.files[0].name);
+  $("#uploadDataFileBrowse").data("lastModified", this.files[0].lastModified);
+  //console.log($("#uploadDataFileBrowse").files[0].name); // not working
+
+  //console.log(this.files[0].size);
+  //console.log( $("#uploadDataFileBrowse").data("size") );
+  //console.log( $("#uploadDataFileBrowse").data("lastModified") );
+  $("#uploadProgress").val('Not yet uploaded.');
+});
+
+$("#userData").change( function() {
+//function isUserData() {
+  if ( $("#userData").is(':checked') ) { 
+    $("#inputSection").show();
+    $("#cmip5Section").hide();
+    $("#uploadSection").hide();
+    $("#uploadData").prop('checked', false);
+  } else {
+    $("#inputSection").hide();
+    $("#cmip5Section").show();
+    $("#uploadSection").hide();
+  }
+  displayUrl4();
+  //$(".inputChange").change().stopPropagation();
+});
+
+$("#uploadData").change( function() {
+//function isUserData() {
+  if ( $("#uploadData").is(':checked') ) { 
+    $("#inputSection").hide();
+    $("#cmip5Section").hide();
+    $("#uploadSection").show();
+    $("#userData").prop('checked', false);
+  } else {
+    $("#inputSection").hide();
+    $("#cmip5Section").show();
+    $("#uploadSection").hide();
+  }
+  displayUrl4();
+  //$(".inputChange").change().stopPropagation();
+});
+
+
+
+
+      $("#download_data").click(function(event) {
+        var durl = $("#data_url").val();
+        // alert(durl);
+        window.location.assign(durl);
+      });
+
+
+      $("#action1").click(function(event) {
+
+var goBack = checkAxisNum();
+if (goBack) return;
+
+
+        displayUrl4();
+
+        Response = null;
+
+        // no data to download yet
+        disableButton("action1");
+        disableButton("download_data");
+
+
+        $("#Response").val("Calculating ...");
+        $("#data_url").val("Calculating ...");
+        $("#Image").html("Image will appear here.");
+
+        var url = "http://" + window.location.hostname + ":8090/svc/universalPlotting?";
+        var argList = makeUrl4(true);
+        url = url + argList;
+        console.log("server url:");
+        console.log(url);
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            data: null,
+            success: function(data, textStatus, xhr) {
+                Response = data;
+                // alert("data: " + data);
+                if (data.success == false) {
+                    // alert(data.error);
+                    Response = null;
+                    var text = JSON.stringify(data, null, 4);
+
+                    if (text.indexOf("No Data") != -1) {
+                      $("#Image").val("No Data");
+                      $("#Response").val("No Data");
+                      $("#data_url").val("No Data");
+                      enableButton("action1"); 
+                      return;
+                    }
+
+                    text = "Error in backend: <br>" + text; 
+                    // $("#Response").html("<span style='color:red'>" + text + "</span>");
+                    $("#Response").val(text);
+                    $("#data_url").val("No data file due to backend error.");
+                    enableButton("action1"); 
+                    return;
+                }  // if (data.success == false)
+
+                var text = JSON.stringify(data, null, 4);
+                // alert(text);
+                // $("#Response").html("<pre>"+text+"</pre>");
+                $("#Response").val(text);
+                var html = "<img src='"+data.url+"?" + new Date().getTime() + "'/>";
+                //var html = "<img src='"+data.url+"' width='820'/>";
+                $("#Image").html(html);
+
+                // post dataUrl to textarea and enable download button
+                $("#data_url").val(data.dataUrl);
+                enableButton("download_data");
+                enableButton("action1"); 
+
+
+                includeDataUrl = true;
+                dataUrl = data.dataUrl;
+                displayUrl4a();
+
+
+            }, // success: function(data, textStatus, xhr)
+            error: function(xhr, textStatus, errorThrown) {
+                $("#Response").val("error!");
+                $("#data_url").val("error!");
+                enableButton("action1"); 
+                // alert("xhr.status: "+xhr.status);
+                // alert("error status: "+textStatus);
+            },
+            complete: function(xhr, textStatus) {
+                //alert("complete status: "+textStatus);
+            },
+      }); // .ajax
+   }); // action.click
+
+      $("#uploadAction").click(function(event) {
+        //var formData = new FormData($('#uploadAction')[0]);
+        var formData = new FormData();
+        $("#uploadProgress").val('uploading...'); 
+        formData.append('file', $('input[type=file]')[0].files[0]);
+        formData.append('serverFile', $('#uploadDataFilename').val());
+        $.ajax({
+            type: 'POST',
+            url: "http://cmda-test.jpl.nasa.gov:8090/fileUpload",
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            async: false,
+            success: function(data) {
+              if (data.success==true) {
+                $("#uploadProgress").val('File has been uploaded.'); 
+                //console.log(data.varList);
+                //console.log(data.varDict);
+                alert(data.message + '\n' + data.check);
+                $("#uploadDataFilename").val(data.filename);
+  var list1=document.getElementById("uploadDataVar");
+  for (var i=list1.length-1; i>=0; i--) {
+    list1.remove(i);
+  }
+  for (var i=0; i<data.varList.length; i++) {
+    var vv=data.varList[i];
+    if (data.varDict[vv]['nDim']>1) {
+      //console.log(vv);
+      list1.add(new Option(vv,vv));
+    }
+  }
+  $("#uploadDataVar").change();
+            } else { // success==true
+              $("#uploadProgress").text(data.message); 
+            }
+            },
+        });
+    });
+
+      $("#userDataCheck").click(function(event) {
+        $("#userDataCheckProgress").text('checking...'); 
+        $.ajax({
+            type: 'GET',
+            url: "http://cmda-test.jpl.nasa.gov:8090/fileCheck?file="+escape($('#userDataFile').val()),
+            data: null,
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            async: false,
+            success: function(data) {
+                $("#userDataCheckProgress").text('File check finished.'); 
+                //console.log(data.varList);
+                //console.log(data.varDict);
+                alert(data.message + '\n' + data.check);
+  var list1=document.getElementById("userDataVar0");
+  for (var i=list1.length-1; i>=0; i--) {
+    list1.remove(i);
+  }
+  for (var i=0; i<data.varList.length; i++) {
+    var vv=data.varList[i];
+    if (data.varDict[vv]['nDim']>1 && vv.indexOf('_bnds')==-1) {
+      console.log(vv);
+      list1.add(new Option(vv,vv));
+    }
+  }
+  $("#userDataVar0").change();
+            },
+        });
+    });
+
+
+
+  });  // ready(function())
+
+  </script>
+
+</head>
+
+<body>
+<div class="container-fluid">
+<div class="row center1">
+<div class="col-sm-8 col-sm-offset-2 col-xs-12 color-head">
+<h3>A Universal Plotting Tool</h3>
+A Universal Plotting Tool
+</div> <!-- col-sm -->
+<div class="col-sm-offset-2">
+</div> <!-- col-sm -->
+</div> <!-- row center1 -->
+
+
+
+<div class="row">
+ <div class="col-sm-4 right1">
+ </div>
+  <div class="col-sm-8 left1">
+      <label class="checkbox-inline"><input type="checkbox" id="userData" class="inputChange" unchecked >Online User Data </label>
+      <label class="checkbox-inline"><input type="checkbox" id="uploadData" class="inputChange" unchecked >Upload User Data </label>
+ </div>
+</div> <!-- row -->
+
+<div id="inputSection">
+<div class="row center1 subtitle1" >
+User Online Data
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Data Group:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <input id="inputGroup" class="inputChange" value="temp"  size=15>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Input Data File:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <input id="userDataFile" class="inputChange" value="http://opendap.jpl.nasa.gov:80/opendap/SeaSurfaceTopography/aviso/L4/dynamic_topo_1deg_1mo/zos_AVISO_L4_199210-201012.nc"  size=100>
+    <input type = "button" value='Check File' id="userDataCheck"/>
+    <input id="userDataCheckProgress" type="text" value="" />
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Variable Name:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <input id="userDataVar" class="inputChange" value="zos"  size=15>
+    <select id="userDataVar0" onclick="this.previousElementSibling.value=this.value; $('#userDataVar').change()">
+    </select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+ </div>
+ <div class="col-sm-8 left1">
+      <label class="checkbox-inline"><input type="checkbox" id="userDataOpendap" class="inputChange" unchecked >OPeNDAP</label>
+ </div>
+</div> <!-- row -->
+
+</div> <!-- inputSection -->
+
+<!-- upload_data -->
+<div id="uploadSection">
+<div class="row center1 subtitle1" >
+Upload User Data
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Data Group:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+  <form action = "http://cmda-test.jpl.nasa.gov:8090/fileUpload" method = "POST" 
+         enctype = "multipart/form-data">
+         <fieldset>
+         <input type="file" name="file" accept=".nc,.cdf" id="uploadDataFileBrowse"/>
+         </fieldset>
+         <fieldset>
+         <input type = "button" value='Upload' id="uploadAction"/>
+         Uploading progress: <input id="uploadProgress" type="text" value="" />
+         </fieldset>
+  </form>
+  <input id="uploadDataFilename" type="hidden" value='' /> 
+  </div> <!-- col-sm -->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Variable Name:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="uploadDataVar" >
+    </select>
+    <!-- <input id="uploadDataVar" class="inputChange"  style="width: 100px; border: none;"/> -->
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+</div> <!-- uploadSection -->
+   
+
+<div id="cmip5Section">
+
+
+
+
+<div id=dataBlock1 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Data
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data1" class="inputChange" onchange="addVarList(1); addPres(1);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var1" class="inputChange var" onchange="addPres(1);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row" style="display: none;">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel1" >
+    Pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres1" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+</div> <!-- cmip5Section -->
+
+ 
+<div class="color3">
+<div class="row center1 subtitle1" >
+Data Subsetting
+</div> <!-- row -->
+
+
+
+
+
+
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    longitude (deg):
+  </div>
+
+  <div class="col-sm-4 left1">
+<select id="lonMethod" class="inputChange" onchange="showLon2();">
+    <option value="1">pick a value</option>
+    <option value="2">average over</option>
+    <option value="3">form an axis</option>
+</select>
+    <input id="lonS" value="0" class="inputChange" autocomplete="off" size=7>
+    <span id="lon2a">
+      <input id="lonE" value="360" class="inputChange" autocomplete="off" size=7>
+    </span>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    latitude (deg):
+  </div>
+
+  <div class="col-sm-4 left1">
+<select id="latMethod" class="inputChange" onchange="showLat2();">
+    <option value="1">pick a value</option>
+    <option value="2">average over</option>
+    <option value="3">form an axis</option>
+</select>
+    <input id="latS" value="-90" class="inputChange" autocomplete="off" size=7>
+    <span id="lat2a">
+      <input id="latE" value="90" class="inputChange" autocomplete="off" size=7>
+    </span>
+  </div>
+</div> <!-- row -->
+
+<div id="pressureRow" class="row">
+  <div class="col-sm-4 right1">
+    pressure (hPa):
+  </div>
+
+  <div class="col-sm-4 left1">
+<select id="presMethod" class="inputChange" onchange="showPres2();">
+    <option value="1">pick a value</option>
+    <option value="2">average over</option>
+    <option value="3">form an axis</option>
+</select>
+    <input id="vpres1" value="200" class="inputChange" autocomplete="off" size=7>
+    <span id="pres2a">
+      <input id="vpres1a" value="900" class="inputChange" autocomplete="off" size=7>
+    </span>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    Time (year-month):
+  </div>
+
+  <div class="col-sm-8 left1">
+<select id="timeMethod" onchange="showTime2();">
+    <option value="1">pick a value</option>
+    <option value="2">average over</option>
+    <option value="3">form an axis</option>
+</select>
+
+    <span >
+      <input id="timeS" value="2004-01" class="inputChange" autocomplete="off" size=7 onchange="checkTimeL()">
+    </span>
+
+    <span id="time2a">
+      <input id="timeE" value="2004-12" class="inputChange" size=7 autocomplete="off" onchange="checkTimeH()">
+    </span>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+  </div>
+  <div class="col-sm-8 left1">
+    <span id=startYear>start year-month:</span>
+    <span id=endYear>end year-month:</span>
+  </div>
+ </div> <!-- color3 -->
+
+ 
+<div class="color0">
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Display Options:
+  </div>
+</div>
+
+<div class="color0">
+<div id="ferretLevelDiv" class="row">
+  <div class="col-sm-2 left1">
+  </div>
+  <div class="col-sm-2 right1">
+    Ferret Level Type:
+  </div>
+  <div class="col-sm-6 left1">
+<select id="ferretLevel0" onchange="this.nextElementSibling.value=this.value; $('#ferretLevel').change()">
+    <option value="10">10 levels</option>
+    <option value="10V">10 levels, variance-based</option>
+    <option value="10C">10 levels, zero-centered</option>
+    <option value="10H">10 levels, histogram-based</option>
+    <option value="0.5D">interval=0.5</option>
+    <option value="(-inf)(0,35,1)(inf)">vmin=0, vmax=35, interval=1, open-ended</option>
+    <option value="(0,35,1)">vmin=0, vmax=35, interval=1; outside values cropped</option>
+    <option value="(0,35,1)(25,28,0.5)">vmin=0, vmax=35, interval=1; within (25,28), interval=0.5</option>
+</select>
+
+&nbsp&nbsp Modify It: <input id="ferretLevel" class="inputChange" style="width: 100px; border: none;"/>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    Specify Colormap:
+  </div> <!-- col-sm-4 level2-->
+  <div class="col-sm-8 left1">
+    <select id="colorMap" class="inputChange" >
+    <option value="rainbow">rainbow</option>
+    <option value="centered">centered</option>
+    <option value="bright_centered">bright_centered</option>
+    <option value="white_centered">white_centered</option>
+    <option value="grayscale">grayscale</option>
+    <option value="inverse_grayscale">inverse_grayscale</option>
+    <option value="red_blue_centered">red_blue_centered</option>
+    <option value="topo">topo</option>
+    <option value="ocean_temp">ocean_temp</option>
+    <option value="yellow_orange_brown">yellow_orange_brown</option>
+    <option value="brown_orange_yellow">brown_orange_yellow</option>
+    <option value="warm_cmyk">warm_cmyk</option>
+    <option value="terrestrial">terrestrial</option>
+    </select>
+  </div>
+</div> <!-- row -->
+  <div class="col-sm-4 right1">
+    Plot Title:
+  </div>
+  <div class="col-sm-8 left1">
+  <input id="plotTitle" class="inputChange" />  
+  </div>
+
+<div  class="row">
+
+</div> <!-- row -->
+
+</div> <!-- color -->
+ 
+</div> <!-- color0 -->
+
+
+
+
+<div class="color2">
+<div class="row">
+  <div class="col-sm-4 right1">
+    Analysis Purpose:
+  </div> <!-- col -->
+  <div class="col-sm-8 left1">
+    <form>
+    <textarea name="purpose" id="purpose" value="" class="inputChange" rows="4" cols="50"> </textarea>
+    </form>
+  </div> <!-- col -->
+</div> <!-- row -->
+</div> <!-- color2 -->
+
+
+<div class="color4">
+<div class="row">
+  <div class="col-sm-6 center1">
+    <input id="action1" type="submit" value="Get Plot" style="height:28px"/>
+  </div>
+  <div class="col-sm-6 center1">
+    <form>
+      <input id="download_data" type="button" value="Download Data" style="height:28px"/>
+    </form>
+  </div>
+</div> <!-- row -->
+
+
+</div> <!-- color4 -->
+
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Browser URL:
+  </div>
+</div>
+<div class="row" id="actionUrl0">
+  <div class="col-sm-12 center1">
+    <textarea id="actionUrl" rows=5></textarea>
+  </div>
+</div> <!-- row -->
+  			
+<div class="row" id="Image0" center1>
+  <div class="col-sm-12 center1">
+    <div id="Image" class="borderedText">Image will be here</div>
+  </div>
+</div> <!-- row -->
+ 
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Data File URL:
+  </div>
+</div>
+<div class="row" >
+  <div class="col-sm-12 center1">
+    <textarea readonly id="data_url" cols="150" rows="2"></textarea>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Service Response Text:
+  </div>
+</div>
+<div class="row" center1>
+  <div class="col-sm-12 center1">
+    <textarea id="Response" cols="150" rows="6"></textarea>
+  </div>
+</div> <!-- row -->
+
+</div> <!-- container -->
+</body>
+</html>

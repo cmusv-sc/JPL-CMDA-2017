@@ -1,0 +1,20 @@
+Sensor/Model	Data Product	Variable Name	Variable Units
+MODIS	Level 2 1km Cloud Product	Cloud_Phase_Optical_Properties	none
+MODIS	Level 2 1km Cloud Product	Cloud_Optical_Thickness_Uncertainty_1621	percent
+MODIS	Level 2 1km Cloud Product	Cloud_Water_Path	g/m^2
+MODIS	Level 2 1km Cloud Product	Quality_Assurance_1km	none
+MODIS	Level 2 1km Cloud Product	Cloud_Effective_Radius	micron
+MODIS	Level 2 1km Cloud Product	Cloud_Multi_Layer_Flag	none
+MODIS	Level 2 1km Cloud Product	Cloud_Effective_Radius_1621	micron
+MODIS	Level 2 1km Cloud Product	Cloud_Water_Path_1621	g/m^2
+MODIS	Level 2 1km Cloud Product	Cloud_Water_Path_Uncertainty	percent
+MODIS	Level 2 1km Cloud Product	Cirrus_Reflectance	none
+MODIS	Level 2 1km Cloud Product	Effective_Radius_Difference	micron
+MODIS	Level 2 1km Cloud Product	Cloud_Optical_Thickness_1621	none
+MODIS	Level 2 1km Cloud Product	Cloud_Optical_Thickness	none
+MODIS	Level 2 1km Cloud Product	Cirrus_Reflectance_Flag	none
+MODIS	Level 2 1km Cloud Product	Cloud_Effective_Radius_Uncertainty	percent
+MODIS	Level 2 1km Cloud Product	Cloud_Optical_Thickness_Uncertainty	percent
+MODIS	Level 2 1km Cloud Product	Cloud_Mask_1km	none
+MODIS	Level 2 1km Cloud Product	Cloud_Water_Path_Uncertainty_1621	percent
+MODIS	Level 2 1km Cloud Product	Cloud_Effective_Radius_Uncertainty_1621	percent

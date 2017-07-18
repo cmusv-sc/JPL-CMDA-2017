@@ -1,0 +1,7 @@
+# ./octaveWrapper ukmo_hadgem2-es hus 198501 199512 '-30 30' '90000, 20000' '5,6,7,8'
+# ./octaveWrapper ncc_noresm cli 197501 199512 '-60 60' '90000, 20000' '5,6,7,8'
+#./octaveWrapper gfdl_cm3 cli 197501 199512 '-60 60' '90000, 20000' '5,6,7,8' '/tmp' 7
+#./octaveWrapper argo_argo os 200101 201012 '-90 90' '1000000, 5000000' '5,6,7,8' ~/matlab
+#./octaveWrapper argo_argo os 200101 201012 '-90 90' '1000000, 5000000' '1,2,3,4,5,6,7,8,9,10,11,12' /tmp
+# ./octaveWrapper nasa_airs hus 200101 200912 '-90 90' '90000, 20000' '12,1,2' /tmp 7
+./octaveWrapper ecmwf_interim hus 200901 201512 '-90 90' '90000, 20000' '5,6,7,8' '/tmp' 0

@@ -1,0 +1,37 @@
+circle {
+    fill: white;
+    fill-opacity: .5;
+    stroke-width: 3;
+    stroke-opacity: 1;
+    stroke: black;
+}
+
+circle.root {
+    stroke-width: 5;
+    fill: lightblue;
+    fill-opacity: 1;
+}
+
+circle.service {
+    stroke: yellow;
+    stroke-width: 1;
+}
+
+.selected circle{
+    fill-opacity: 1;
+    stroke-width: 4;
+    stroke: lightblue;
+}
+
+.edge {
+    stroke-linecap: round;
+    stroke: lightblue;
+    stroke-opacity: 1;
+    stroke-width: 2;
+}
+
+.edge.RECEIVED {
+    stroke-dasharray: 10,5,2,2,2,5;
+    stroke: yellow;
+    stroke-opacity: 1;
+}

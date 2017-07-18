@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js" type="text/javascript"></script> -->
+  <script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
+  <script type="text/javascript" src="js/jquery.flot.min.js"></script>
+  <script type="text/javascript" src="js/json2.js"></script>
+  <script type="text/javascript" src="js/xmisc.js"></script>
+
+  <script src='js/dataList.js'></script>
+  <script src='js/varList.js'></script>
+
+  <script type="text/javascript">
+
+    var Response = null;
+    var variable1 = "";
+    var variable2 = "";
+
+
+    // called on load or reload
+    window.onload = function() {
+      put_data(1);
+      put_var(1);
+
+      // no data to download yet
+      disable_download_button();
+    }
+
+    // disable download data button
+    function disable_download_button()
+    {
+      var x=document.getElementById("download_data");
+      x.disabled=true;
+    }
+
+    // enable download data button
+    function enable_download_button()
+    {
+      var x=document.getElementById("download_data");
+      x.disabled=false;
+    }
+
+    // disable pressure level box for 2D var
+    function disable_pres1(ID)
+    {
+      var x;
+      x=document.getElementById("pres"+ID);
+      x.value = "N/A";
+      x.disabled=true;
+    }
+
+    // enable pressure level box for 3D var
+    function enable_pres1(ID)
+    {
+      var x;
+      x=document.getElementById("pres"+ID);
+      //x.value = "500";
+      x.disabled=false;
+    }
+
+    function put_data(ID){
+      var list1=document.getElementById("data"+ID);
+
+      for(var key in dataList) {
+        if (key.slice(0,5)==="group") {
+          var og = document.createElement("OPTGROUP");
+          og.setAttribute('label', dataList[key][0]);
+          list1.add(og);
+        } else {
+          og.appendChild(new Option(key,key));
+        }
+      }
+    }
+
+    function put_var(ID) {
+      var list1=document.getElementById("var"+ID);
+      for (var i=list1.length-1; i>=0; i--) {
+      list1.remove(i);
+      }
+
+      data_string =  document.getElementById("data"+ID).value;
+      var varList2 = dataList[data_string][1];  
+      for (var i=0; i<varList2.length; i++) {
+        var k = varList2[i];
+        list1.add(new Option(varList[k][0],k));
+      }
+    }
+
+    // 
+    function select_var1(ID)
+    {
+      var var_string;
+      var_string = $("#var"+ID).val();
+
+      // alert("var_string: " + var_string)
+
+      if (varList[var_string][2]==3) {
+        enable_pres1(ID);
+      } else {
+        disable_pres1(ID);
+      }
+
+      //alert("variable1: " + var_string);
+    }
+
+    $(document).ready(function(){
+
+      $("a").click(function(event){
+        alert("As you can see, the link no longer took you to jquery.com");
+        event.preventDefault();
+      });
+
+
+      $("#download_data").click(function(event) {
+        var durl = $("#data_url").val();
+        // alert(durl);
+        window.location.assign(durl);
+      });
+
+
+      $("#action1").click(function(event) {
+        // alert('****** inside scatterPlot2V()!');
+        Response = null;
+
+        // no data to download yet
+        disable_download_button();
+
+        $("#Response").html("Calculating ...");
+        $("#data_url").html("Calculating ...");
+
+        var url = "http://einstein.sv.cmu.edu:9002/svc/regridAndDownload?";
+        // alert("url: " + url);
+
+        var d1 = $("#data1").val();
+        var model1 = d1.replace("/", "_");
+        model1 = model1.toLowerCase();
+
+        var arglist = "";
+        arglist = arglist.concat("model=");
+        arglist = arglist.concat(model1);
+
+        // alert("arglist: " + arglist);
+
+        var v1 = $("#var1").val();
+        arglist = arglist.concat("&var=");
+        arglist = arglist.concat(v1);
+
+        // alert("arglist: " + arglist);
+
+        var pres1 = $("#pres1").val();
+        arglist = arglist.concat("&plev=");
+        arglist = arglist.concat(pres1);
+
+        var t0 = $("#t0").val();
+        var t1 = $("#t1").val();
+
+        t0 = t0.replace("-", "");
+        t1 = t1.replace("-", "");
+
+        arglist = arglist.concat("&start_time=");
+        arglist = arglist.concat(t0);
+
+        arglist = arglist.concat("&end_time=");
+        arglist = arglist.concat(t1);
+
+        // alert("arglist: " + arglist);
+
+        var lon0 = $("#lon0").val();
+        var lon1 = $("#lon1").val();
+        var dlon = $("#dlon").val();
+        var lat0 = $("#lat0").val();
+        var lat1 = $("#lat1").val();
+        var dlat = $("#dlat").val();
+        var purpose = $("#purpose").val();
+
+        arglist = arglist.concat("&lon1=");
+        arglist = arglist.concat(lon0);
+
+        arglist = arglist.concat("&lon2=");
+        arglist = arglist.concat(lon1);
+
+        arglist = arglist.concat("&dlon=");
+        arglist = arglist.concat(dlon);
+
+        arglist = arglist.concat("&lat1=");
+        arglist = arglist.concat(lat0);
+
+        arglist = arglist.concat("&lat2=");
+        arglist = arglist.concat(lat1);
+
+        arglist = arglist.concat("&dlat=");
+        arglist = arglist.concat(dlat);
+
+        arglist = arglist.concat("&purpose=");
+        arglist = arglist.concat(purpose);
+        // alert("arglist: " + arglist);
+
+        // url = url + encodeURIComponent(arglist);
+        url = url + encodeURI(arglist);
+        // url = url + arglist;
+        // alert("url: " + url);
+
+        var urlTimeBounds = "http://einstein.sv.cmu.edu:9002/svc/time_bounds?";
+        var arglistTB = "";
+        arglistTB = arglistTB.concat("serviceType=");
+        arglistTB = arglistTB.concat("1");
+        arglistTB = arglistTB.concat("&source1=");
+        arglistTB = arglistTB.concat(d1);
+        arglistTB = arglistTB.concat("&var=");
+        arglistTB = arglistTB.concat(variable1);
+        urlTimeBounds = urlTimeBounds + encodeURI(arglistTB);
+        // alert("urlTimeBounds: " + urlTimeBounds);
+
+        $.ajax({
+            type: "GET",
+            url: urlTimeBounds,
+            dataType: "json",
+            data: null,
+            success: function(data, textStatus, xhr) {
+                Response = data;
+                // alert("data: " + data);
+                if (data.success == false) {
+                    // alert(data.error);
+                    Response = null;
+                    var text = JSON.stringify(data, null, 4);
+                    text = "Error in backend: <br>" + text; 
+                    $("#Response").html(text);
+                    $("#data_url").html(text);
+                    return;
+                }
+                var text = JSON.stringify(data, null, 4);
+                // alert("text: " + text);
+                // $("#Response").html("<pre>"+text+"</pre>");
+                // $("#Response").html(text);
+
+                var tb = data.time_bounds;
+                var bds = String(tb).split(",");
+                // alert("tb: " + tb);
+                // alert("bds: " + bds);
+                var lowerT = parseInt(bds[0]);
+                var upperT = parseInt(bds[1]);
+                // alert("lowerT: " + lowerT);
+                // alert("upperT: " + upperT);
+                var t0I = parseInt(t0);
+                var t1I = parseInt(t1);
+                // alert("t0: " + t0I);
+                // alert("t1: " + t1I);
+
+                if ( lowerT == 0 && upperT ==0 ) {
+                  alert("We do not have data for this source and variable configuration.");
+                  return;
+                }
+
+                if (t0I < lowerT && t1I < lowerT ||
+                    t0I > upperT && t1I > upperT) {
+                  alert("We do not have data that span your time range. Try the range inside ["+lowerT+", "+upperT+"].");
+                  return;
+                }
+
+                if (t0I < lowerT && t1I <= upperT) {
+                  alert("Your start year-month is out of bound. It has to be in or later than " + lowerT +
+                        ". We will use the range ["+lowerT+", "+t1I+"] for you.");
+                }
+
+                if (t1I > upperT && t0I >= lowerT) {
+                  alert("Your end year-month is out of bound. It has to be in or earlier than " + upperT +
+                        ". We will use the range ["+t0I+", "+upperT+"] for you.");
+                }
+
+                if (t0I < lowerT && t1I > upperT ) {
+                  alert("Both of your start and end year-months are out of bounds. They have to be in or earlier than " + upperT +
+                        ", and in or later than " + lowerT + ". We will use the range ["+lowerT+", "+upperT+"] for you.");
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+		$("#Response").html("error!");
+		$("#data_url").html("error!");
+                // alert("xhr.status: "+xhr.status);
+                // alert("error status: "+textStatus);
+            },
+            complete: function(xhr, textStatus) {
+                //alert("complete status: "+textStatus);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            data: null,
+            success: function(data, textStatus, xhr) {
+                Response = data;
+                // alert("data: " + data);
+                if (data.success == false) {
+                    // alert(data.error);
+                    Response = null;
+                    var text = JSON.stringify(data, null, 4);
+
+                    if (text.indexOf("No Data") != -1) {
+                      $("#Response").html("No Data");
+                      $("#data_url").html("No Data");
+                      return;
+                    }
+
+                    text = "Error in backend: <br>" + text; 
+                    // $("#Response").html("<span style='color:red'>" + text + "</span>");
+                    $("#Response").html(text);
+                    $("#data_url").html(text);
+
+                    return;
+                }
+                var text = JSON.stringify(data, null, 4);
+                // alert(text);
+                // $("#Response").html("<pre>"+text+"</pre>");
+                $("#Response").html(text);
+
+                // post dataUrl to textarea and enable download button
+                $("#data_url").html(data.dataUrl);
+                enable_download_button();
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                $("#Response").html("error!");
+                $("#data_url").html("error!");
+                // alert("xhr.status: "+xhr.status);
+                // alert("error status: "+textStatus);
+            },
+            complete: function(xhr, textStatus) {
+                //alert("complete status: "+textStatus);
+            }
+        });
+
+      });
+
+    });
+    
+  </script>
+</head>
+<body>
+
+<p>
+
+<table border="1">
+
+<tr>
+<td colspan="4">
+<center>
+<b>Service: Regrid and Download</b><br><br>
+This service regrids a variable from a dataset according to the lat/lon/plev specified by the user, and mades the regridded data downloadable by the user. 
+<br><br>
+</center>
+</td>
+</tr>
+
+<tr>
+<td>data source:</td><td><select name="data1", id="data1" onchange="put_var(1)">
+</select></td>
+
+<td>variable name:</td><td><select name="var1", id="var1" onchange="select_var1(1)">
+</select>
+</td>
+</tr>
+
+<tr>
+<td colspan=4>
+atmosphere pressure level (hPa), or ocean pressure level (dbar)
+<!--
+<input id=pres1 size=50>
+-->
+<input list="plev1" id=pres1 size=100>
+<datalist id="plev1">
+<option value="100000,80000,50000,30000,20000,10000">
+<option value="100000,30000,10000">
+<option value="100000,10000">
+<option value="50000,20000">
+</datalist>
+</td>
+</tr>
+
+<tr>
+<td>start year-month: <input id="t0" value="2004-01" alt="start"/></td>
+<td>end year-month: <input id="t1" value="2004-12" alt="end"/></td>
+<td colspan=2>
+</td>
+</tr>
+
+
+<tr>
+<td width="25%">start lat (deg): <input size=5 id="lat0" value="-90"/></td>
+<td width="25%">end lat (deg): <input size=5 id="lat1" value="90"/></td>
+<td width="25%">grid size (deg): <input size=5 id="dlat" value="1.0"/></td>
+<td></td>
+</tr>
+
+<tr>
+<td width="25%">start lon (deg): <input size=5 id="lon0" value="0"/></td>
+<td width="25%">end lon (deg): <input size=5 id="lon1" value="360"/></td>
+<td width="25%">grid size (deg): <input size=5 id="dlon" value="1.0"/></td>
+<td></td>
+</tr>
+<tr>
+      <td colspan="1">Execution purpose</td>
+      <td colspan="3">
+        <form>
+          <textarea name="purpose" id="purpose" rows="4" cols="50"> </textarea>
+        </form>
+      </td>    
+    </tr>
+<tr>
+<td colspan="2" align="center"><input id="action1" type="submit" value="            Get  Data            " style="height:28px"/></td>
+<form>
+<td colspan="2" align="center"><input id="download_data" type="button" value="Download Data" style="height:28px"/>
+</td>
+</form>
+
+</tr>
+
+<tr>
+<td colspan="4" align="center">
+<textarea readonly id="data_url" cols="130" rows="2">Data URL Here</textarea>
+</td>
+</tr>
+
+<tr>
+<td colspan="4" align="center">
+<textarea id="Response" cols="130" rows="6">Service Response Text Here</textarea>
+</td>
+</tr>
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/csiro/mk3.6/regridded/clw_Amon_CSIRO-Mk3-6-0_amip_r1i1p1_plevRegridded_199901-200912.nc

@@ -1,0 +1,159 @@
+#!/usr/bin/octave -q
+addpath([pwd()  '/../util/']);
+
+pkg load netcdf;
+arg_list = argv();
+printf ("program name: %s\n", program_name());
+
+narg = length(arg_list);
+
+if narg < 2
+  error('Insufficient argument, need a model and a variable name!'); 
+end
+sourceName = lower(arg_list{1});
+printf ("sourceName: %s\n", sourceName);
+varName = arg_list{2};
+printf ("varName: %s\n", varName);
+
+if narg > 2
+  startTimeStr = arg_list{3};
+  startTime = struct('year', str2num(startTimeStr(1:4)), 'month', str2num(startTimeStr(5:6)));
+end
+
+if narg > 3
+  stopTimeStr = arg_list{4};
+  stopTime = struct('year', str2num(stopTimeStr(1:4)), 'month', str2num(stopTimeStr(5:6)));
+end
+
+% Default grid, 2 x 2.5 deg, MLS grid
+lon = 2.5*(0:143);
+lat = 2*(-45:45);
+
+if narg > 4
+  lon_grid = str2num(arg_list{5});
+  printf ("longitude grid (min, max, resolution): (%d, %d, %d) \n", lon_grid(1), lon_grid(2), lon_grid(3));
+  if isNA(lon_grid)
+    lon = [];
+  else
+    lon = lon_grid(1):lon_grid(3):lon_grid(2);
+  end
+end
+
+if narg > 5
+  lat_grid = str2num(arg_list{6});
+  printf ("latitude grid (min, max, resolution): (%d, %d, %d) \n", lat_grid(1), lat_grid(2), lat_grid(3));
+  if isNA(lat_grid)
+    lat = [];
+  else
+    lat = lat_grid(1):lat_grid(3):lat_grid(2);
+  end
+end
+
+% Default CMIP5 pressure levels
+plev = plevForRegrid();
+
+if narg > 6
+  plev = str2num(strrep(arg_list{7}, ',', ' '));
+  printf ("pressure levels : %s Pa\n", arg_list{5});
+  if isNA(plev)
+    plev = [];
+  end
+end
+
+outputDir = '/tmp/';
+if narg > 7
+  outputDir = arg_list{8};
+end 
+
+overwrite = true;
+if narg > 8
+  overwrite = str2num(arg_list{9});
+end 
+
+for ii = 1:narg
+  printf("%d. %s\n", arg_list{ii}, ii)
+end
+
+dataFileFullPath = getDataFilePaths(sourceName, varName, startTime, stopTime);
+
+nFile = length(dataFileFullPath);
+
+disp(nFile)
+
+outFiles = cell(nFile,1);
+
+regridStr = strrep(strrep([arg_list{5} '_'  arg_list{6} '_' arg_list{7}], ' ' , ''), ',', 'f');
+
+for fileI = 1:nFile
+  thisInputFile = dataFileFullPath{fileI};
+  [thisPath, thisName] = fileparts(thisInputFile);
+
+  [thisST, thisET] = getStartAndStopDates(thisInputFile);
+  subsetting = false;
+  idx1 = 1;
+  if earlierThan(thisST, startTime)
+    idx1 = numberOfMonths(thisST, startTime);
+    subsetting = true;
+    fileName_sub = strrep(thisName, date2Str(thisST), date2Str(startTime));
+  end
+  idx2 = numberOfMonths(thisST, thisET);
+  if laterThan(thisET, stopTime)
+    idx2 = numberOfMonths(thisST, stopTime);
+    subsetting = true;
+    fileName_sub = strrep(thisName, date2Str(thisET), date2Str(stopTime));
+  end
+  if subsetting
+    inputData_sub = [outputDir '/' fileName_sub '.nc'];
+    if exist(inputData_sub, 'file')
+      delete(inputData_sub);
+    end
+    system(['/usr/bin/ncks -d time,' num2str(idx1-1) ',' num2str(idx2-1) ' ' thisInputFile ' ' inputData_sub ';']);  
+    outFiles{fileI} = [outputDir '/' fileName_sub '_' regridStr '.nc'];
+    thisInputFile = inputData_sub;
+  else
+    outFiles{fileI} = [outputDir '/' thisName '_' regridStr '.nc'];
+  end
+  if exist(outFiles{fileI}, 'file')
+    if overwrite
+      delete(outFiles{fileI});
+    else
+      continue;
+    end
+  end
+  status = regridAndDownload(thisInputFile, outFiles{fileI}, varName, lon, lat, plev);
+end
+
+dataFile = [sourceName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_' regridStr '.nc'];
+% if original grid, we will use "original" in the data file name
+if isempty(lon) & isempty(lat) & isempty(plev) 
+  dataFile = [sourceName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_original.nc'];
+else
+  dataFile = [sourceName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_' regridStr '.nc'];
+end
+
+dataFilePath = [outputDir '/' dataFile];
+
+if nFile > 1
+% Let us concatenate all the outpout files
+cmd = ['/usr/bin/ncrcat ']
+for ii = 1:nFile
+  cmd = [cmd outFiles{ii} ' '];
+end
+cmd = [cmd dataFilePath];
+
+if exist(dataFilePath)
+  delete(dataFilePath);
+end
+  
+system(cmd);
+for ii = 1:nFile
+  delete(outFiles{ii});
+end
+else
+  if ~strcmp(outFiles{1}, dataFilePath)
+    movefile(outFiles{1}, dataFilePath);
+  end
+end
+
+printf("dataFile: %s\n", dataFile)
+printf("dataFilePath: %s\n", dataFilePath)

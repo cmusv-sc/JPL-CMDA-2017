@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./clt_Amon_ECMWF_interim_197901-201404.nc

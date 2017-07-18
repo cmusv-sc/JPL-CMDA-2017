@@ -1,0 +1,26 @@
+{
+    "edges": [
+        {
+            "source": "a__GvdCXSG",
+            "target": "pfDJNfFqZi"
+        },
+        {
+            "source": "NDdqRT4xHo",
+            "target": "oqFk0F86Wc"
+        }
+     ],
+     "nodes": [
+        {
+            "cluster": 1,
+            "id": "jgxWzatM0z",
+            "firstName": "Jennifer",
+            "node_type": "friend"
+        },
+        {
+            "cluster": 1,
+            "id": "lebsumPb_N",
+            "firstName": "Michael",
+            "node_type": "friend"
+        }
+     ]
+}

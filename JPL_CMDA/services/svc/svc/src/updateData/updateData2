@@ -1,0 +1,140 @@
+#!/home/svc/install/bin/ana
+
+'''
+This script uses the info from step1 to form des files for Ferret needed in benyang's services.
+
+execfile('/home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/src/updateData/updateData2') 
+
+'''
+
+if 1:
+  # Python
+  import os, sys, string, time, glob
+  import pickle
+  import re
+
+  # numpy
+  import numpy as np
+
+if 1:
+  import pickle
+  import glob
+
+  if 1: # for the ec2 cloud
+    mkdesCmd = '/home/svc/install/bin/ana /home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/src/updateData/mkdes2_ '  # for cs2 machine
+    dir0 = '/mnt/data_2016'
+
+  dir00 = '%s/cmip5'%dir0
+  desDir = '%s/des'%dir0
+
+  desDir1 = desDir
+  # Do this for not to change the data disk:
+
+  #dirs9 = ['regridded', 'original', '.' ]
+  #dirs9 = ['regridded',  '.' ]
+  dirs9 = ['regridded', 'break', '.' ]
+
+  doSource = []
+  #doSource = ['gfdl_esm2g']
+
+  doVar = []
+  #doVar = ['wap', 'hur']
+  #doVar = ['wap']
+
+  isMkdes = 1
+  isLink = 1
+
+  # load varDict
+  fn9 = '%s/varDict.pickle'%desDir
+  dict9 = pickle.load( open(fn9) )
+  sources = dict9.keys()
+  sources.sort()
+
+  os.chdir(desDir)
+  notWorking = {}
+  # loop sources
+  for source in sources:
+    print 'doing %s'%source
+    temp1 = source.split('/')
+    source1 = temp1[0] + '_' + temp1[1]
+
+    if len(doSource)>0:
+      if source1 not in doSource:
+        continue
+
+    # make dir
+    dir2 = '%s/%s'%(desDir1, source1)
+    if not os.path.isdir(dir2):
+      print 'making %s'%dir2
+      temp2 = 'mkdir %s'%dir2
+      os.system(temp2)
+
+    temp2 = 'rm -f %s/*.nc %s/*.des'%(dir2, dir2)
+    os.system(temp2)
+
+    # list of done vars
+    varDone = []
+
+    # loop subDirs
+    dirs90 = dict9[source].keys()
+    for dir9 in dirs9:
+      if dir9 not in dirs90:
+        continue
+
+      dir9a = '%s/%s/%s'%(dir00, source, dir9)
+      #dir9a = '../cmip5/%s/%s'%(source, dir9)
+ 
+      # loop varNames
+      vars9 = dict9[source][dir9].keys()
+      for var9 in vars9:
+
+        if var9 in varDone:
+          continue
+
+        if len(doVar)>0:
+          if var9 not in doVar:
+            continue
+
+        print '%s: %d -> %d'%(var9, dict9[source][dir9][var9][0], dict9[source][dir9][var9][1])
+
+        # mkdes
+        temp5 = '%s/%s_*_*-*.nc'%(dir9a, var9)
+        files9a = glob.glob(temp5)
+        print '%s: %d'%(temp5, len(files9a))
+        if 0:
+          if len(files9a)==0:
+            print '!!!!!!!!!!!!!! not doing this'
+            notWorking[source+'_'+var9] = len(files9a)
+            continue
+
+        varDone.append(var9)
+        if len(files9a)>1:
+          desFn = '%s/%s.des'%(dir2, var9)
+          temp4 = '%s --f90 --des %s %s/%s_*_*-*.nc'%\
+                (mkdesCmd, desFn, dir9a, var9)
+
+          if isMkdes:
+            print temp4
+            try:
+              os.system(temp4)
+            except: adfadfas
+
+        else:
+          desFn = '%s/%s.nc'%(dir2, var9)
+          temp6a = 'ln -s %s %s'%(files9a[0], desFn) 
+          if isLink:
+            print temp6a
+            try:
+              os.system(temp6a)
+            except: adfadfas
+            
+        if not os.path.isfile(desFn) and not os.path.islink(desFn):
+          notWorking[source+'_'+var9] = [dir9, len(files9a)]
+ 
+  keys2 = notWorking.keys()
+  keys2.sort()
+  print 'Not working:'
+  for k in keys2:
+    print '%30s: %15s  %2d'%(k, notWorking[k][0], notWorking[k][1])
+
+

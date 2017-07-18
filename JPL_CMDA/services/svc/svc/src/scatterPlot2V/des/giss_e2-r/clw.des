@@ -1,0 +1,48 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'GISS-E2-R model output prepared for CMIP5 historical',
+   D_T0TIME      = '01-Jan-1976 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/regridded/clw_Amon_GISS-E2-R_historical_r1i1p1_plevRegridded_199501-200012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  6950.5000,
+   S_END         =  9109.5000,
+   S_DELTA       =    30.4085,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/regridded/clw_Amon_GISS-E2-R_historical_r1i1p1_plevRegridded_200101-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9147.5000,
+   S_END         = 10941.5000,
+   S_DELTA       =    30.4068,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

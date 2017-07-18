@@ -1,0 +1,879 @@
+#!/home/svc/install/epd/bin/python
+'''
+execfile('/home/bytang/projects/cmac/trunk/services/svc/svc/src/randomForest/pythonWrapper')
+
+import os 
+os.chdir('/home/svc/cmac/trunk/services/svc/svc/src/correlationMap')
+execfile('pythonWrapper')
+
+
+'''
+HOME='/home/svc'
+
+cr = {
+#                              1  2   3  4
+#
+'import_':              1,   # 0  1   1  0
+# parameters_
+# def_change_labels:     # not working
+# def_extractNC(desFn):
+# def_clipEnd(x, w, percL, percR):
+# class_SUBSET_REGION():
+  # def_noDataExit()
+  # def_getFileName2
+  # def_getFileName
+  # def_getUnits(self):
+  # def_subsetting():
+  # def_loadFile
+  # def_corr #
+  # def_saveData(self):
+'init_class':           1,   # 1  1
+'command_arg':          1,   # 1  1
+'plot__':               1,   # 1  1
+'':        0,   # 1  1
+'':        0,   # 1  1
+}
+
+#if cr['']       == 1:
+#if cr['']       == 1:
+
+# 1 -- 
+# 
+
+if cr['import_']       == 1:
+  import os, sys,  time
+  import tempfile
+  #import math
+  import glob
+  import re
+
+  import numpy as np      
+  from netCDF4 import Dataset
+  import netCDF4 as nC4
+  sys.path.insert(0, '../py')
+  import NC_btang_v4 as NC1
+  import cmac
+
+  import matplotlib 
+  matplotlib.use('Agg')  
+  import matplotlib.pylab as Mat
+  Mat.ioff()
+  from mpl_toolkits.basemap import Basemap
+
+t00 = time.time()
+
+# parameters_
+num2month = {
+1: 'JAN',
+2: 'FEB',
+3: 'MAR',
+4: 'APR',
+5: 'MAY',
+6: 'JUN',
+7: 'JUL',
+8: 'AUG',
+9: 'SEP',
+10: 'OCT',
+11: 'NOV',
+12: 'DEC',
+}
+
+modelCenter = [
+'cccma',
+'csiro',
+'gfdl',
+'giss',
+'ipsl',
+'miroc',
+'ncar',
+'ncc',
+'ukmo',
+]
+
+obsCenter = [
+'nasa',
+'noaa',
+'argo',
+]
+
+oceanVar = [
+'ot',
+'os',
+]
+
+var3d = [
+'ta',
+'hus',
+'clw',
+'cli',
+'ot',
+'os',
+]
+
+regridVar = [
+'cli',
+'clw',
+]
+
+# def_change_labels(ax):
+def change_labels(ax):
+  x1 = Mat.getp(ax, 'xticklabels')
+  #x1 = Mat.getp(ax.xaxis, 'ticklabels') # not working
+  x1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    print t1
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'W'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'E'
+    x1New.append(t2)
+  #
+  x1 = Mat.getp(ax, 'yticklabels')
+
+  y1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'S'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'N'
+    y1New.append(t2)
+  Mat.setp(ax, xticklabels=x1New, yticklabels=y1New)
+  return x1New, y1New
+
+
+# def_extractNC(desFn):
+p1 = re.compile("S_FILENAME += *\'(.+\.nc)\'")
+def extractNC(desFn):
+  lines = open(desFn).read()
+  # S_FILENAME    = '/mnt/r1i1p1_plevRegridded_198412-200511.nc'
+
+  m1 = p1.search(lines)
+  return m1.groups()[0]
+
+# def_clipEnd(x, w, percL, percR):
+def clipEnd(x, w, percL, percR):
+  indS = np.argsort(x)
+  x1 = x[indS]
+  w1 = w[indS]
+  sum1 = np.cumsum(w1)
+  threshL = sum1[-1]*percL
+  threshR = sum1[-1]*(1.0 - percR)
+  indL = max( np.searchsorted(sum1, threshL) - 1, 0 )
+  indR = min( np.searchsorted(sum1, threshR) + 1, len(x) )
+ 
+  return x1[indL], x1[indR]
+
+# class_SUBSET_REGION():
+class SUBSET_REGION():
+  #== def___init__
+  def __init__(self):
+    self.dataDir, self.cmacDir = cmac.getRootDir()
+    if self.dataDir is None:
+      sys.exit(1)
+
+    self.scatterDir = '%s/trunk/services/svc/svc/src/scatterPlot2V'%self.cmacDir
+
+    ### self.ferretCmd = '/home/bytang/install/bin/ferret' 
+    # /mnt/xvdf/data/
+    if self.dataDir.find('xvdf')>-1:
+      self.ferretCmd = '/home/sflops/install/bin/ferret'
+    else:
+      self.ferretCmd = '/home/svc/install/bin/ferret' 
+
+    self.clipL = 0.02
+    self.clipR = 0.02
+
+    self.ferretMem = 100
+    self.isDiffPlot = 0
+
+    #self.dataDir = '/mnt/hgfs/cmacws/data1/data/cmip5'
+    ### self.desDir = '/home/bytang/projects/cmac/des/original'
+    #self.desDir = '/home/svc/cmac/des/original'
+
+    # zzzz
+    #self.desDir = '/home/bytang/projects/cmac/tmp/des'  # for Benyang's testing
+    self.desDir = os.path.split(self.dataDir)[0] + '/des'  # for deployment
+    #self.desDir = '%s/des'%self.scatterDir  # ad hoc fix for summer school
+
+    if 0:
+      self.lon1S = -10.5
+      self.lon1E = 20.3
+      #self.dLon = 1.0
+
+    if 0:
+      self.lon1S = -180.0
+      self.lon1E = 180.0
+      #self.dLon = 1.0
+  
+    if 0:
+      self.lat1S = -70.1
+      self.lat1E = -20.9
+      #self.dLat = 1.0
+
+    if 1:
+      self.lon1S = -180.0
+      self.lon1E = 180.0
+
+    if 1:
+      self.lat1S = -80.0
+      self.lat1E =  80.0
+
+#
+    if 1:
+      self.nVar = 2
+      self.center = []
+      self.model = []
+      self.varName = []
+      self.pres = []
+
+    if 0:
+      self.center.append('gfdl')
+      self.model.append('cm3')
+      self.varName.append('ts')
+      self.pres.append(200*100)
+
+    if 0:
+      self.center.append('gfdl')
+      self.model.append('cm3')
+      self.varName.append('ts')
+      self.pres.append(200*100)
+
+    if 1:
+      self.center.append('gfdl')
+      self.model.append('esm2g')
+      self.varName.append('lai')
+      self.pres.append(200*100)
+
+    if 1:
+      self.center.append('gfdl')
+      self.model.append('esm2g')
+      self.varName.append('zos')
+      self.pres.append(200*100)
+
+    self.laggedTime = 1
+    self.yearS = 2004
+    self.yearE = 2004
+
+    self.monthS = 1
+    self.monthE = 12
+
+    self.dayS = 15
+    self.dayE = 15
+
+    self.nSample = 500
+
+    self.outDir = '.'
+  
+    self.noData = None
+
+  #== def_derived
+  def derived(self):
+    pass
+
+  # def_noDataExit()
+  def noDataExit(self, msg):
+    print "No Data !!!"
+    print msg
+    sys.exit(1)
+
+  # not used. Use the des file instead.
+  # def_getFileName(self, center, model, varName):
+  def getFileName(self, center, model, varName):
+    # the original is just for model
+    if center in modelCenter:
+      if varName in regridVar:
+        dir0 = '%s/%s/%s/regridded'%(self.dataDir, center, model)
+      else:
+        dir0 = '%s/%s/%s/original'%(self.dataDir, center, model)
+ 
+    else:
+      dir0 = '%s/%s/%s'%(self.dataDir, center, model)
+
+    desDir = self.desDir
+
+    filesNc = glob.glob('%s/%s_*.nc'%(dir0, varName))
+    desFn = '%s/%s_%s_%s.des'%(desDir, center, model, varName)
+    filesDes = glob.glob(desFn)
+    if 1:
+      print dir0
+      print 'filesNc, filesDes:'
+      print center, model, varName
+      print filesNc
+      print filesDes
+
+    # yyyy
+    if len(filesNc)==0:
+      self.noDataExit('no *.nc file.')
+
+    if len(filesDes)>1:
+      print 'more than 1 des files:'
+      for f in filesDes:
+        print f
+
+      self.noDataExit('more than 1 *.des files.')
+      return None
+
+    if len(filesNc)>1 and len(filesDes)==1:
+      return filesDes[0], filesNc[0]
+
+    if len(filesNc)>1 and len(filesDes)==0:
+      try:
+        temp1 = '/home/bytang/bin/mine/mkdes2 --f90 --des %s %s/%s_*.nc'%(desFn, dir0, varName)
+        print temp1
+        os.system(temp1)
+        files2a = glob.glob(desFn)
+        return files2a[0], filesNc[0]
+      except:
+        self.noDataExit('failed to generate the des file.')
+      
+    if len(filesNc)==1:
+      return filesNc[0], filesNc[0]
+ 
+    return None
+
+  # def_getFileName2(self, center, model, varName):
+  def getFileName2(self, center, model, varName):
+    dir0 = '%s/%s_%s'%(self.desDir, center, model)
+    fileNc = glob.glob('%s/%s.nc'%(dir0, varName))
+    #print '%s/%s.nc'%(dir0, varName)
+    if len(fileNc)>0:
+      return fileNc[0], fileNc[0] 
+
+    else:
+      #print '%s/%s.des'%(dir0, varName)
+      fileDes = glob.glob('%s/%s.des'%(dir0, varName))
+
+      if len(fileDes)==0:
+        return None
+
+      # def_extractNC(desFn):
+      return fileDes[0], extractNC(fileDes[0])
+
+  # def_getUnits(self):
+  def getUnits(self):
+    self.units = []
+    for iVar in range(self.nVar):
+      nc1 = Dataset(self.inFileNc[iVar], 'r')
+      data = nc1.variables[self.varName[iVar]]
+      self.units.append(data.units)
+      nc1.close()
+
+  # def_subsetting():
+  def subsetting(self, ncFile1, varName1, ncFile2=None, varName2='DATA1', 
+         varNameOut='DATA1', interp='', dim=4, lev=-1, isAve=0):
+
+    try:
+      temp1 = os.path.isfile(ncFile1)
+    except:
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      self.noData = 1
+      tempFile = None
+      return tempFile
+    
+    if not os.path.isfile(ncFile1):
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      self.noData = 1
+      tempFile = None
+      return tempFile
+      
+    aveStr = ''
+    if isAve==1:
+      aveStr = '@ave'
+
+    if self.noData ==1:
+      self.noDataExit('in subsetting: nc file is not there.')
+     
+    tempFile = tempfile.mkstemp(suffix='.nc', dir=self.outDir)
+
+    tmpFileJnl = tempfile.mkstemp(suffix='.jnl', dir=self.outDir)
+    #print varName, tempFile, tmpFileJnl
+
+    dimStr = ''
+    if dim==3:
+      dimStr = ', t="15-%s-%d":"15-%s-%d"%s'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+    elif dim==4:
+      if lev<0:
+        dimStr = ', k=1, t="15-%s-%d":"15-%s-%d"%s'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+      else:
+        dimStr = ', z=%g@itp, t="15-%s-%d":"15-%s-%d"%s'\
+%(lev, num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+
+      if 0:
+        dimStr = ', k=1, t="15-%s-%d":"15-%s-%d"%s'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+
+    #  
+    if ncFile2 is None:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  !show data
+
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, x=%f:%f, y=%f:%f %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  # 4
+  varNameOut,
+  varName1,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  #interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    else:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  use "%s"
+  !show data
+
+  
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, g=%s[d=2, l=1]%s %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  ncFile2, 
+  # 4
+  varNameOut,
+  varName1,
+  varName2,
+  interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    open(tmpFileJnl[1], 'w').write(script1)
+
+    temp1 = '%s -gif -script %s' %(self.ferretCmd, tmpFileJnl[1])
+
+    try:
+      os.system(temp1)
+    except:
+      self.noDataExit('subsetting: failed to run ferret')
+
+    #os.remove(tmpFileJnl)
+
+    if not os.path.isfile(tempFile[1]):
+      self.noDataExit('subsetting: ferret failed to generate a nc file.')
+
+    if os.stat(tempFile[1]).st_size<10:
+      self.noDataExit('subsetting: ferret failed to generate a nc file.')
+
+    return tempFile[1]
+
+  # def_loadFile
+  def loadFile(self, ncFile, varName='DATA1'):
+    nc1 = Dataset(ncFile, 'r')
+    data = nc1.variables[varName][:]
+    nc1.close()
+
+    #zzzz 
+    if len(data.shape)==3:
+      data = data[0, :,:]
+    return data
+ 
+  # def_corr #
+  def corr(self, ncFile1, ncFile2, varName1='DATA1', varName2='DATA2'):
+    nBin = 30 
+    nBin1 = 40 
+
+    # open file
+    nc1 = Dataset(ncFile1, 'r')
+    nc2 = Dataset(ncFile2, 'r')
+
+    ncVar1 = nc1.variables[varName1]
+    ncVar2 = nc2.variables[varName2]
+
+    dims1 = ncVar1.dimensions
+    lon1 = nc1.variables[dims1[-1]][:]
+    lat1 = nc1.variables[dims1[-2]][:]
+
+    dims2 = ncVar2.dimensions
+    lon2 = nc2.variables[dims2[-1]][:]
+    lat2 = nc2.variables[dims2[-2]][:]
+
+    print ncVar1.shape
+
+    nMonth = ncVar1.shape[0]
+ 
+    # loop over time
+    monthCount = 0
+    for iMonth in range(self.laggedTime, nMonth):
+      monthCount += 1
+      a1 = ncVar1[iMonth-self.laggedTime]
+      a2 = ncVar2[iMonth]
+
+      # sometimes the 2 data may not have the save shape
+      if (a1.shape[-1] != a2.shape[-1]):
+        min1 = min(a1.shape[-1], a2.shape[-1]) 
+        a1 = a1[:, :min1] 
+        a2 = a2[:, :min1] 
+
+      if (a1.shape[0] != a2.shape[0]):
+        min1 = min(a1.shape[0], a2.shape[0]) 
+        a1 = a1[:min1,:] 
+        a2 = a2[:min1,:] 
+
+      # remove the invalid data
+      if 0:
+        temp1 = np.ma.arange(5)
+        valid1 = np.ones( a1.shape )
+        valid2 = np.ones( a1.shape )
+        if type(a1) == type(temp1):
+          if a1.mask is not None:
+            valid1 = ~( a1.mask )
+        if type(a2) == type(temp1):
+          if a2.mask is not None:
+            valid2 = ~( a2.mask )
+
+        valid = valid1 & valid2
+        aa1 = a1[valid]
+        aa2 = a2[valid]
+
+        aa1 = aa1.ravel()
+        aa2 = aa2.ravel()
+
+      if monthCount==1:
+        xb = a1
+        yb = a2
+        xyb = a1*a2
+        xxb = a1*a1
+        yyb = a2*a2
+      else:
+        xb += a1
+        yb += a2
+        xyb += a1*a2
+        xxb += a1*a1
+        yyb += a2*a2
+        
+      print 'a2: '
+      print a2.min(), a2.max(), a2.mean(), a2.std()
+
+      print 'yb: '
+      print yb.min(), yb.max(), yb.mean(), yb.std()
+
+    nc1.close()
+    nc2.close()
+
+    # calc corr
+    xb /= float(monthCount)
+    yb /= float(monthCount)
+    xyb /= float(monthCount)
+    xxb /= float(monthCount)
+    yyb /= float(monthCount)
+
+    print 'xb: '
+    print xb.min(), xb.max(), xb.mean(), xb.std()
+
+    print 'yb: '
+    print yb.min(), yb.max(), yb.mean(), yb.std()
+
+    print 'xyb: '
+    print xyb.min(), xyb.max(), xyb.mean(), xyb.std()
+
+    print 'xxb: '
+    print xxb.min(), xxb.max(), xxb.mean(), xxb.std()
+
+    print 'yyb: '
+    print yyb.min(), yyb.max(), yyb.mean(), yyb.std()
+
+    temp1 = np.sqrt( (xxb-xb*xb)*(yyb-yb*yb) )
+    temp2 = temp1<1e-10
+    temp1[temp2] = 1.0
+
+    temp3 = (xyb - xb*yb)
+    corrxy = np.ma.array(temp3/temp1)
+    corrxy[temp2] = np.ma.masked
+
+    print 'corrxy: '
+    print corrxy.min(), corrxy.max(), corrxy.mean(), corrxy.std()
+
+    title1 = 'corrcoef(%s_%s:%s[t-%d] , %s_%s:%s[t]). # of month: %d'\
+          %(a.center[0], a.model[0], a.varName[0], 
+          a.laggedTime, 
+          a.center[1], a.model[1], a.varName[1],
+          monthCount)
+    figFile = '%s/corrcoef.png'%self.outDir
+
+
+    # not using mapPlot
+    if 0:
+      # figure
+      fig1 = Mat.figure(figsize=(10,5))
+      Mat.clf()
+
+      # plot correlation map
+      Mat.subplot(1,1,1)
+      #fig1.tight_layout()
+
+      fig1.tight_layout()
+      m1 = Basemap(self.lon1S, self.lat1S, self.lon1E, self.lat1E, 
+           resolution='c', suppress_ticks=False)
+      temp1 = m1.pcolor(lon1, lat1, corrxy, vmin=-1.0, vmax=1.0)
+      #temp1 = m1.pcolor(lon1, lat1, corrxy)
+      temp1 = m1.drawcoastlines()
+      Mat.colorbar()
+      Mat.title(title1)
+
+      #change_labels(Mat.gca())
+      # output png file
+      Mat.savefig(figFile, dpi=100)
+
+    # using mapPlot
+    if 1:
+      map1 = cmac.MAPPLOT()
+      map1.data1 = corrxy 
+      map1.lon1 = lon1 
+      map1.lat1 = lat1 
+      map1.vmin1 = -1.0 
+      map1.vmax1 = 1.0 
+      map1.title = title1
+      map1.xLabel = 'Longitude'
+      map1.yLabel = 'Latitude'
+      map1.plotH = 6.0
+      map1.outFile = figFile
+
+      map1.plot()
+
+    print 'figFile: %s'%figFile
+
+    # save corr data
+    if 1:
+      # lon1 and lon2 sometimes differ.
+      if len(lon1) < len(lon2):
+        lon12 = lon1
+      else: 
+        lon12 = lon2
+
+      if len(lat1) < len(lat2):
+        lat12 = lat1
+      else: 
+        lat12 = lat2
+
+      sys.path.append('../util')
+      corrxya = corrxy.filled(-9999.0)
+
+      fn = '%s/data.nc'%self.outDir
+
+      NC1.save2nc(corrxya, ncfile=fn, name='corr', 
+        newfile=1,
+        format='NETCDF3_CLASSIC',
+        missing_value=-9999.0,
+        axisorder='yx', axislib=NC1.axislib0, axisarray=[lat12, lon12])
+
+      print 'dataFile: %s'%fn
+
+  # def_saveData(self):
+  def saveData(self, tempFile1, tempFile2):
+    fn = '%s/data_compare.nc'%self.outDir
+
+    # load data
+    nc1 = Dataset(tempFile1, 'r')
+    data1a = nc1.variables['DATA1']
+    dims1 = data1a.dimensions
+    data1 = data1a[:]
+    lon1 = nc1.variables[dims1[-1]][:]
+    lat1 = nc1.variables[dims1[-2]][:]
+
+    nDim1 = len(data1.shape)
+    if nDim1==3:
+      time1 = nc1.variables[dims1[0]][:]
+
+    nc1.close()
+
+    nc2 = Dataset(tempFile2, 'r')
+    data2a = nc2.variables['DATA2']
+    dims2 = data2a.dimensions
+    data2 = data2a[:]
+    lon2 = nc2.variables[dims2[-1]][:]
+    lat2 = nc2.variables[dims2[-2]][:]
+
+    nDim2 = len(data2.shape)
+    if nDim2==3:
+      time2 = nc2.variables[dims2[0]][:]
+
+    nc2.close()
+
+    # sometimes the 2 data may not have the save shape
+    nLon = min( len(lon1), len(lon2) )
+    nLat = min( len(lat1), len(lat2) )
+    if len(lon1)>nLon or len(lat1)>nLat:
+      lon1 = lon1[:nLon]
+      lat1 = lat1[:nLat]
+      data1 = data1[..., :nLat, :nLon]
+
+    if len(lon2)>nLon or len(lat2)>nLat:
+      lon2 = lon2[:nLon]
+      lat2 = lat2[:nLat]
+      data2 = data2[..., :nLat, :nLon]
+
+    # fill the missing data
+    if type(data1)==type(np.ma.arange(1)):
+      data1a = data1.filled(-9999.0)
+    else: 
+      data1a = data1
+
+    if type(data2)==type(np.ma.arange(1)):
+      data2a = data2.filled(-9999.0)
+    else: 
+      data2a = data2
+
+    # save the 2 variables
+    if nDim1==2:
+      NC1.save2nc(data1a, ncfile=fn, name='data1', 
+        newfile=1,
+        format='NETCDF3_CLASSIC',
+        missing_value=-9999.0,
+        axisorder='yx', axislib=NC1.axislib0, axisarray=[lat1, lon1])
+    else:
+      NC1.save2nc(data1a, ncfile=fn, name='data1', 
+        newfile=1,
+        format='NETCDF3_CLASSIC',
+        missing_value=-9999.0,
+        axisorder='tyx', axislib=NC1.axislib0, axisarray=[time1,lat1, lon1])
+
+    nc1 = Dataset(fn, 'r+')
+
+    if nDim2==2:
+      d2 = nc1.createVariable('data2', 'float32', ('lat', 'lon'))
+    else:
+      d2 = nc1.createVariable('data2', 'float32', ('time', 'lat', 'lon'))
+
+    #print d2.shape
+    #print data2.shape
+    # zzzz
+    #nn0 = min( d2.shape[0], data2.shape[0])
+    #nn1 = min( d2.shape[1], data2.shape[1])
+    d2[:] = data2a
+    nc1.close()
+
+    print 'dataFile: %s'%fn
+    
+if cr['init_class']       == 1:
+  a = SUBSET_REGION()
+
+if cr['command_arg']       == 1:
+
+  '''
+- interface:
+ nVar
+ repeat nVar times:
+  model1
+  var1
+  lavel1
+ laggedTime
+ months
+ lon1,lon2
+ lat1,lat2
+ outDir
+''' 
+  #     inputs = \
+  #              self.model1 + ' ' + self.var1 + ' ' + self.start_time1 + ' ' + self.end_time1 + ' ' + \
+  #              self.lon1a + ',' + self.lon1b + ' ' + self.lat1a + ',' + self.lat1b + ' ' + \
+  #              self.model2 + ' ' + self.var2 + ' ' + self.start_time2 + ' ' + self.end_time2 + ' ' + \
+  #              self.lon2a + ',' + self.lon2b + ' ' + self.lat2a + ',' + self.lat2b + ' ' + \
+  #              self.output_dir
+
+  if len(sys.argv)>1:
+    argv = sys.argv
+
+    pid = open(argv[1])
+    import pickle
+    argDict = pickle.load(pid)
+    pid.close()
+    for k in argDict.keys():
+      temp1 = 'a.' + k + '=argDict[k]'   
+      print temp1
+      exec(temp1)
+
+    a.nVar = 2
+    a.nVarP = 0
+
+    for i in range(a.nVar+a.nVarP):
+      try:
+        a.pres[i] = float(a.pres[i])
+      except ValueError:
+        a.pres[i] = -999999
+      if a.pres[i]>0 and (a.varName[i] not in oceanVar):
+        a.pres[i] *= 100.0
+
+    a.yearS = int(a.yearS)
+    a.yearE = int(a.yearE)
+    a.monthS = int(a.monthS)
+    a.monthE = int(a.monthE)
+    a.lon1S = float(a.lon1S)
+    a.lon1E = float(a.lon1E)
+    a.lat1S = float(a.lat1S)
+    a.lat1E = float(a.lat1E)
+    a.laggedTime = int(a.laggedTime)
+
+if cr['plot__']       == 1:
+  # get file names
+  #try: 
+  a.inFile = []
+  a.inFileNc = []
+  for iVar in range(a.nVar):
+    if 1: 
+      inFile1, inFile1Nc = a.getFileName2(a.center[iVar], a.model[iVar], a.varName[iVar]) 
+      a.inFile.append(inFile1)
+      a.inFileNc.append(inFile1Nc)
+      print 'variable ', iVar
+      print a.center[iVar], a.model[iVar], a.varName[iVar]
+      print a.inFile[-1]
+      print a.inFileNc[-1]
+
+  a.getUnits()
+
+  # subset
+  tempFile1 = a.subsetting(a.inFile[0], a.varName[0], dim=4, lev=a.pres[0])
+  tempFile2 = a.subsetting(a.inFile[1], a.varName[1], ncFile2=tempFile1, varNameOut='DATA2', dim=4, lev=a.pres[1])
+
+  if 1:
+    a.corr(tempFile1,tempFile2)
+
+  print 'tempFiles:'
+  print tempFile1
+  print tempFile2

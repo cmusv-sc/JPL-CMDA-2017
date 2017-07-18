@@ -1,0 +1,15 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Cloud ice water content	kg kg**-1
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Relative humidity	%
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Specific humidity	kg kg**-1
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Vertical velocity	Pa s**-1
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Ozone mass mixing ratio	kg kg**-1
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Cloud liquid water content	kg kg**-1
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Cloud cover	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Potential vorticity	K m**2 kg**-1 s**-1
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	V velocity	m s**-1
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	U velocity	m s**-1
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Geopotential	m**2 s**-2
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Vorticity (relative)	s**-1
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Temperature	K
+ECMWF	ERA Interim Daily Pressure Level (NCAR)	Divergence	s**-1

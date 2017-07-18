@@ -1,0 +1,62 @@
+#!/usr/bin/octave -q
+
+addpath([pwd()  '/../util/']);
+
+pkg load netcdf;
+
+arg_list = argv();
+printf ("program name: %s\n", program_name());
+
+narg = length(arg_list);
+
+if narg < 2
+  error('Insufficient argument, need an input data file and a variable name!'); 
+end
+inputFile = arg_list{1};
+printf ("input file : %s\n", inputFile);
+varName = arg_list{2};
+printf ("varName: %s\n", varName);
+
+% Default grid, 2 x 2.5 deg, MLS grid
+lon = 2.5*(0:143);
+lat = 2*(-45:45);
+
+if narg >= 3
+  lon_grid = str2num(arg_list{3});
+  printf ("longitude grid (min, max, resolution): (%d, %d, %d) \n", lon_grid(1), lon_grid(2), lon_grid(3));
+  lon = lon_grid(1):lon_grid(3):lon_grid(2);
+end
+
+if narg >= 4
+  lat_grid = str2num(arg_list{4});
+  printf ("latitude grid (min, max, resolution): (%d, %d, %d) \n", lat_grid(1), lat_grid(2), lat_grid(3));
+  lat = lat_grid(1):lat_grid(3):lat_grid(2);
+end
+
+overwrite = false;
+if narg >= 5
+  overwrite = (arg_list{5} ~= 0);
+end
+
+outputFile = [inputFile(1:(end-3)), '_regridded_' num2str(lon_grid(3)) 'x' num2str(lat_grid(3)) '.nc'];
+
+if narg >= 6
+  outputFile = arg_list{6};
+  printf("1. %s\n", arg_list{1})
+  printf("2. %s\n", arg_list{2})
+  printf("3. %s\n", arg_list{3})
+  printf("4. %s\n", arg_list{4})
+  printf("5. %s\n", arg_list{5})
+  printf("6. %s\n", arg_list{6})
+end 
+
+if exist(outputFile, 'file')
+  if overwrite
+    delete(outputFile);
+  else
+    warning('!!! output file exists, use overwrite flag to replace it!');
+    return;
+  end
+end
+
+status = regridLonAndLat(inputFile, outputFile, varName, lon, lat);

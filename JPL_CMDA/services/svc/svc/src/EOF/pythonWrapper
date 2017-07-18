@@ -1,0 +1,1119 @@
+#!/home/svc/install/epd/bin/python
+'''
+execfile('/home/bytang/projects/cmac/trunk/services/svc/svc/src/randomForest/pythonWrapper')
+
+
+'''
+HOME='/home/svc'
+
+cr = {
+#                              1  2   3  4
+    # zzzz
+'import_':              1,   # 0  1   1  0
+# parameters_
+# def_change_labels:     # not working
+# def_getRootDir():
+# def_extractNC(desFn):
+# def_convertTime(time0, units):
+# def_clipEnd(x, w, percL, percR):
+# def_plotTser
+#== def_plotPattern
+
+# class_SUBSET_REGION():
+  # def_noDataExit()
+  # def_getFileName2
+  # def_getFileName
+  # def_getUnits(self):
+  # def_checkTime
+  # def_subsetting():
+  # def_loadFile
+'init_class':           1,   # 1  1
+'command_arg':          1,   # 1  1
+'calc_PCA':             1,   # 1  1
+'plot_1':               0,   # 1  1
+'plot_2':               1,   # 1  1
+'save_file':            1,   # 1  1
+}
+
+#if cr['']       == 1:
+#if cr['']       == 1:
+#if cr['']       == 1:
+#if cr['']       == 1:
+
+# 1 -- 
+# 
+
+if cr['import_']       == 1:
+  import os, sys,  time
+  import tempfile
+  #import math
+  import glob
+  import re
+  import pickle
+
+  import numpy as np      
+  from netCDF4 import Dataset
+  import netCDF4 as nC4
+  sys.path.insert(0, '../py')
+  import NC_btang_v4 as NC1
+  import pca_v4 as pca
+  import cmac
+
+  import matplotlib 
+  matplotlib.use('Agg')  
+  import matplotlib.pylab as Mat
+  Mat.ioff()
+  #from mpl_toolkits.basemap import NetCDFFile
+  from mpl_toolkits.basemap import Basemap
+
+  # RF import
+  from sklearn.ensemble import RandomForestRegressor as RFR
+  from sklearn.metrics import mean_squared_error
+  from sklearn.metrics import r2_score
+  from sklearn.metrics import explained_variance_score
+
+
+t00 = time.time()
+
+# parameters_
+num2month = {
+1: 'JAN',
+2: 'FEB',
+3: 'MAR',
+4: 'APR',
+5: 'MAY',
+6: 'JUN',
+7: 'JUL',
+8: 'AUG',
+9: 'SEP',
+10: 'OCT',
+11: 'NOV',
+12: 'DEC',
+}
+
+modelCenter = [
+'cccma',
+'csiro',
+'gfdl',
+'giss',
+'ipsl',
+'miroc',
+'ncar',
+'ncc',
+'ukmo',
+]
+
+obsCenter = [
+'nasa',
+'noaa',
+'argo',
+]
+
+oceanVar = [
+'ot',
+'os',
+]
+
+var3d = [
+'ta',
+'hus',
+'clw',
+'cli',
+'ot',
+'os',
+]
+
+regridVar = [
+'cli',
+'clw',
+]
+
+# def_change_labels(ax):
+def change_labels(ax):
+  x1 = Mat.getp(ax, 'xticklabels')
+  #x1 = Mat.getp(ax.xaxis, 'ticklabels') # not working
+  x1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    print t1
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'W'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'E'
+    x1New.append(t2)
+  #
+  x1 = Mat.getp(ax, 'yticklabels')
+
+  y1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'S'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'N'
+    y1New.append(t2)
+  Mat.setp(ax, xticklabels=x1New, yticklabels=y1New)
+  return x1New, y1New
+
+
+# def_extractNC(desFn):
+p1 = re.compile("S_FILENAME += *\'(.+\.nc)\'")
+def extractNC(desFn):
+  lines = open(desFn).read()
+  # S_FILENAME    = '/mnt/r1i1p1_plevRegridded_198412-200511.nc'
+
+  m1 = p1.search(lines)
+  return m1.groups()[0]
+
+# def_convertTime(time0, units):
+def convertTime(time0, units):
+  import matplotlib.dates as DA
+  import calendar
+  import string
+
+  # convert time
+  time9 = time0.copy()
+  print 'time9.shape: ',
+  print time9.shape
+  print units
+
+  temp1 = string.split(units, 'since')
+  if len(temp1)==2:
+    unit1a = string.lower(string.strip( temp1[0] ))
+    unit1b = string.strip( temp1[1] )
+  
+    # convert time9 to day
+    if string.find(unit1a, 'year')!=-1:
+      time9 *= (365.25)
+    elif string.find(unit1a, 'month')!=-1:
+      time9 *= (365.25/12)
+    elif string.find(unit1a, 'hour')!=-1:
+      time9 *= (1./24.)
+    elif string.find(unit1a, 'minute')!=-1:
+      time9 *= (1./24./60.)
+    elif string.find(unit1a, 'second')!=-1:
+      time9 *= (1./24./3600.)
+
+    # convert time9 to days since year 0001
+    temp4 = string.split(unit1b)
+    temp3 = string.split(temp4[0], '-')
+    year0 = int( temp3[0] )
+    month0 = int( temp3[1] )
+    day0 = int( temp3[2] )
+
+    temp5 = (year0, month0, day0, 0,0,0, 0,0,0)
+    t0 = calendar.timegm(temp5) - calendar.timegm((1,1,1, 0,0,0, 0,0,0))
+    t0 = t0/(3600.*24)
+
+    time9 += t0
+    return time9
+
+# def_clipEnd(x, w, percL, percR):
+def clipEnd(x, w, percL, percR):
+  indS = np.argsort(x)
+  x1 = x[indS]
+  w1 = w[indS]
+  sum1 = np.cumsum(w1)
+  threshL = sum1[-1]*percL
+  threshR = sum1[-1]*(1.0 - percR)
+  indL = max( np.searchsorted(sum1, threshL) - 1, 0 )
+  indR = min( np.searchsorted(sum1, threshR) + 1, len(x) )
+ 
+  return x1[indL], x1[indR]
+
+# def_plotTser
+def plotTser(tser,i1,i2,max1):
+  ii = 0
+  for i in range(i1,i2+1):
+    time9 = np.arange( len(tser[0,:]))
+    print time9.shape, tser[i,:].shape
+    #Mat.plot_date(time9, tser[i,:], '-')
+    Mat.plot(time9, tser[i,:], '-')
+    Mat.hold('on')
+    ii += 1
+  Mat.hold('off')
+  Mat.xlim(time9[0], time9[-1])
+  Mat.ylim(-max1, max1)
+
+  labels = ax.get_xticklabels()
+  #Mat.setp(labels, rotation=20, fontsize=8)
+  Mat.setp(labels, rotation=0, fontsize=8)
+
+  Mat.grid()
+  if i1==i2:
+    Mat.title('EOF %d'%(i1+1))
+  else:
+    Mat.title('EOFs %d-%d'%(i1+1, i2+1))
+
+# def_plotTser2
+def plotTser2(time9, tser,i1,i2,max1):
+  ii = 0
+  for i in range(i1,i2+1):
+    print time9.shape, tser[i,:].shape
+    Mat.plot_date(time9, tser[i,:], '-')
+    Mat.hold('on')
+    ii += 1
+  Mat.hold('off')
+  Mat.xlim(time9[0], time9[-1])
+  Mat.ylim(-max1, max1)
+
+  ax = Mat.gca()
+  nTime = len(time9)
+  if nTime<30:
+    major1 = matplotlib.dates.MonthLocator(range(1,13))
+  else:
+    major1 = matplotlib.dates.YearLocator()
+  ax.xaxis.set_major_locator(major1)
+
+  monthsFmt = matplotlib.dates.DateFormatter("%b '%y")
+  ax.xaxis.set_major_formatter(monthsFmt)
+
+  labels = ax.get_xticklabels()
+  #Mat.setp(labels, rotation=20, fontsize=8)
+  Mat.setp(labels, rotation=90, fontsize=7)
+
+  Mat.grid()
+  if i1==i2:
+    Mat.title('EOF %d'%(i1+1))
+  else:
+    Mat.title('EOFs %d-%d'%(i1+1, i2+1))
+
+#== def_find_bound(x):
+# for used in matplotlib
+def find_bound(x):
+  '''
+Modify x so it becomes the end points.
+'''
+  temp1 = np.zeros((len(x)+1,), dtype=x.dtype)
+  temp1[1:-1] = (x[1:,]+x[:-1])/2.
+  temp1[0] = x[0] - (temp1[1]-x[0])
+  temp1[-1] = x[-1] + (x[-1] - temp1[-2])
+
+  return temp1
+
+#== def_plotPattern
+def plotPattern(i, min1, max1):
+
+  #if patternDim==1:
+  #  varAxis2 = np.array(varAxis)
+  #  pl = Mat.plot(varAxis2, pattern2[i,:])
+  #  Mat.xlim(varAxis2[0], varAxis2[-1])
+  #  Mat.ylim(-max1, max1)
+  #  Mat.grid()
+  #  Mat.xlabel(xlabel1)
+
+  #if patternDim==2:
+
+  #im = m.pcolor(xx2, yy2, pattern2[i, ::-1, :], vmin=min2, vmax=max2, \
+  #      norm=matplotlib.colors.normalize(), shading='flat')
+
+  im = m.pcolor(lon2, lat2, pattern1[i, :, :], vmin=min2, vmax=max2, shading='flat')
+  m.drawcoastlines(color=(.7,.7,.7))
+  Mat.title('EOF %d  Variance=%.1f%%'%(i+1, p1.varP[i]*100))
+
+  if i==nKeep-1:
+    hc = Mat.colorbar()
+
+    #labels = hc.get_yticklabels()
+    #hay = hc.get_yaxis()
+    #hfmt = hay.get_major_formatter()
+    #hfmt.fmt = '%g'
+    #hay.set_major_formatter(hfmt)
+
+  #m.drawmeridians(x32,linestyle='--', dashes=[1,4],labels=[1,0,0,1]) 
+  #m.drawparallels(y32,linestyle='--', dashes=[1,4],labels=[1,0,0,1]) 
+  #m.drawmeridians(x32) 
+  #m.drawparallels(y32) 
+
+# class_SUBSET_REGION():
+class SUBSET_REGION():
+  #== def___init__
+  def __init__(self):
+    self.dataDir, self.cmacDir = cmac.getRootDir()
+    if self.dataDir is None:
+      sys.exit(1)
+
+    self.scatterDir = '%s/trunk/services/svc/svc/src/scatterPlot2V'%self.cmacDir
+
+    ### self.ferretCmd = '/home/bytang/install/bin/ferret' 
+    # /mnt/xvdf/data/
+    if self.dataDir.find('xvdf')>-1:
+      self.ferretCmd = '/home/sflops/install/bin/ferret'
+    else:
+      self.ferretCmd = '/home/svc/install/bin/ferret' 
+
+    self.clipL = 0.02
+    self.clipR = 0.02
+
+    self.ferretMem = 100
+    self.isDiffPlot = 0
+
+    #self.dataDir = '/mnt/hgfs/cmacws/data1/data/cmip5'
+    ### self.desDir = '/home/bytang/projects/cmac/des/original'
+    #self.desDir = '/home/svc/cmac/des/original'
+
+    # zzzz
+    #self.desDir = '/home/bytang/projects/cmac/tmp/des'  # for Benyang's testing
+    self.desDir = os.path.split(self.dataDir)[0] + '/des'  # for deployment
+    #self.desDir = '%s/des'%self.scatterDir  # ad hoc fix for summer school
+
+    self.inFile = '' 
+    self.inFile2 = '' 
+#   self.inFileBU = '' 
+#   self.netcdfFile = '' 
+#   self.netcdfDirRemote = '' 
+#   self.pngFile = '' 
+#   self.pdfFile = '' 
+#   self.lockFile = '' 
+#
+#   self.isCoastline = 1 
+#   self.regionName = '' 
+#   self.dataName = '' 
+#   self.dateStr = '' 
+#
+#   self.regionTitle = 'same' 
+#   self.dataTitle = 'same' 
+#   self.dateTitle = 'same' 
+#
+#   self.offset = 0.0 
+#
+
+    if 0:
+      self.lon1S = -10.5
+      self.lon1E = 20.3
+      #self.dLon = 1.0
+
+    if 0:
+      self.lon1S = -180.0
+      self.lon1E = 180.0
+      #self.dLon = 1.0
+  
+    if 0:
+      self.lat1S = -70.1
+      self.lat1E = -20.9
+      #self.dLat = 1.0
+
+    if 1:
+      self.lon1S = -180.0
+      self.lon1E = 180.0
+
+    if 1:
+      self.lat1S = -80.0
+      self.lat1E =  80.0
+
+#
+    if 1:
+      self.center1 = 'ukmo'
+      self.model1  = 'hadgem2-a'
+      self.varName1='ts'
+
+    if 0:
+      self.center2 = 'giss'
+      self.model2  = 'e2-r'
+      #self.varName2='rsdt'
+      self.varName2='ts'
+
+    if 1:
+      self.center2 = 'gfdl'
+      #self.model2  = 'esm2g'
+      self.model2  = 'cm3'
+      #self.varName2='rsdt'
+      self.varName2='ta'  # working
+      self.varName2='clw' # not working
+      self.varName2='lai' # not working
+
+    if 0:
+      self.center2 = 'ukmo'
+      self.model2  = 'hadgem2-a'
+      self.varName2='ts'
+      #self.varName2='cli'
+
+    self.nDim = 3
+
+    self.pres1 = 3000
+    self.pres2 = 3000
+
+    self.yearS = 1990
+    self.yearE = 1991
+
+    self.monthS = 1
+    self.monthE = 1
+
+    self.dayS = 15
+    self.dayE = 15
+
+    self.nSample = 500
+
+    self.outDir = '.'
+  
+    self.noData = None
+
+  #== def_derived
+  def derived(self):
+    pass
+
+  # def_noDataExit()
+  def noDataExit(self, msg):
+    print "No Data !!!"
+    print msg
+    sys.exit(1)
+
+  # not used. Use the des file instead.
+  # def_getFileName(self, center, model, varName):
+  def getFileName(self, center, model, varName):
+    # the original is just for model
+    if center in modelCenter:
+      if varName in regridVar:
+        dir0 = '%s/%s/%s/regridded'%(self.dataDir, center, model)
+      else:
+        dir0 = '%s/%s/%s/original'%(self.dataDir, center, model)
+ 
+    else:
+      dir0 = '%s/%s/%s'%(self.dataDir, center, model)
+
+    desDir = self.desDir
+
+    filesNc = glob.glob('%s/%s_*.nc'%(dir0, varName))
+    desFn = '%s/%s_%s_%s.des'%(desDir, center, model, varName)
+    filesDes = glob.glob(desFn)
+    if 1:
+      print dir0
+      print 'filesNc, filesDes:'
+      print center, model, varName
+      print filesNc
+      print filesDes
+
+    # yyyy
+    if len(filesNc)==0:
+      self.noDataExit('no *.nc file.')
+
+    if len(filesDes)>1:
+      print 'more than 1 des files:'
+      for f in filesDes:
+        print f
+
+      self.noDataExit('more than 1 *.des files.')
+      return None
+
+    if len(filesNc)>1 and len(filesDes)==1:
+      return filesDes[0], filesNc[0]
+
+    if len(filesNc)>1 and len(filesDes)==0:
+      try:
+        temp1 = '/home/bytang/bin/mine/mkdes2 --f90 --des %s %s/%s_*.nc'%(desFn, dir0, varName)
+        print temp1
+        os.system(temp1)
+        files2a = glob.glob(desFn)
+        return files2a[0], filesNc[0]
+      except:
+        self.noDataExit('failed to generate the des file.')
+      
+    if len(filesNc)==1:
+      return filesNc[0], filesNc[0]
+ 
+    return None
+
+  # def_getFileName2(self, center, model, varName):
+  def getFileName2(self, center, model, varName):
+    dir0 = '%s/%s_%s'%(self.desDir, center, model)
+    fileNc = glob.glob('%s/%s.nc'%(dir0, varName))
+    print '%s/%s.nc'%(dir0, varName)
+    if len(fileNc)>0:
+      return fileNc[0], fileNc[0] 
+
+    else:
+      print '%s/%s.des'%(dir0, varName)
+      fileDes = glob.glob('%s/%s.des'%(dir0, varName))
+
+      if len(fileDes)==0:
+        return None
+
+      # def_extractNC(desFn):
+      return fileDes[0], extractNC(fileDes[0])
+
+  # def_getUnits(self):
+  def getUnits(self):
+    nc1 = Dataset(self.inFile1Nc, 'r')
+    data = nc1.variables[self.varName1]
+    self.units1 = data.units
+    nc1.close()
+
+    nc1 = Dataset(self.inFile2Nc, 'r')
+    data = nc1.variables[self.varName2]
+    self.units2 = data.units
+    nc1.close()
+
+  # def_checkTime
+  # not used yet
+  def checkTime(self, ncFile, varName):
+    # open file
+    nc1 = Dataset(ncFile, 'r')
+
+    # read time
+    data = nc1.variables[varName]
+    dims = data.dimensions
+    timeName = dims[0]
+    time1 = nc1.variables[timeName]
+
+    tS = nC4.num2date(time1[0], time1.units)
+    tE = nC4.num2date(time1[-1], time1.units)
+
+    tNumS = nC4.date2num(datetime.datetime(self.yearS, self.monthS, self.dayS, 0,0,0), time1.units)
+    tNumE = nC4.date2num(datetime.datetime(self.yearE, self.monthE, self.dayE, 0,0,0), time1.units)
+
+    if tNumS<time1[0]:
+      self.yearS = tS.year
+      self.monthS = tS.month
+      self.dayS = tS.day
+      print 'start time changed to: %d-%2d-%2d'%(self.yearS, self.monthS, self.dayS)
+
+
+    if tNumE>time1[-1]:
+      self.yearE = tE.year
+      self.monthE = tE.month
+      self.dayE = tE.day
+      print '  end time changed to: %d-%2d-%2d'%(self.yearE, self.monthE, self.dayE)
+
+    nc1.close()
+
+  # def_subsetting():
+  def subsetting(self, ncFile1, varName1, ncFile2=None, varName2='DATA1', 
+         varNameOut='DATA1', interp='', dim=4, lev=-1, isAve=0):
+
+    try:
+      temp1 = os.path.isfile(ncFile1)
+    except:
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      self.noData = 1
+      tempFile = None
+      return tempFile
+    
+    if not os.path.isfile(ncFile1):
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      self.noData = 1
+      tempFile = None
+      return tempFile
+      
+    aveStr = ''
+    if isAve==1:
+      aveStr = '@ave'
+
+    if self.noData ==1:
+      self.noDataExit('in subsetting: nc file is not there.')
+     
+    tempFile = tempfile.mkstemp(suffix='.nc', dir=self.outDir)
+
+    tmpFileJnl = tempfile.mkstemp(suffix='.jnl', dir=self.outDir)
+    #print varName, tempFile, tmpFileJnl
+
+    print type(self.yearS), type(self.monthS)
+    dimStr = ''
+    if dim==3:
+      dimStr = ', t="15-%s-%d":"15-%s-%d"%s'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+    elif dim==4:
+      if lev<0:
+        dimStr = ', k=1, t="15-%s-%d":"15-%s-%d"%s'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+      else:
+        dimStr = ', z=%g@itp, t="15-%s-%d":"15-%s-%d"%s'\
+%(lev, num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+
+      if 0:
+        dimStr = ', k=1, t="15-%s-%d":"15-%s-%d"%s'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+
+    #  
+    if ncFile2 is None:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  !show data
+
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, x=%f:%f, y=%f:%f %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  # 4
+  varNameOut,
+  varName1,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  #interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    else:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  use "%s"
+  !show data
+
+  
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, g=%s[d=2, l=1]%s %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  ncFile2, 
+  # 4
+  varNameOut,
+  varName1,
+  varName2,
+  interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    open(tmpFileJnl[1], 'w').write(script1)
+
+    temp1 = '%s -gif -script %s' %(self.ferretCmd, tmpFileJnl[1])
+
+    try:
+      os.system(temp1)
+    except:
+      self.noDataExit('subsetting: failed to run ferret')
+
+    #os.remove(tmpFileJnl)
+
+    if not os.path.isfile(tempFile[1]):
+      self.noDataExit('subsetting: ferret failed to generate a nc file.')
+
+    if os.stat(tempFile[1]).st_size<10:
+      self.noDataExit('subsetting: ferret failed to generate a nc file.')
+
+    return tempFile[1]
+
+  # def_loadFile
+  def loadFile(self, ncFile, varName='DATA1'):
+    nc1 = Dataset(ncFile, 'r')
+    data = nc1.variables[varName][:]
+    nc1.close()
+
+    #zzzz 
+    if len(data.shape)==3:
+      data = data[0, :,:]
+    return data
+   
+if cr['init_class']       == 1:
+  a = SUBSET_REGION()
+
+if cr['command_arg']       == 1:
+  if len(sys.argv)>1:
+    argv = sys.argv
+    pid = open(argv[1])
+    argDict = pickle.load(pid)
+    pid.close()
+    for k in argDict.keys():
+      temp1 = 'a.' + k + '=argDict[k]'   
+      print temp1
+      exec(temp1)
+
+    a.nVar = 1
+    for i in range(a.nVar):
+      try:
+        a.pres[i] = float(a.pres[i])
+      except ValueError:
+        a.pres[i] = -999999
+      if a.pres[i]>0 and (a.varName[i] not in oceanVar):
+        a.pres[i] *= 100.0
+
+    a.yearS = int(a.yearS)
+    a.yearE = int(a.yearE)
+    a.monthS = int(a.monthS)
+    a.monthE = int(a.monthE)
+    a.lon1S = float(a.lon1S)
+    a.lon1E = float(a.lon1E)
+    a.lat1S = float(a.lat1S)
+    a.lat1E = float(a.lat1E)
+
+    a.anomaly = int(a.anomaly)
+
+if cr['calc_PCA']       == 1:
+  print a.yearS+1, a.yearE, a.monthS, a.monthE
+  # get file names
+  #try: 
+  a.inFile = []
+  a.inFileNc = []
+  data2b = []
+  for iVar in range(a.nVar):
+    if 1: 
+      inFile1, inFile1Nc = a.getFileName2(a.center[iVar], a.model[iVar], a.varName[iVar]) 
+      a.inFile.append(inFile1)
+      a.inFileNc.append(inFile1Nc)
+      print 'variable ', iVar
+      print a.center[iVar], a.model[iVar], a.varName[iVar]
+      print a.inFile[-1]
+      print a.inFileNc[-1]
+
+    # subset the target
+    if iVar==0:
+      tempFile1 = a.subsetting(a.inFile[iVar], a.varName[iVar], dim=4, lev=a.pres[iVar])
+      nc1 = Dataset(tempFile1, 'r')
+      ncVar1 = nc1.variables['DATA1']
+      data1 = ncVar1[:]
+      
+      dims1 = ncVar1.dimensions
+      time1 = nc1.variables[dims1[0]][:]
+      timeUnits = nc1.variables[dims1[0]].units
+      lon1 = nc1.variables[dims1[-1]][:]
+      lat1 = nc1.variables[dims1[-2]][:]
+      nc1.close()
+
+      nLon = len(lon1)
+      nLat = len(lat1)
+
+  print 'data1.shape: ', data1.shape
+  data1.shape = data1.shape[0], nLon*nLat
+
+  weightLat = np.cos(lat1*np.pi/180.)
+  weight1 = np.ones( (nLat, nLon), dtype=np.float32 )
+  weight1.shape = nLon*nLat, 
+
+  # filter out invalid
+  temp1 = np.ma.arange(5)
+  valid1 = np.ones( data1.shape, dtype=bool )
+  if type(data1) == type(temp1):
+    if data1.mask is not None:
+      valid1 = ~( data1.mask )
+
+  # invalid times and grid:
+  temp2 = valid1.sum(axis=0)
+  valid1a = temp2==data1.shape[0]
+
+  print 'valid1.sum(): ', valid1.sum()
+  print 'valid1a.sum(): ', valid1a.sum()
+
+  valid = valid1a 
+  if valid.sum()<data1.shape[1]:
+    data1c = data1[:, valid]
+    weight1 = weight1[valid]
+    isGap = 1
+  else:
+    data1c = data1
+    isGap = 0
+
+  data1c = np.array(data1c)
+  mean1 = data1c.mean(axis=0)
+  data1c = data1c - mean1[np.newaxis, :]
+  print 'data1c.shape: ', data1c.shape
+  nPoint = len(data1c)
+  nFeature = data1c.shape[1]
+
+  # remove seasonal cycle
+  if a.anomaly==1:
+    anom = np.ones( (12, nFeature), dtype='f') 
+    for i in range(12):
+      anom[i] = data1c[i::12].mean(axis=0)
+      data1c[i::12] -= anom[i][np.newaxis, :]
+
+  # calc PCA
+
+  nKeepMax = min(nPoint, nFeature)
+  nKeep = min(10, nKeepMax)
+  #weight1 = None
+  p1= pca.PCA(data1c,missingvalue=None, nkeep=nKeep, mask=None, weight=weight1)
+  p1.calculate2()
+
+  # labels for the variables
+  lab = []
+  for i in range(a.nVar):
+    if a.pres[i]>0:
+      pStr = '[p=%.0f]'%a.pres[i]
+    else:
+      pStr = ''
+    lab.append( '%s_%s:%s%s'%(a.center[i], a.model[i], a.varName[i], pStr) )
+ 
+
+if cr['plot_1']       == 1:
+  #== plot_variance
+  fig1 = Mat.figure(figsize=(10,6))
+  Mat.clf()
+  #varP[0] = 0.
+  Mat.plot(np.arange(1,nKeep+1), p1.varP[:nKeep], 'o')
+  Mat.xlim(0.5, nKeep+0.5)
+  Mat.grid()
+  Mat.ylabel('percentage of variance')
+  Mat.title('Variances of the first %d EOFs, for %s'%(nKeep, lab[0]) )
+
+  figFileVariance = '%s/variance.png'%a.outDir
+  Mat.savefig(figFileVariance, dpi=100)
+
+  #== plot_tser
+  tserW = 10
+  tserH = 4
+  nPlot = nKeep
+
+  fig1 = Mat.figure(figsize=(tserW,tserH*nPlot+2))
+  Mat.clf()
+
+  min1 = p1.tser.min()
+  max1 = p1.tser.max()
+  max1 = max(max1, np.abs(min1))
+
+  try:
+    time9 = convertTime(time1, timeUnits)
+  except:
+    time9 = None
+
+  for i in range(10):
+    ax = Mat.subplot(nPlot,1,i+1)
+    if time9 is None:
+      plotTser(p1.tser, i,i, max1)
+    else:
+      plotTser2(time9, p1.tser, i,i, max1)
+
+  figFileTser = '%s/tser.png'%a.outDir
+  Mat.savefig(figFileTser, dpi=100)
+
+  #== calc_min_max, before putting in lat/lon grid
+  min2 = p1.pattern.min()
+  max2 = p1.pattern.max()
+
+  # fill lat/lon
+  if isGap:
+    pattern1 = np.ma.ones( (nKeep, nLon*nLat), dtype = np.float32 ) * np.ma.masked
+    pattern1[:, valid] = p1.pattern
+  else:
+    pattern1 = p1.pattern
+ 
+  pattern1.shape = nKeep, nLat, nLon
+
+  #== plot_patterns
+  from mpl_toolkits.basemap import Basemap
+  patternW = 10
+
+  aspect1 = (lat1[-1]-lat1[0]) / (lon1[-1]-lon1[0])
+  patternH = aspect1*patternW + 0.8
+
+  Mat.clf()
+  xPlot = 1
+  yPlot = ((nKeep-1)/xPlot+1)
+  f1 =Mat.figure(figsize=(patternW*xPlot, patternH*yPlot))
+
+  lon2 = find_bound(lon1)
+  lat2 = find_bound(lat1)
+
+  lat2[0] = max(-90, lat2[0])
+  lat2[-1] = min(90, lat2[-1])
+
+  m = Basemap(lon2[0], lat2[0], lon2[-1], lat2[-1], resolution='c', suppress_ticks=False)
+
+  for i in range(nKeep):
+    ax = Mat.subplot(yPlot,xPlot,i+1)
+    plotPattern(i, min2, max2)
+
+  figFilePattern = '%s/pattern.png'%a.outDir
+  Mat.savefig(figFilePattern, dpi=100)
+
+  #== concatenate plots
+  from PIL import Image
+
+  files = [
+figFileVariance, 
+figFileTser, 
+figFilePattern, 
+]
+
+  images = map(Image.open, files)
+  w = max(i.size[0] for i in images)
+  h = sum(i.size[1] for i in images)
+
+  result = Image.new("RGBA", (w, h))
+
+  y = 0
+  for i in images:
+      result.paste(i, (0, y))
+      y += i.size[1]
+
+  figFile = '%s/plot.png'%a.outDir
+  result.save(figFile)
+  print 'figFile: %s'%figFile
+
+if cr['plot_2']       == 1:
+  #== plot_variance
+  fig1 = Mat.figure(figsize=(10,6))
+  Mat.clf()
+  #varP[0] = 0.
+  Mat.plot(np.arange(1,nKeep+1), p1.varP[:nKeep]*100, 'o')
+  Mat.xlim(0.5, nKeep+0.5)
+  Mat.grid()
+  Mat.ylabel('Percentage of Variance')
+  Mat.title('Variances of the First %d EOFs, for %s'%(nKeep, lab[0]) )
+
+  figFileVariance = '%s/variance.png'%a.outDir
+  Mat.savefig(figFileVariance, dpi=100)
+
+  #nPlot = nKeep
+  nPlot = 5
+
+  #== plot_tser
+  tserW = 8
+  tserH = 6
+
+  fig1 = Mat.figure(figsize=(tserW,tserH*nPlot))
+  Mat.clf()
+
+  min1 = p1.tser.min()
+  max1 = p1.tser.max()
+  max1 = max(max1, np.abs(min1))
+
+  try:
+    time9 = convertTime(time1, timeUnits)
+  except:
+    time9 = None   
+
+  for i in range(nPlot):
+    ax = Mat.subplot(nPlot,1,i+1)
+    if time9 is None:
+      plotTser(p1.tser, i,i, max1)
+    else:
+      plotTser2(time9, p1.tser, i,i, max1)
+
+  figFileTser = '%s/tser.png'%a.outDir
+  Mat.savefig(figFileTser, dpi=100)
+
+  #== calc_min_max, before putting in lat/lon grid
+  min2 = p1.pattern.min()
+  max2 = p1.pattern.max()
+
+  # fill lat/lon
+  if isGap:
+    pattern1 = np.ma.ones( (nPlot, nLon*nLat), dtype = np.float32 ) * np.ma.masked
+    pattern1[:, valid] = p1.pattern[:nPlot, :]
+  else:
+    pattern1 = p1.pattern[:nPlot, :]
+ 
+  pattern1.shape = nPlot, nLat, nLon
+
+  #== plot_patterns
+  from mpl_toolkits.basemap import Basemap
+  patternH = 6.0
+
+  aspect1 = (lat1[-1]-lat1[0]) / (lon1[-1]-lon1[0])
+  patternW = min( patternH/aspect1, 12)
+
+  Mat.clf()
+  xPlot = 1
+  yPlot = ((nPlot-1)/xPlot+1)
+  f1 =Mat.figure(figsize=(patternW*xPlot, patternH*yPlot))
+
+  lon2 = find_bound(lon1)
+  lat2 = find_bound(lat1)
+
+  lat2[0] = max(-90, lat2[0])
+  lat2[-1] = min(90, lat2[-1])
+
+  m = Basemap(lon2[0], lat2[0], lon2[-1], lat2[-1], resolution='c', suppress_ticks=False)
+
+  for i in range(nPlot):
+    ax = Mat.subplot(yPlot,xPlot,i+1)
+    plotPattern(i, min2, max2)
+
+  figFilePattern = '%s/pattern.png'%a.outDir
+  Mat.savefig(figFilePattern, dpi=100)
+
+  #== concatenate plots
+  from PIL import Image
+
+  files = [
+figFileVariance, 
+figFileTser, 
+figFilePattern, 
+]
+
+  images = map(Image.open, files)
+  for i in images:
+    print i.size
+
+  w = images[1].size[0] + images[2].size[0] 
+  h = images[0].size[1] + max( images[1].size[1], images[2].size[1] )
+
+  result = Image.new("RGBA", (w, h))
+
+  result.paste( images[0], (0, 0) )
+  result.paste( images[1], (0, images[0].size[1]) )
+  result.paste( images[2], (images[1].size[0], images[0].size[1]) )
+
+  figFile = '%s/plot.png'%a.outDir
+  result.save(figFile)
+  print 'figFile: %s'%figFile
+
+if cr['save_file']       == 1:
+  print 'save to a file.'
+  fn = '%s/data.nc'%a.outDir
+  index1 = np.arange(nPlot).astype('i') + 1
+  index1a = np.arange(nKeep).astype('i') + 1
+  axisLib1 = {
+'t':{'name': 'time',  'unit': timeUnits},
+'i':{'name': 'index', 'unit': 'i'},
+}
+
+  # save patterns
+  if type(pattern1)==type(np.ma.ones((2,2))):
+    pattern2 = pattern1.filled(-9999.0)
+  else:
+    pattern2 = pattern1
+
+  NC1.save2nc(pattern2, ncfile=fn, name='patterns',
+    newfile=1,
+    format='NETCDF3_CLASSIC',
+    missing_value=-9999.0,
+    axisorder='iyx', axislib=NC1.axislib0, axisarray=[index1, lat1, lon1])
+  
+  # save tser
+  NC1.save2nc(p1.tser[:nPlot], ncfile=fn, name='tser',
+    newfile=0,
+    format='NETCDF3_CLASSIC',
+    missing_value=-9999.0,
+    axisorder='it', axislib=axisLib1, axisarray=[index1, time1])
+
+  # save varP
+  NC1.save2nc(p1.varP[:nKeep], ncfile=fn, name='varP',
+    newfile=0,
+    format='NETCDF3_CLASSIC',
+    missing_value=-9999.0,
+    axisorder='i', axislib=NC1.axislib0, axisarray=[index1a])
+
+  print 'dataFile: %s'%fn
+ 
+
+
+

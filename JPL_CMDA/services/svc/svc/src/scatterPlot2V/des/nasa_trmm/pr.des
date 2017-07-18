@@ -1,0 +1,78 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'obs-TRMM output prepared for obs4MIPs NASA-GSFC observations',
+   D_T0TIME      = '01-Jan-1900 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/trmm/./pr_TRMM-L3_v7_199801-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 35809.5000,
+   S_END         = 36508.5000,
+   S_DELTA       =    30.3913,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/trmm/./pr_TRMM-L3_v7A_200001-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 36539.5000,
+   S_END         = 38700.5000,
+   S_DELTA       =    30.4366,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/trmm/./pr_TRMM-L3_v7A_200701-200912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 39096.5000,
+   S_END         = 40161.5000,
+   S_DELTA       =    30.4286,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/trmm/./pr_TRMM-L3_v7A_201001-201009.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 40192.5000,
+   S_END         = 40435.0000,
+   S_DELTA       =    30.3125,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/trmm/./pr_TRMM-L3_v7_201010-201210.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 40465.5000,
+   S_END         = 41196.5000,
+   S_DELTA       =    30.4583,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

@@ -1,0 +1,754 @@
+#!/home/svc/install/epd/bin/python
+'''
+execfile('/home/bytang/projects/cmac/trunk/services/svc/svc/src/randomForest/pythonWrapper')
+
+
+'''
+HOME='/home/svc'
+
+cr = {
+#                              1  2   3  4
+    # zzzz
+'import_':              1,   # 0  1   1  0
+# parameters_
+# def_change_labels:     # not working
+# def_extractNC(desFn):
+# def_clipEnd(x, w, percL, percR):
+# class_SUBSET_REGION():
+  # def_noDataExit()
+  # def_getFileName2
+  # def_getFileName
+  # def_getUnits(self):
+  # def_checkTime
+  # def_subsetting():
+  # def_loadFile
+'init_class':           1,   # 1  1
+'command_arg':          1,   # 1  1
+'plot__':               1,   # 1  1
+'':        0,   # 1  1
+'':        0,   # 1  1
+}
+
+#if cr['']       == 1:
+#if cr['']       == 1:
+
+# 1 -- 
+# 
+
+if cr['import_']       == 1:
+  import os, sys,  time
+  import tempfile
+  #import math
+  import glob
+  import re
+  import pickle
+
+  import numpy as np      
+  from netCDF4 import Dataset
+  import netCDF4 as nC4
+  sys.path.insert(0, '../py')
+  import NC_btang_v4 as NC1
+  import cmac
+
+  import matplotlib 
+  matplotlib.use('Agg')  
+  import matplotlib.pylab as Mat
+  Mat.ioff()
+  #from mpl_toolkits.basemap import NetCDFFile
+  from mpl_toolkits.basemap import Basemap
+
+  # RF import
+  from sklearn.ensemble import RandomForestRegressor as RFR
+  from sklearn.metrics import mean_squared_error
+  from sklearn.metrics import r2_score
+  from sklearn.metrics import explained_variance_score
+
+
+t00 = time.time()
+
+# parameters_
+num2month = {
+1: 'JAN',
+2: 'FEB',
+3: 'MAR',
+4: 'APR',
+5: 'MAY',
+6: 'JUN',
+7: 'JUL',
+8: 'AUG',
+9: 'SEP',
+10: 'OCT',
+11: 'NOV',
+12: 'DEC',
+}
+
+modelCenter = [
+'cccma',
+'csiro',
+'gfdl',
+'giss',
+'ipsl',
+'miroc',
+'ncar',
+'ncc',
+'ukmo',
+]
+
+obsCenter = [
+'nasa',
+'noaa',
+'argo',
+]
+
+oceanVar = [
+'ot',
+'os',
+]
+
+var3d = [
+'ta',
+'hus',
+'clw',
+'cli',
+'ot',
+'os',
+]
+
+regridVar = [
+'cli',
+'clw',
+]
+
+# def_change_labels(ax):
+def change_labels(ax):
+  x1 = Mat.getp(ax, 'xticklabels')
+  #x1 = Mat.getp(ax.xaxis, 'ticklabels') # not working
+  x1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    print t1
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'W'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'E'
+    x1New.append(t2)
+  #
+  x1 = Mat.getp(ax, 'yticklabels')
+
+  y1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'S'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'N'
+    y1New.append(t2)
+  Mat.setp(ax, xticklabels=x1New, yticklabels=y1New)
+  return x1New, y1New
+
+# def_extractNC(desFn):
+p1 = re.compile("S_FILENAME += *\'(.+\.nc)\'")
+def extractNC(desFn):
+  lines = open(desFn).read()
+  # S_FILENAME    = '/mnt/r1i1p1_plevRegridded_198412-200511.nc'
+
+  m1 = p1.search(lines)
+  return m1.groups()[0]
+
+# def_clipEnd(x, w, percL, percR):
+def clipEnd(x, w, percL, percR):
+  indS = np.argsort(x)
+  x1 = x[indS]
+  w1 = w[indS]
+  sum1 = np.cumsum(w1)
+  threshL = sum1[-1]*percL
+  threshR = sum1[-1]*(1.0 - percR)
+  indL = max( np.searchsorted(sum1, threshL) - 1, 0 )
+  indR = min( np.searchsorted(sum1, threshR) + 1, len(x) )
+ 
+  return x1[indL], x1[indR]
+
+# class_SUBSET_REGION():
+class SUBSET_REGION():
+  #== def___init__
+  def __init__(self):
+    self.dataDir, self.cmacDir = cmac.getRootDir()
+    if self.dataDir is None:
+      sys.exit(1)
+
+    self.scatterDir = '%s/trunk/services/svc/svc/src/scatterPlot2V'%self.cmacDir
+
+    ### self.ferretCmd = '/home/bytang/install/bin/ferret' 
+    # /mnt/xvdf/data/
+    if self.dataDir.find('xvdf')>-1:
+      self.ferretCmd = '/home/sflops/install/bin/ferret'
+    else:
+      self.ferretCmd = '/home/svc/install/bin/ferret' 
+
+    self.clipL = 0.02
+    self.clipR = 0.02
+
+    self.ferretMem = 100
+    self.isDiffPlot = 0
+
+    #self.dataDir = '/mnt/hgfs/cmacws/data1/data/cmip5'
+    ### self.desDir = '/home/bytang/projects/cmac/des/original'
+    #self.desDir = '/home/svc/cmac/des/original'
+
+    # zzzz
+    #self.desDir = '/home/bytang/projects/cmac/tmp/des'  # for Benyang's testing
+    self.desDir = os.path.split(self.dataDir)[0] + '/des'  # for deployment
+    #self.desDir = '%s/des'%self.scatterDir  # ad hoc fix for summer school
+
+    self.inFile = '' 
+    self.inFile2 = '' 
+#   self.inFileBU = '' 
+#   self.netcdfFile = '' 
+#   self.netcdfDirRemote = '' 
+#   self.pngFile = '' 
+#   self.pdfFile = '' 
+#   self.lockFile = '' 
+#
+#   self.isCoastline = 1 
+#   self.regionName = '' 
+#   self.dataName = '' 
+#   self.dateStr = '' 
+#
+#   self.regionTitle = 'same' 
+#   self.dataTitle = 'same' 
+#   self.dateTitle = 'same' 
+#
+#   self.offset = 0.0 
+#
+
+    if 0:
+      self.lon1S = -10.5
+      self.lon1E = 20.3
+      #self.dLon = 1.0
+
+    if 0:
+      self.lon1S = -180.0
+      self.lon1E = 180.0
+      #self.dLon = 1.0
+  
+    if 0:
+      self.lat1S = -70.1
+      self.lat1E = -20.9
+      #self.dLat = 1.0
+
+    if 1:
+      self.lon1S = -180.0
+      self.lon1E = 180.0
+
+    if 1:
+      self.lat1S = -80.0
+      self.lat1E =  80.0
+
+#
+    if 1:
+      self.center1 = 'ukmo'
+      self.model1  = 'hadgem2-a'
+      self.varName1='ts'
+
+    if 0:
+      self.center2 = 'giss'
+      self.model2  = 'e2-r'
+      #self.varName2='rsdt'
+      self.varName2='ts'
+
+    if 1:
+      self.center2 = 'gfdl'
+      #self.model2  = 'esm2g'
+      self.model2  = 'cm3'
+      #self.varName2='rsdt'
+      self.varName2='ta'  # working
+      self.varName2='clw' # not working
+      self.varName2='lai' # not working
+
+    if 0:
+      self.center2 = 'ukmo'
+      self.model2  = 'hadgem2-a'
+      self.varName2='ts'
+      #self.varName2='cli'
+
+    self.nDim = 3
+
+    self.pres1 = 3000
+    self.pres2 = 3000
+
+    self.yearS = 1990
+    self.yearE = 1991
+
+    self.monthS = 1
+    self.monthE = 1
+
+    self.dayS = 15
+    self.dayE = 15
+
+    self.nSample = 500
+
+    self.outDir = '.'
+  
+    self.noData = None
+
+  #== def_derived
+  def derived(self):
+    pass
+
+  # def_noDataExit()
+  def noDataExit(self, msg):
+    print "No Data !!!"
+    print msg
+    sys.exit(1)
+
+  # not used. Use the des file instead.
+  # def_getFileName(self, center, model, varName):
+  def getFileName(self, center, model, varName):
+    # the original is just for model
+    if center in modelCenter:
+      if varName in regridVar:
+        dir0 = '%s/%s/%s/regridded'%(self.dataDir, center, model)
+      else:
+        dir0 = '%s/%s/%s/original'%(self.dataDir, center, model)
+ 
+    else:
+      dir0 = '%s/%s/%s'%(self.dataDir, center, model)
+
+    desDir = self.desDir
+
+    filesNc = glob.glob('%s/%s_*.nc'%(dir0, varName))
+    desFn = '%s/%s_%s_%s.des'%(desDir, center, model, varName)
+    filesDes = glob.glob(desFn)
+    if 1:
+      print dir0
+      print 'filesNc, filesDes:'
+      print center, model, varName
+      print filesNc
+      print filesDes
+
+    # yyyy
+    if len(filesNc)==0:
+      self.noDataExit('no *.nc file.')
+
+    if len(filesDes)>1:
+      print 'more than 1 des files:'
+      for f in filesDes:
+        print f
+
+      self.noDataExit('more than 1 *.des files.')
+      return None
+
+    if len(filesNc)>1 and len(filesDes)==1:
+      return filesDes[0], filesNc[0]
+
+    if len(filesNc)>1 and len(filesDes)==0:
+      try:
+        temp1 = '/home/bytang/bin/mine/mkdes2 --f90 --des %s %s/%s_*.nc'%(desFn, dir0, varName)
+        print temp1
+        os.system(temp1)
+        files2a = glob.glob(desFn)
+        return files2a[0], filesNc[0]
+      except:
+        self.noDataExit('failed to generate the des file.')
+      
+    if len(filesNc)==1:
+      return filesNc[0], filesNc[0]
+ 
+    return None
+
+  # def_getFileName2(self, center, model, varName):
+  def getFileName2(self, center, model, varName):
+    dir0 = '%s/%s_%s'%(self.desDir, center, model)
+    fileNc = glob.glob('%s/%s.nc'%(dir0, varName))
+    print '%s/%s.nc'%(dir0, varName)
+    if len(fileNc)>0:
+      return fileNc[0], fileNc[0] 
+
+    else:
+      print '%s/%s.des'%(dir0, varName)
+      fileDes = glob.glob('%s/%s.des'%(dir0, varName))
+
+      if len(fileDes)==0:
+        return None
+
+      # def_extractNC(desFn):
+      return fileDes[0], extractNC(fileDes[0])
+
+  # def_getUnits(self):
+  def getUnits(self):
+    nc1 = Dataset(self.inFile1Nc, 'r')
+    data = nc1.variables[self.varName1]
+    self.units1 = data.units
+    nc1.close()
+
+    nc1 = Dataset(self.inFile2Nc, 'r')
+    data = nc1.variables[self.varName2]
+    self.units2 = data.units
+    nc1.close()
+
+  # def_checkTime
+  # not used yet
+  def checkTime(self, ncFile, varName):
+    # open file
+    nc1 = Dataset(ncFile, 'r')
+
+    # read time
+    data = nc1.variables[varName]
+    dims = data.dimensions
+    timeName = dims[0]
+    time1 = nc1.variables[timeName]
+
+    tS = nC4.num2date(time1[0], time1.units)
+    tE = nC4.num2date(time1[-1], time1.units)
+
+    tNumS = nC4.date2num(datetime.datetime(self.yearS, self.monthS, self.dayS, 0,0,0), time1.units)
+    tNumE = nC4.date2num(datetime.datetime(self.yearE, self.monthE, self.dayE, 0,0,0), time1.units)
+
+    if tNumS<time1[0]:
+      self.yearS = tS.year
+      self.monthS = tS.month
+      self.dayS = tS.day
+      print 'start time changed to: %d-%2d-%2d'%(self.yearS, self.monthS, self.dayS)
+
+
+    if tNumE>time1[-1]:
+      self.yearE = tE.year
+      self.monthE = tE.month
+      self.dayE = tE.day
+      print '  end time changed to: %d-%2d-%2d'%(self.yearE, self.monthE, self.dayE)
+
+    nc1.close()
+
+  # def_subsetting():
+  def subsetting(self, ncFile1, varName1, ncFile2=None, varName2='DATA1', 
+         varNameOut='DATA1', interp='', dim=4, lev=-1, isAve=0):
+
+    try:
+      temp1 = os.path.isfile(ncFile1)
+    except:
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      self.noData = 1
+      tempFile = None
+      return tempFile
+    
+    if not os.path.isfile(ncFile1):
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      self.noData = 1
+      tempFile = None
+      return tempFile
+      
+    aveStr = ''
+    if isAve==1:
+      aveStr = '@ave'
+
+    if self.noData ==1:
+      self.noDataExit('in subsetting: nc file is not there.')
+     
+    tempFile = tempfile.mkstemp(suffix='.nc', dir=self.outDir)
+
+    tmpFileJnl = tempfile.mkstemp(suffix='.jnl', dir=self.outDir)
+    #print varName, tempFile, tmpFileJnl
+
+    print type(self.yearS), type(self.monthS)
+    dimStr = ''
+    if dim==3:
+      dimStr = ', t="15-%s-%d":"15-%s-%d"%s'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+    elif dim==4:
+      if lev<0:
+        dimStr = ', k=1, t="15-%s-%d":"15-%s-%d"%s'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+      else:
+        dimStr = ', z=%g@itp, t="15-%s-%d":"15-%s-%d"%s'\
+%(lev, num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+
+      if 0:
+        dimStr = ', k=1, t="15-%s-%d":"15-%s-%d"%s'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE, aveStr)
+
+    #  
+    if ncFile2 is None:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  !show data
+
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, x=%f:%f, y=%f:%f %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  # 4
+  varNameOut,
+  varName1,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  #interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    else:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  use "%s"
+  !show data
+
+  
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, g=%s[d=2, l=1]%s %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  ncFile2, 
+  # 4
+  varNameOut,
+  varName1,
+  varName2,
+  interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    open(tmpFileJnl[1], 'w').write(script1)
+
+    temp1 = '%s -gif -script %s' %(self.ferretCmd, tmpFileJnl[1])
+
+    try:
+      os.system(temp1)
+    except:
+      self.noDataExit('subsetting: failed to run ferret')
+
+    #os.remove(tmpFileJnl)
+
+    if not os.path.isfile(tempFile[1]):
+      self.noDataExit('subsetting: ferret failed to generate a nc file.')
+
+    if os.stat(tempFile[1]).st_size<10:
+      self.noDataExit('subsetting: ferret failed to generate a nc file.')
+
+    return tempFile[1]
+
+  # def_loadFile
+  def loadFile(self, ncFile, varName='DATA1'):
+    nc1 = Dataset(ncFile, 'r')
+    data = nc1.variables[varName][:]
+    nc1.close()
+
+    #zzzz 
+    if len(data.shape)==3:
+      data = data[0, :,:]
+    return data
+   
+if cr['init_class']       == 1:
+  a = SUBSET_REGION()
+
+if cr['command_arg']       == 1:
+  if len(sys.argv)>1:
+    argv = sys.argv
+    pid = open(argv[1])
+    argDict = pickle.load(pid)
+    pid.close()
+    for k in argDict.keys():
+      temp1 = 'a.' + k + '=argDict[k]'   
+      print temp1
+      exec(temp1)
+
+    a.nVar = int(a.nVar)
+    a.nVarP = 1
+
+    for i in range(a.nVar+a.nVarP):
+      try:
+        a.pres[i] = float(a.pres[i])
+      except ValueError:
+        a.pres[i] = -999999
+      if a.pres[i]>0 and (a.varName[i] not in oceanVar):
+        a.pres[i] *= 100.0
+
+    a.yearS = int(a.yearS)
+    a.yearE = int(a.yearE)
+    a.monthS = int(a.monthS)
+    a.monthE = int(a.monthE)
+    a.lon1S = float(a.lon1S)
+    a.lon1E = float(a.lon1E)
+    a.lat1S = float(a.lat1S)
+    a.lat1E = float(a.lat1E)
+
+if cr['plot__']       == 1:
+  print a.yearS+1, a.yearE, a.monthS, a.monthE
+  # get file names
+  #try: 
+  a.inFile = []
+  a.inFileNc = []
+  data2b = []
+  nVarP = 1
+  for iVar in range(a.nVar+a.nVarP):
+    if 1: 
+      inFile1, inFile1Nc = a.getFileName2(a.center[iVar], a.model[iVar], a.varName[iVar]) 
+      a.inFile.append(inFile1)
+      a.inFileNc.append(inFile1Nc)
+      print 'variable ', iVar
+      print a.center[iVar], a.model[iVar], a.varName[iVar]
+      print a.inFile[-1]
+      print a.inFileNc[-1]
+
+    # subset the target
+    if iVar==0:
+      tempFile1 = a.subsetting(a.inFile[iVar], a.varName[iVar], dim=4, lev=a.pres[iVar])
+      nc1 = Dataset(tempFile1, 'r')
+      ncVar1 = nc1.variables['DATA1']
+      data1 = ncVar1[:]
+      data1.shape = np.prod(data1.shape), 
+      
+      dims1 = ncVar1.dimensions
+      lon1 = nc1.variables[dims1[-1]][:]
+      lat1 = nc1.variables[dims1[-2]][:]
+      nc1.close()
+
+    # subset the predictors
+    else:
+      tempFile2 = a.subsetting(a.inFile[iVar], a.varName[iVar], 
+          ncFile2=tempFile1, varNameOut='DATA2', dim=4, lev=a.pres[iVar])
+
+      nc2 = Dataset(tempFile2, 'r')
+      data2a = nc2.variables['DATA2'][:]
+      nc2.close()
+
+      data2a.shape = np.prod(data2a.shape), 1
+      data2b.append(data2a)
+
+  # combine
+  data2 = np.ma.concatenate(data2b, axis=1)
+  print 'data1.shape, data2.shape: ', data1.shape, data2.shape
+
+  # filter out invalid
+  temp1 = np.ma.arange(5)
+  valid1 = np.ones( data1.shape, dtype=bool )
+  if type(data1) == type(temp1):
+    if data1.mask is not None:
+      valid1 = ~( data1.mask )
+
+  valid2 = np.ones( data2.shape, dtype=bool )
+  if type(data2) == type(temp1):
+    if data2.mask is not None:
+      valid2 = ~( data2.mask )
+
+  if valid2.shape != data2.shape:
+    valid2 = np.ones( data2.shape, dtype=bool )
+
+  print 'data2.mask: ', type(data2.mask), data2.mask.shape, data2.mask
+  print 'valid2.shape: ', valid2.shape
+
+  # invalid times and grid:
+  temp2 = valid2.sum(axis=1)
+  valid2a = temp2==data2.shape[1]
+
+  print 'valid1.sum(), valid2a.sum(): ', valid1.sum(), valid2a.sum()
+
+  valid = valid1 & valid2a
+  if valid.sum()<data1.shape[0]:
+    data1c = data1[valid]
+    data2c = data2[valid]
+  else:
+    data1c = data1
+    data2c = data2
+
+  data1c = np.array(data1c)
+  data2c = np.array(data2c)
+  print 'data1c.shape, data2c.shape: ', data1c.shape, data2c.shape
+  nPoint = len(data1c)
+  nFeature = data2c.shape[1]
+
+  # reduce nPoint
+  nPointAllow = 5000
+  nPoint0 = nPoint
+  if nPoint > nPointAllow:
+    ind1 = np.random.choice(nPoint, nPointAllow)
+    data1c = data1c[ind1] 
+    data2c = data2c[ind1] 
+    nPoint = len(data1c)
+
+  # initiate RFR
+  nTree = 500
+  nJob = 8
+  maxDepth = 20
+  rfr = RFR(n_estimators=nTree, n_jobs=nJob, max_depth=maxDepth,compute_importances=True, oob_score=True)
+
+  # train RFR
+  t0 = time.time()
+  rfr.fit(data2c,data1c)
+  print 'training dt = %.2f'%(time.time()-t0)
+  print 'rfr.feature_importances_: ', rfr.feature_importances_.shape, rfr.feature_importances_
+  print 'training skill: %.3f'%rfr.oob_score_
+
+  # plot
+  fig1 = Mat.figure(1)
+  Mat.clf()
+  fig1.set_size_inches(15, 10)
+  #Mat.bar(range(rfr.feature_importances_.shape[0]), rfr.feature_importances_)
+  Mat.bar(range(nFeature), rfr.feature_importances_)
+  #Mat.xticks(range(23), pp)
+  #Mat.xlabel("Pressure (hPa)")
+  Mat.ylabel("random forest importance")
+
+  lab = []
+  for i in range(a.nVar+a.nVarP):
+    if a.pres[i]>0:
+      pStr = '[p=%.0f]'%a.pres[i]
+    else:
+      pStr = ''
+    lab.append( '%s_%s:%s%s'%(a.center[i], a.model[i], a.varName[i], pStr) )
+  
+  Mat.xticks(np.arange(nFeature)+0.5, lab[1:], rotation=15, ha='right')
+  Mat.title("random forest model to predict %s.  nPoint=%d  nPointUsed=%d  R2=%.3f"%(lab[0], nPoint0, nPoint, rfr.oob_score_) )
+
+  figFile = '%s/plot.png'%a.outDir
+  Mat.savefig(figFile, dpi=100)
+
+  print 'figFile: %s'%figFile
+
+  # save to a file
+  fn = '%s/data.nc'%a.outDir
+  index1 = np.arange(nFeature).astype('i')
+  NC1.save2nc(rfr.feature_importances_, ncfile=fn, name='importance',
+    newfile=1,
+    format='NETCDF3_CLASSIC',
+    missing_value=-9999.0,
+    axisorder='i', axislib=NC1.axislib0, axisarray=[index1])
+ 
+  print 'dataFile: %s'%fn

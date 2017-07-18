@@ -1,0 +1,388 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = ' ',
+   D_T0TIME      = '01-Jan-1900 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_197901-197912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 28854.0000,
+   S_END         = 29188.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198001-198012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 29219.0000,
+   S_END         = 29554.0000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198101-198112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 29585.0000,
+   S_END         = 29919.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198201-198212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 29950.0000,
+   S_END         = 30284.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198301-198312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 30315.0000,
+   S_END         = 30649.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198401-198412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 30680.0000,
+   S_END         = 31015.0000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198501-198512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 31046.0000,
+   S_END         = 31380.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198601-198612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 31411.0000,
+   S_END         = 31745.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198701-198712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 31776.0000,
+   S_END         = 32110.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198801-198812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 32141.0000,
+   S_END         = 32476.0000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_198901-198912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 32507.0000,
+   S_END         = 32841.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199001-199012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 32872.0000,
+   S_END         = 33206.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199101-199112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 33237.0000,
+   S_END         = 33571.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199201-199212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 33602.0000,
+   S_END         = 33937.0000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199301-199312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 33968.0000,
+   S_END         = 34302.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199401-199412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 34333.0000,
+   S_END         = 34667.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199501-199512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 34698.0000,
+   S_END         = 35032.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199601-199612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 35063.0000,
+   S_END         = 35398.0000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199701-199712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 35429.0000,
+   S_END         = 35763.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199801-199812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 35794.0000,
+   S_END         = 36128.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_199901-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 36159.0000,
+   S_END         = 36493.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200001-200012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 36524.0000,
+   S_END         = 36859.0000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200101-200112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 36890.0000,
+   S_END         = 37224.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200201-200212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 37255.0000,
+   S_END         = 37589.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200301-200312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 37620.0000,
+   S_END         = 37954.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200401-200412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 37985.0000,
+   S_END         = 38320.0000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200501-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 38351.0000,
+   S_END         = 38685.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200601-200612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 38716.0000,
+   S_END         = 39050.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200701-200712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 39081.0000,
+   S_END         = 39415.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200801-200812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 39446.0000,
+   S_END         = 39781.0000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_200901-200912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 39812.0000,
+   S_END         = 40146.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_201001-201012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 40177.0000,
+   S_END         = 40511.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_201101-201112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 40542.0000,
+   S_END         = 40876.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_201201-201212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 40907.0000,
+   S_END         = 41242.0000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_201301-201312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 41273.0000,
+   S_END         = 41607.0000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ecmwf/interim/./wap_Amon_ECMWF_interim_201401-201402.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 41638.0000,
+   S_END         = 41669.0000,
+   S_DELTA       =    31.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

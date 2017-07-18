@@ -1,0 +1,158 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = ' ',
+   D_T0TIME      = '01-Jan-2001 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_200101-200112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =    15.2200,
+   S_END         =   350.0600,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_200201-200212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =   380.5000,
+   S_END         =   715.3400,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_200301-200312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =   745.7800,
+   S_END         =  1080.6200,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_200401-200412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  1111.0600,
+   S_END         =  1445.9000,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_200501-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  1476.3400,
+   S_END         =  1811.1800,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_200601-200612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  1841.6200,
+   S_END         =  2176.4600,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_200701-200712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  2206.9000,
+   S_END         =  2541.7400,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_200801-200812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  2572.1800,
+   S_END         =  2907.0200,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_200901-200912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  2937.4600,
+   S_END         =  3272.3000,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_201001-201012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  3302.7400,
+   S_END         =  3637.5800,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_201101-201112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  3668.0200,
+   S_END         =  4002.8600,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_201201-201212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  4033.3000,
+   S_END         =  4368.1400,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/argo/argo/break/ot_ARGO_201301-201305.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  4398.5800,
+   S_END         =  4520.3400,
+   S_DELTA       =    30.4400,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

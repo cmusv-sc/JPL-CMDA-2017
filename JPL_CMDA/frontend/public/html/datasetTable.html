@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <title>Dataset Table</title>
+  <!-- for Bootstrap -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+  <!-- Use a JQuery ThemeRoller theme, in this case 'smoothness' -->
+  <link rel="stylesheet" type="text/css" href="ddcl/smoothness-1.11.2/jquery-ui-1.11.2.custom.css">
+  <link rel="stylesheet" type="text/css" href="ddcl/ui.dropdownchecklist.themeroller.css">
+
+  <!-- Include the basic JQuery support (core and ui) -->
+  <script type="text/javascript" src="ddcl/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="ddcl/jquery-ui-1.11.2.custom.min.js"></script>
+  
+  <!-- Include the DropDownCheckList support -->
+  <script type="text/javascript" src="ddcl/ui.dropdownchecklist-1.5-min.js"></script>
+ 
+  <script src='js2/dataList1.js'></script>
+  <script src='js2/varList.js'></script>
+  <link rel="stylesheet" href="common.css">
+
+<script>
+
+// put_data__
+function put_data(ID){
+  var list1=document.getElementById("data"+ID);
+  list1.add(new Option("all", "all"));
+
+  for(var key in dataList) {
+    if (key.slice(0,5)==="group") {
+      var og = document.createElement("OPTGROUP");
+      og.setAttribute('label', dataList[key][0]);
+      list1.add(og);
+    } else {
+      og.appendChild(new Option(key,key));
+    }
+  }
+}
+
+function put_var(ID){
+  var list1=document.getElementById("var"+ID);
+  list1.add(new Option("all", "all"));
+  for (var key in varList) {
+    list1.add(new Option(varList[key][0],key));
+  }
+}
+
+/*
+headers:
+id
+Agency
+Model/Instrument 
+variable shortname
+variable longname
+Units
+Grid Dimensions
+Start Time
+End Time
+*/
+ 
+function getOption(sel1, isFull) {
+  out1 = [];
+  if (isFull) {
+    for (var i = 0; i < sel1.options.length; i++) {
+        out1.push(sel1.options[i].value);
+    }
+  } else {
+    for (var i = 0; i < sel1.options.length; i++) {
+      if(sel1.options[i].selected){
+        out1.push(sel1.options[i].value);
+      }
+    }
+  }
+  return out1;
+}
+
+/*
+function changeSet(){
+  var iSet = document.getElementById("type1").selectedIndex;
+  alert(iSet);
+  .getScript("js2/dataList"+iSet+".js", functionlh(data, textStatus, jqxhr){});
+}
+*/
+function makeTable(isFull){
+    var table1 = document.getElementById("table1");
+    //table1.style.width  = '100px';
+    table1.style.border = '1px solid black';
+
+    var vv = getOption(document.getElementById("var1"));
+    var dd = getOption(document.getElementById("data1"));
+
+
+   // for (var i=0; i<vv.length; i++) { alert(vv[i]);}
+
+    if (dd[0]=="all") {dd.splice(0,1);}
+    if (vv[0]=="all") {vv.splice(0,1);}
+
+    //alert(vv);
+    //alert(dd);
+    //tbl = $("#table1");
+
+    var agency1 = "";
+    var model1 = "";
+    var long1 = "";
+    var unit1 = "";
+ 
+    string1 = "";
+    string2 = "";
+    id1 = 0;
+    for(var i = 0; i < dd.length; i++){
+      var data_string = dd[i];
+      var varList2 = dataList[data_string][1];  
+      var temp1 = data_string.split("/");
+      agency1 = temp1[0];
+      model1 = temp1[1];
+      for(var j = 0; j < varList2.length; j++){
+        var var_string = varList2[j];
+         //alert(var_string); 
+          //alert(vv.indexOf(var_string));
+        if (vv.indexOf(var_string)>-1) {
+          id1 += 1;
+          long1 = varList[var_string][0];
+          dim1 = varList[var_string][2];
+
+          string1 += "<tr><td>" 
+              + id1 + "</td><td>"
+              + agency1 + "</td><td>"
+              + model1 + "</td><td>"
+              + var_string + "</td><td>"
+              + long1 + "</td><td>"
+              + varList[var_string][3] + "</td><td>"
+              + varList[var_string][2] + "</td><td>"
+              + dataList[data_string][2][var_string][0] + "</td><td>"
+              + dataList[data_string][2][var_string][1] + "</td></tr>";
+
+/*
+          string2 += "" 
+              + id1 + ", "
+              + agency1 + ", "
+              + model1 + ", "
+              + var_string + ", "
+              + long1 + ", "
+              + varList[var_string][3] + ", "
+              + varList[var_string][2] + ", "
+              + dataList[data_string][2][var_string][0] + ", "
+              + dataList[data_string][2][var_string][1] + "\n >";
+*/
+        }
+      }
+    }
+    document.getElementById("tbody1").innerHTML = string1;
+    //document.getElementById("textarea1").value = string2;
+}
+
+$(document).ready(function(){
+  put_data(1);
+  put_var(1);
+
+
+  $("#data1").dropdownchecklist({ firstItemChecksAll: true, maxDropHeight: 600, textFormatFunction: function(options) {
+        var selectedOptions = options.filter(":selected");
+        var countOfSelected = selectedOptions.size();
+        var size = options.size();
+        switch(countOfSelected) {
+            case 0: return "None";
+            case 1: return selectedOptions.text();
+            case size: return "all datasets";
+            default: return countOfSelected + " datasets";
+        }
+    } });
+
+  $("#var1").dropdownchecklist({ firstItemChecksAll: true, maxDropHeight: 600, textFormatFunction: function(options) {
+        var selectedOptions = options.filter(":selected");
+        var countOfSelected = selectedOptions.size();
+        var size = options.size();
+        switch(countOfSelected) {
+            case 0: return "None";
+            case 1: return selectedOptions.text();
+            case size: return "all variables";
+            default: return countOfSelected + " variables";
+        }
+    } });
+});
+
+</script>
+
+<style>
+/* table tbody { height:300px; overflow-y:scroll; }
+table thead { display:block; } */
+/* table {
+width: 100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+*/
+</style>
+</head>
+
+<body>
+<div class="container-fluid">
+<div class="color1">
+<div class="row center1 subtitle1" >
+Select data to show in the table 
+</div> <!-- row -->
+
+<!--
+<div class="row">
+  <div class="col-sm-1 ">
+    Service Type::<br><select  id="type1" onchange="changeSet()">
+      <option value="1">"1"</option>
+      <option value="2">"2"</option>
+    </select>
+  </div> --><!-- col-sm -->
+
+  <div class="col-sm-4 ">
+    Select Models or Instruments:<br><select name="data1", id="data1" multiple ></select>
+  </div> <!-- col-sm -->
+
+  <div class="col-sm-6 ">
+    Select variables:<br><select name="var1", id="var1" multiple > </select>
+  </div> <!-- col-sm -->
+
+  <div class="col-sm-2 ">
+    <input onclick="makeTable(false)" type="button" id="make1"  value="Make Table" class="btn btn-primary">
+  </div> <!-- col-sm -->
+</div> <!-- row -->
+
+</div> <!-- color1 --> 
+<p>
+<p>
+<div class="table-responsive">
+<table id="table1" class="table  table-hover table-bordered">
+<thead class="color3">
+<th>#</th>
+<th>Agency</th>
+<th>Model or<br>Instrument</th>
+<th>Variable<br>shortname</th>
+<th>Variable longname</th>
+<th>Units</th>
+<th>Grid<br>dims</th>
+<th>Start<br>time</th>
+<th>End<br>time</th>
+</thead>
+<tbody id="tbody1">
+</tbody>
+</table>
+
+<!--
+<div background-color: red>
+  <textarea id="textarea1">
+  </textarea>
+</div> --><!-- color -->
+
+</div> <!-- table -->
+</div> <!-- container -->
+</body>
+</html>

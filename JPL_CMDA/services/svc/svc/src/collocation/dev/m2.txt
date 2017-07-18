@@ -1,0 +1,14 @@
+****** success match rate (%):  100.0 for target granule  14237
+****** success match rate (%):  100.0 for target granule  14238
+****** success match rate (%):  100.0 for target granule  14239
+****** success match rate (%):  100.0 for target granule  14240
+****** success match rate (%):  100.0 for target granule  14241
+****** success match rate (%):  100.0 for target granule  14242
+****** success match rate (%):  100.0 for target granule  14243
+****** success match rate (%):  100.0 for target granule  14244
+****** success match rate (%):  100.0 for target granule  14245
+****** success match rate (%):  100.0 for target granule  14246
+****** success match rate (%):  100.0 for target granule  14247
+****** success match rate (%):  100.0 for target granule  14248
+****** success match rate (%):  100.0 for target granule  14249
+****** success match rate (%):  100.0 for target granule  14250

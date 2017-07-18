@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+
+  
+
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <!-- for Bootstrap -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- /<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+-->
+
+  <script src="js2/jquery.min.js"></script>
+  <link rel="stylesheet" href="js2/bootstrap.min.css">
+  <script src="js2/bootstrap.min.js"></script>
+
+  <!-- cmac related -->
+  <link rel="stylesheet" href="common.css">
+  <script src='js2/dataList1.js'></script>
+  <script src='js2/varList.js'></script>
+  <script src='js2/common-v4.js'></script>
+  <script src='js2/js.cookie-2.1.3.min.js'></script>
+
+  <title>Map View</title>
+
+  <script>
+
+  // because they are used in common.js
+  var isNVar = 1;
+  var nVar0 = 6;
+  var nVar = nVar0;
+  var nVarP = 1; 
+  //if ( isNVar==0 ) { nVar = nVar0; }
+  var useQueryStr = 1; 
+
+  var includeDataUrl = true;
+  var DataUrl = "";
+
+var dList = [
+{  "name": "Data", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 1, 
+   "pickMonth": 1, 
+},
+{  "name": "Additional Data 1", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 1, 
+   "pickMonth": 1, 
+},
+{  "name": "Additional Data 2", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 1, 
+   "pickMonth": 1, 
+},
+{  "name": "Additional Data 3", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 1, 
+   "pickMonth": 1, 
+},
+{  "name": "Additional Data 4", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 1, 
+   "pickMonth": 1, 
+},
+{  "name": "Additional Data 5", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 1, 
+   "pickMonth": 1, 
+},
+];
+
+// format: RestFulName: [htmlId, functionName, additionalParams]
+var inputs = {
+'purpose': ['purpose', 'url2escape'],
+'lonS': ['lonS', 'urlDirect'],
+'lonE': ['lonE', 'urlDirect'],
+'latS': ['latS', 'urlDirect'],
+'latE': ['latE', 'urlDirect'],
+'nVar': ['nVar', 'urlDirect'],
+'scale': ['scale', 'urlScale1'],
+};
+
+var mapping = {};
+var key99;
+var arg99;
+for (var k in inputs) {
+  key99 = k;
+  arg99 = inputs[k];
+  mapping[k] = eval('new ' + inputs[k][1] + '()');
+}
+
+
+
+
+
+window.onload = function() {
+ addDataList(1); 
+ addVarList(1); 
+ addPres(1); 
+ addDataList(2); 
+ addVarList(2); 
+ addPres(2); 
+ addDataList(3); 
+ addVarList(3); 
+ addPres(3); 
+ addDataList(4); 
+ addVarList(4); 
+ addPres(4); 
+ addDataList(5); 
+ addVarList(5); 
+ addPres(5); 
+ addDataList(6); 
+ addVarList(6); 
+ addPres(6); 
+
+
+
+
+  disableButton("download_data");
+  enableButton("action1"); 
+
+  if (isNVar==1) {
+    hideVar();
+  }
+
+  if ($("#purpose").val()==" ") {
+    $("#purpose").val("");
+  }
+
+
+
+
+$("#var"+1).change();
+$("#var"+2).change();
+$("#var"+3).change();
+$("#var"+4).change();
+$("#var"+5).change();
+$("#var"+6).change();
+
+processQS4();
+
+}  // onload = function()
+
+$(document).ready(function(){
+
+// remember the last picked variable
+$(".var").click( function() {
+  //console.log(this.id);
+  var id1 = this.id;
+  $("#"+id1).change( function() {
+    $("#"+id1).data("aa", $("#"+id1).val()); 
+  });
+});
+
+$(".inputChange").change(function(){
+displayUrl4();
+disableButton("download_data");
+includeDataUrl = false;
+});
+
+
+
+      $("#download_data").click(function(event) {
+        var durl = $("#data_url").val();
+        // alert(durl);
+        window.location.assign(durl);
+      });
+
+      $("#action1").click(function(event) {
+
+
+        displayUrl4();
+
+        Response = null;
+
+        // no data to download yet
+        disableButton("action1");
+        disableButton("download_data");
+
+        $("#Response").val("Calculating ...");
+        $("#data_url").val("Calculating ...");
+        $("#Image").html("Image will appear here.");
+
+        var url = "http://" + window.location.hostname + ":8090/svc/mapView?";
+        var argList = makeUrl4(true);
+        url = url + argList;
+        console.log("server url:");
+        console.log(url);
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            data: null,
+            success: function(data, textStatus, xhr) {
+                Response = data;
+                // alert("data: " + data);
+                if (data.success == false) {
+                    // alert(data.error);
+                    Response = null;
+                    var text = JSON.stringify(data, null, 4);
+
+                    if (text.indexOf("No Data") != -1) {
+                      $("#Image").val("No Data");
+                      $("#Response").val("No Data");
+                      $("#data_url").val("No Data");
+                      enableButton("action1"); 
+                      return;
+                    }
+
+                    text = "Error in backend: <br>" + text; 
+                    // $("#Response").html("<span style='color:red'>" + text + "</span>");
+                    $("#Response").val(text);
+                    $("#data_url").val("No data file due to backend error.");
+                    enableButton("action1"); 
+                    return;
+                }  // if (data.success == false)
+
+                var text = JSON.stringify(data, null, 4);
+                // alert(text);
+                // $("#Response").html("<pre>"+text+"</pre>");
+                $("#Response").val(text);
+                var html = "<img src='"+data.url+"' />";
+                //var html = "<img src='"+data.url+"' width='820'/>";
+                $("#Image").html(html);
+
+                // post dataUrl to textarea and enable download button
+                $("#data_url").val(data.dataUrl);
+                enableButton("download_data");
+                enableButton("action1"); 
+
+                includeDataUrl = true;
+                dataUrl = data.dataUrl;
+                displayUrl4a();
+
+
+            }, // success: function(data, textStatus, xhr)
+            error: function(xhr, textStatus, errorThrown) {
+                $("#Response").val("error!");
+                $("#data_url").val("error!");
+                enableButton("action1"); 
+                // alert("xhr.status: "+xhr.status);
+                // alert("error status: "+textStatus);
+            },
+            complete: function(xhr, textStatus) {
+                //alert("complete status: "+textStatus);
+            },
+      }); // .ajax
+   }); // action.click
+  });  // ready(function())
+
+  </script>
+
+</head>
+
+<body>
+<div class="container-fluid">
+<div class="row center1">
+<div class="col-sm-8 col-sm-offset-2 col-xs-12 color-head">
+<h3>Service: Map View</h3>
+Map View service allows a user to display one or more variables as function(s) of latitude and longitude as a map or maps with the color representing the values of the physical quantity of interest. The values are computed by averaging over a range of time. For 3-d variables, the values are for specified pressure levels.
+</div> <!-- col-sm -->
+<div class="col-sm-offset-2">
+</div> <!-- col-sm -->
+</div> <!-- row center1 -->
+
+
+   
+
+
+
+
+
+<div id=dataBlock1 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Data
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data1" class="inputChange" onchange="addVarList(1); addPres(1);timeBound([1],'1'); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var1" class="inputChange var" onchange="addPres(1);timeBound([1],'1')"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id="monthSelect01">
+select months:
+<select name="months" id="months1" class="inputChange" onchange="select_months(1)">
+<option id="all1">select all</option>
+<option id="none1">select none</option>
+<option id="summer1">Summer:Jun-Jul-Aug</option>
+<option id="autum1">Autumn:Sep-Oct-Nov</option>
+<option id="winter1">Winter:Dec-Jan-Feb</option>
+<option id="spring1">Spring:Mar-Apr-May</option> </select>
+    </div>  
+  </div>
+  <div class="col-sm-8 left1">
+    <div id="monthSelect1">
+<form role="form"> 
+<label class="checkbox-inline"> <input type="checkbox" id="Jan1" value="Jan" class="inputChange" checked>Jan</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Feb1" value="Feb" class="inputChange" checked>Feb</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Mar1" value="Mar" class="inputChange" checked>Mar</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Apr1" value="Apr" class="inputChange" checked>Apr</label>
+<label class="checkbox-inline"> <input type="checkbox" id="May1" value="May" class="inputChange" checked>May</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jun1" value="Jun" class="inputChange" checked>Jun</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jul1" value="Jul" class="inputChange" checked>Jul</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Aug1" value="Aug" class="inputChange" checked>Aug</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Sep1" value="Sep" class="inputChange" checked>Sep</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Oct1" value="Oct" class="inputChange" checked>Oct</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Nov1" value="Nov" class="inputChange" checked>Nov</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Dec1" value="Dec" class="inputChange" checked>Dec</label>
+</form>
+    </div>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id=startYear1>start year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeS1" value="2004-01" class="inputChange" autocomplete="off" size=7 onchange="checkTimeL(1)">
+  </div>
+
+  <div class="col-sm-4 right1">
+    <div id=endYear1>end year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeE1" value="2004-12" class="inputChange" size=7 autocomplete="off" onchange="checkTimeH(1)">
+  </div>
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel1" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres1" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+<div class="color2">
+<div class="row">
+  <div class="col-sm-4 right1">
+    Number of Additional Variables (max 5):
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="nVar" value="0" class="inputChange" autocomplete="off"  size=7 onchange="hideVar()">
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+</div> <!-- color -->
+
+
+
+
+
+<div id=dataBlock2 class="color1">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Additional Data 1
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data2" class="inputChange" onchange="addVarList(2); addPres(2);timeBound([2],'2'); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var2" class="inputChange var" onchange="addPres(2);timeBound([2],'2')"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id="monthSelect02">
+select months:
+<select name="months" id="months2" class="inputChange" onchange="select_months(2)">
+<option id="all2">select all</option>
+<option id="none2">select none</option>
+<option id="summer2">Summer:Jun-Jul-Aug</option>
+<option id="autum2">Autumn:Sep-Oct-Nov</option>
+<option id="winter2">Winter:Dec-Jan-Feb</option>
+<option id="spring2">Spring:Mar-Apr-May</option> </select>
+    </div>  
+  </div>
+  <div class="col-sm-8 left1">
+    <div id="monthSelect2">
+<form role="form"> 
+<label class="checkbox-inline"> <input type="checkbox" id="Jan2" value="Jan" class="inputChange" checked>Jan</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Feb2" value="Feb" class="inputChange" checked>Feb</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Mar2" value="Mar" class="inputChange" checked>Mar</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Apr2" value="Apr" class="inputChange" checked>Apr</label>
+<label class="checkbox-inline"> <input type="checkbox" id="May2" value="May" class="inputChange" checked>May</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jun2" value="Jun" class="inputChange" checked>Jun</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jul2" value="Jul" class="inputChange" checked>Jul</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Aug2" value="Aug" class="inputChange" checked>Aug</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Sep2" value="Sep" class="inputChange" checked>Sep</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Oct2" value="Oct" class="inputChange" checked>Oct</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Nov2" value="Nov" class="inputChange" checked>Nov</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Dec2" value="Dec" class="inputChange" checked>Dec</label>
+</form>
+    </div>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id=startYear2>start year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeS2" value="2004-01" class="inputChange" autocomplete="off" size=7 onchange="checkTimeL(2)">
+  </div>
+
+  <div class="col-sm-4 right1">
+    <div id=endYear2>end year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeE2" value="2004-12" class="inputChange" size=7 autocomplete="off" onchange="checkTimeH(2)">
+  </div>
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel2" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres2" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock3 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Additional Data 2
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data3" class="inputChange" onchange="addVarList(3); addPres(3);timeBound([3],'3'); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var3" class="inputChange var" onchange="addPres(3);timeBound([3],'3')"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id="monthSelect03">
+select months:
+<select name="months" id="months3" class="inputChange" onchange="select_months(3)">
+<option id="all3">select all</option>
+<option id="none3">select none</option>
+<option id="summer3">Summer:Jun-Jul-Aug</option>
+<option id="autum3">Autumn:Sep-Oct-Nov</option>
+<option id="winter3">Winter:Dec-Jan-Feb</option>
+<option id="spring3">Spring:Mar-Apr-May</option> </select>
+    </div>  
+  </div>
+  <div class="col-sm-8 left1">
+    <div id="monthSelect3">
+<form role="form"> 
+<label class="checkbox-inline"> <input type="checkbox" id="Jan3" value="Jan" class="inputChange" checked>Jan</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Feb3" value="Feb" class="inputChange" checked>Feb</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Mar3" value="Mar" class="inputChange" checked>Mar</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Apr3" value="Apr" class="inputChange" checked>Apr</label>
+<label class="checkbox-inline"> <input type="checkbox" id="May3" value="May" class="inputChange" checked>May</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jun3" value="Jun" class="inputChange" checked>Jun</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jul3" value="Jul" class="inputChange" checked>Jul</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Aug3" value="Aug" class="inputChange" checked>Aug</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Sep3" value="Sep" class="inputChange" checked>Sep</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Oct3" value="Oct" class="inputChange" checked>Oct</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Nov3" value="Nov" class="inputChange" checked>Nov</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Dec3" value="Dec" class="inputChange" checked>Dec</label>
+</form>
+    </div>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id=startYear3>start year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeS3" value="2004-01" class="inputChange" autocomplete="off" size=7 onchange="checkTimeL(3)">
+  </div>
+
+  <div class="col-sm-4 right1">
+    <div id=endYear3>end year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeE3" value="2004-12" class="inputChange" size=7 autocomplete="off" onchange="checkTimeH(3)">
+  </div>
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel3" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres3" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock4 class="color1">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Additional Data 3
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data4" class="inputChange" onchange="addVarList(4); addPres(4);timeBound([4],'4'); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var4" class="inputChange var" onchange="addPres(4);timeBound([4],'4')"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id="monthSelect04">
+select months:
+<select name="months" id="months4" class="inputChange" onchange="select_months(4)">
+<option id="all4">select all</option>
+<option id="none4">select none</option>
+<option id="summer4">Summer:Jun-Jul-Aug</option>
+<option id="autum4">Autumn:Sep-Oct-Nov</option>
+<option id="winter4">Winter:Dec-Jan-Feb</option>
+<option id="spring4">Spring:Mar-Apr-May</option> </select>
+    </div>  
+  </div>
+  <div class="col-sm-8 left1">
+    <div id="monthSelect4">
+<form role="form"> 
+<label class="checkbox-inline"> <input type="checkbox" id="Jan4" value="Jan" class="inputChange" checked>Jan</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Feb4" value="Feb" class="inputChange" checked>Feb</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Mar4" value="Mar" class="inputChange" checked>Mar</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Apr4" value="Apr" class="inputChange" checked>Apr</label>
+<label class="checkbox-inline"> <input type="checkbox" id="May4" value="May" class="inputChange" checked>May</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jun4" value="Jun" class="inputChange" checked>Jun</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jul4" value="Jul" class="inputChange" checked>Jul</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Aug4" value="Aug" class="inputChange" checked>Aug</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Sep4" value="Sep" class="inputChange" checked>Sep</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Oct4" value="Oct" class="inputChange" checked>Oct</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Nov4" value="Nov" class="inputChange" checked>Nov</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Dec4" value="Dec" class="inputChange" checked>Dec</label>
+</form>
+    </div>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id=startYear4>start year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeS4" value="2004-01" class="inputChange" autocomplete="off" size=7 onchange="checkTimeL(4)">
+  </div>
+
+  <div class="col-sm-4 right1">
+    <div id=endYear4>end year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeE4" value="2004-12" class="inputChange" size=7 autocomplete="off" onchange="checkTimeH(4)">
+  </div>
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel4" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres4" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock5 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Additional Data 4
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data5" class="inputChange" onchange="addVarList(5); addPres(5);timeBound([5],'5'); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var5" class="inputChange var" onchange="addPres(5);timeBound([5],'5')"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id="monthSelect05">
+select months:
+<select name="months" id="months5" class="inputChange" onchange="select_months(5)">
+<option id="all5">select all</option>
+<option id="none5">select none</option>
+<option id="summer5">Summer:Jun-Jul-Aug</option>
+<option id="autum5">Autumn:Sep-Oct-Nov</option>
+<option id="winter5">Winter:Dec-Jan-Feb</option>
+<option id="spring5">Spring:Mar-Apr-May</option> </select>
+    </div>  
+  </div>
+  <div class="col-sm-8 left1">
+    <div id="monthSelect5">
+<form role="form"> 
+<label class="checkbox-inline"> <input type="checkbox" id="Jan5" value="Jan" class="inputChange" checked>Jan</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Feb5" value="Feb" class="inputChange" checked>Feb</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Mar5" value="Mar" class="inputChange" checked>Mar</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Apr5" value="Apr" class="inputChange" checked>Apr</label>
+<label class="checkbox-inline"> <input type="checkbox" id="May5" value="May" class="inputChange" checked>May</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jun5" value="Jun" class="inputChange" checked>Jun</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jul5" value="Jul" class="inputChange" checked>Jul</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Aug5" value="Aug" class="inputChange" checked>Aug</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Sep5" value="Sep" class="inputChange" checked>Sep</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Oct5" value="Oct" class="inputChange" checked>Oct</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Nov5" value="Nov" class="inputChange" checked>Nov</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Dec5" value="Dec" class="inputChange" checked>Dec</label>
+</form>
+    </div>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id=startYear5>start year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeS5" value="2004-01" class="inputChange" autocomplete="off" size=7 onchange="checkTimeL(5)">
+  </div>
+
+  <div class="col-sm-4 right1">
+    <div id=endYear5>end year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeE5" value="2004-12" class="inputChange" size=7 autocomplete="off" onchange="checkTimeH(5)">
+  </div>
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel5" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres5" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock6 class="color1">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Additional Data 5
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data6" class="inputChange" onchange="addVarList(6); addPres(6);timeBound([6],'6'); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var6" class="inputChange var" onchange="addPres(6);timeBound([6],'6')"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id="monthSelect06">
+select months:
+<select name="months" id="months6" class="inputChange" onchange="select_months(6)">
+<option id="all6">select all</option>
+<option id="none6">select none</option>
+<option id="summer6">Summer:Jun-Jul-Aug</option>
+<option id="autum6">Autumn:Sep-Oct-Nov</option>
+<option id="winter6">Winter:Dec-Jan-Feb</option>
+<option id="spring6">Spring:Mar-Apr-May</option> </select>
+    </div>  
+  </div>
+  <div class="col-sm-8 left1">
+    <div id="monthSelect6">
+<form role="form"> 
+<label class="checkbox-inline"> <input type="checkbox" id="Jan6" value="Jan" class="inputChange" checked>Jan</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Feb6" value="Feb" class="inputChange" checked>Feb</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Mar6" value="Mar" class="inputChange" checked>Mar</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Apr6" value="Apr" class="inputChange" checked>Apr</label>
+<label class="checkbox-inline"> <input type="checkbox" id="May6" value="May" class="inputChange" checked>May</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jun6" value="Jun" class="inputChange" checked>Jun</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Jul6" value="Jul" class="inputChange" checked>Jul</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Aug6" value="Aug" class="inputChange" checked>Aug</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Sep6" value="Sep" class="inputChange" checked>Sep</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Oct6" value="Oct" class="inputChange" checked>Oct</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Nov6" value="Nov" class="inputChange" checked>Nov</label>
+<label class="checkbox-inline"> <input type="checkbox" id="Dec6" value="Dec" class="inputChange" checked>Dec</label>
+</form>
+    </div>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id=startYear6>start year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeS6" value="2004-01" class="inputChange" autocomplete="off" size=7 onchange="checkTimeL(6)">
+  </div>
+
+  <div class="col-sm-4 right1">
+    <div id=endYear6>end year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeE6" value="2004-12" class="inputChange" size=7 autocomplete="off" onchange="checkTimeH(6)">
+  </div>
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel6" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres6" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+ 
+<div class="color3">
+<div class="row center1 subtitle1" >
+Data Subsetting
+</div> <!-- row -->
+
+
+
+
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    start lon (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="lonS" value="0" class="inputChange" autocomplete="off" size=7>
+  </div>
+  <div class="col-sm-4 right1">
+    end lon (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="lonE" value="360" class="inputChange" autocomplete="off" size=7>
+  </div>
+</div> <!-- row -->
+
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    start lat (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="latS" value="-90" class="inputChange" autocomplete="off" size=7>
+  </div>
+  <div class="col-sm-4 right1">
+    end lat (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="latE" value="90" class="inputChange" autocomplete="off" size=7>
+  </div>
+</div> <!-- row -->
+
+ </div> <!-- color3 -->
+
+ 
+<div class="color0">
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Display Options:
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-4 right1">
+        color scale: 
+  </div>
+  <div class="col-sm-8 left1">
+        <form>
+          <label class="input-online" for="radioLin"><input type="radio" name="scale1" value="linear" id="radioLin" class="inputChange" checked>linear  <label>
+          <label class="input-online" for="radioLog"><input type="radio" name="scale1" value="logarithmic" id="radioLog" class="inputChange">logarithmic<label>
+        </form>
+  </div>
+</div> <!-- row -->
+
+ 
+</div> <!-- color0 -->
+
+
+
+
+<div class="color2">
+<div class="row">
+  <div class="col-sm-4 right1">
+    Execution purpose:
+  </div> <!-- col -->
+  <div class="col-sm-8 left1">
+    <form>
+    <textarea name="purpose" id="purpose" value="" class="inputChange" rows="4" cols="50"> </textarea>
+    </form>
+  </div> <!-- col -->
+</div> <!-- row -->
+</div> <!-- color2 -->
+
+
+<div class="color4">
+<div class="row">
+  <div class="col-sm-6 center1">
+    <input id="action1" type="submit" value="Get Plot" style="height:28px"/>
+  </div>
+  <div class="col-sm-6 center1">
+    <form>
+      <input id="download_data" type="button" value="Download Data" style="height:28px"/>
+    </form>
+  </div>
+</div> <!-- row -->
+</div> <!-- color4 -->
+
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Browser URL:
+  </div>
+</div>
+<div class="row" id="actionUrl0">
+  <div class="col-sm-12 center1">
+    <textarea id="actionUrl" rows=5></textarea>
+  </div>
+</div> <!-- row -->
+  			
+<div class="row" id="Image0" center1>
+  <div class="col-sm-12 center1">
+    <div id="Image" class="borderedText">Image will be here</div>
+  </div>
+</div> <!-- row -->
+ 
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Data File URL:
+  </div>
+</div>
+<div class="row" >
+  <div class="col-sm-12 center1">
+    <textarea readonly id="data_url" cols="150" rows="2"></textarea>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Service Response Text:
+  </div>
+</div>
+<div class="row" center1>
+  <div class="col-sm-12 center1">
+    <textarea id="Response" cols="150" rows="6"></textarea>
+  </div>
+</div> <!-- row -->
+
+</div> <!-- container -->
+</body>
+</html>

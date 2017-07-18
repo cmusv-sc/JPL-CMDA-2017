@@ -1,0 +1,111 @@
+#!/usr/bin/octave -q
+addpath([pwd()  '/../util/']);
+pkg load netcdf;
+
+arg_list = argv();
+printf ("%s:\n", program_name());
+
+narg = length(arg_list);
+for ii = 1:narg
+  printf("%s\n", arg_list{ii})
+end
+
+% The first specifies the direct input data files,
+% If empty, we then process the input as usuall
+% otherwise, we use directly these files.
+directInputData = false;
+
+% arg_list{1} contains key-value pairs, if empty assuming normal behavior
+if ~strcmp(arg_list{1}, '/')
+  directInputDataFiles = strchop(arg_list{1}, ',');
+  directInputData = true;
+end
+
+arg_list = {arg_list{2:end}};
+narg = length(arg_list);
+
+if ~directInputData
+  if narg < 10
+    error('Insufficient argument, need a model and a variable name!'); 
+  elseif mod(narg-2, 8)
+    error('Missing or extra argument!');
+  end
+  
+  nVars = (narg - 2)/8;
+  
+  dataInfo = [];
+  for ii = 1:nVars
+    dataInfo(ii).sourceName = lower(arg_list{(ii-1)*8+1});
+    dataInfo(ii).varName = arg_list{(ii-1)*8+2};
+    dataInfo(ii).plev = str2num(arg_list{(ii-1)*8+3});
+    dataInfo(ii).lonRange = str2num(arg_list{(ii-1)*8+4});
+    dataInfo(ii).latRange = str2num(arg_list{(ii-1)*8+5});
+    dataInfo(ii).startTime = str2date(arg_list{(ii-1)*8+6});
+    dataInfo(ii).endTime = str2date(arg_list{(ii-1)*8+7});
+    dataInfo(ii).monthIdx = str2num(arg_list{(ii-1)*8+8});
+  end
+  
+  output_dir = arg_list{8*nVars+1};
+  displayOpt = str2num(arg_list{8*nVars + 2});
+  
+  figFile = [];
+  for ii = 1:nVars
+    dataInfo(ii).dataFile = getDataFilePaths(dataInfo(ii).sourceName, dataInfo(ii).varName, dataInfo(ii).startTime, dataInfo(ii).endTime);
+  %  lonStr = ['lon' num2str(dataInfo(ii).lonRange(1)) '-' num2str(dataInfo(ii).lonRange(2)) 'deg'];
+  %  latStr = ['lat' num2str(dataInfo(ii).latRange(1)) '-' num2str(dataInfo(ii).latRange(2)) 'deg'];
+    if ii == 1
+  %    figFile = [dataInfo(ii).sourceName '_' dataInfo(ii).varName '_' lonStr '_' latStr];
+      figFile = [dataInfo(ii).sourceName '_' dataInfo(ii).varName];
+    else
+  %    figFile = [figFile ':' dataInfo(ii).sourceName '_' dataInfo(ii).varName '_' lonStr '_' latStr];
+  %    figFile = [figFile ':' dataInfo(ii).sourceName '_' dataInfo(ii).varName];
+      figFile = [figFile '-v' num2str(ii)]; 
+    end
+  end
+else  % dicrect input data file
+  nVars = length(directInputDataFiles)
+  for ii = 1:nVars
+    dataInfo(ii).dataFile = {directInputDataFiles{ii}};
+    url_query_string = ncreadatt(directInputDataFiles{ii}, '/', 'url_query_string');
+    % url has 'var1' contains the main variable name. However, there are cases that the data file contains only
+    % derived variable, which could be stored in different name from the original data variable name as specified
+    % in url, field 'var1'. So we will use 'var' by default. 
+    dataInfo(ii).varName = getValueFromURL(url_query_string, 'var');
+    if isempty(dataInfo(ii).varName)
+      dataInfo(ii).varName = getValueFromURL(url_query_string, 'var1');
+    end
+    startTimeStr = getValueFromURL(url_query_string, 'timeS');
+    stopTimeStr = getValueFromURL(url_query_string, 'timeE');
+    dataInfo(ii).startTime = struct('year', str2num(startTimeStr(1:4)), 'month', str2num(startTimeStr(5:6)));
+    dataInfo(ii).endTime = struct('year', str2num(stopTimeStr(1:4)), 'month', str2num(stopTimeStr(5:6)));
+    dataInfo(ii).directInput = true;
+    dataInfo(ii).monthIdx = 1:12; % assume annual average by default 
+    monthIdx = getValueFromURL(url_query_string, 'monthIdx');
+    if ~isempty(monthIdx)
+      dataInfo(ii).monthIdx = monthIdx;
+    end
+    dataInfo(ii).plev = str2num(getValueFromURL(url_query_string, 'pres1'));
+    dataInfo(ii).sourceName = getValueFromURL(url_query_string, 'model1');
+    dataInfo(ii).lonRange = [str2num(getValueFromURL(url_query_string, 'lonS')), str2num(getValueFromURL(url_query_string, 'lonE'))];
+    dataInfo(ii).latRange = [str2num(getValueFromURL(url_query_string, 'latS')), str2num(getValueFromURL(url_query_string, 'latE'))];
+    dataInof(ii).url = url_query_string;
+    if ii == 1
+      figFile = [dataInfo(ii).sourceName '_' dataInfo(ii).varName];
+    else
+      figFile = [figFile ':' dataInfo(ii).sourceName '_' dataInfo(ii).varName];
+    end
+  end
+  output_dir = arg_list{end-1};
+  displayOpt = str2num(arg_list{end});
+end
+
+dataFile = [figFile '.nc'];
+figFile = [figFile '.jpeg'];
+
+figFilePath = [output_dir '/' figFile];
+dataFilePath = [output_dir '/' dataFile];
+printf("figFile: %s\n", figFile)
+printf("figFilePath: %s\n", figFilePath)
+printf("dataFile: %s\n", dataFile)
+printf("dataFilePath: %s\n", dataFilePath)
+displayZonalMean(dataInfo, figFilePath, dataFilePath, displayOpt);

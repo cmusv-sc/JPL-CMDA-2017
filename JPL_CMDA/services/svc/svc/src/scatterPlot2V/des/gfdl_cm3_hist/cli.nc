@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/cm3_hist/./cli_Amon_GFDL-CM3_historical_r1i1p1_199501-199912.nc

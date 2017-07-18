@@ -1,0 +1,1 @@
+./octaveWrapper ts ncc_noresm,ncar_cam5 -999999 '10 140 5' '-20 20 1' 199001 200312 /tmp/ 'var1=ts&timeS=199001&timeE=200312&pres1=-999999&model1=ncc_noresum,ncar_cam5&lonS=10&lonE=140&latS=-20&latE=20'

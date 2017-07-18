@@ -1,0 +1,7 @@
+#./octaveWrapper ukmo_hadgem2-es clt 198501 199512 '70 105' '0 30' '5,6,7,8' '/tmp/'
+#./octaveWrapper nasa_quikscat sfcWind 200501 200812 '70 105' '0 30' '5,6,7,8' '/tmp/'
+#./octaveWrapper noaa_nodc ohc700 200501 201212 '0 360' '-90 90' '1,2,3,4,5,6,7,8,9,10,11,12' '/tmp/'
+#./octaveWrapper nasa_ceres rlds 200501 200612 '0 360' '-90 90' '1,2,3,4,5,6,7,8,9,10,11,12' '/tmp/'
+#./octaveWrapper ncc_noresm ts 199001 200012 '0 100' '-29 29' '4,5,6' '/tmp/' 7
+#./octaveWrapper nasa_modis lst_day 200101 200512 '0 100' '-29 29' '4,5,6' '/tmp/' 0
+./octaveWrapper nasa_modis clt 200101 200512 '0 100' '-29 29' '4,5,6' '/tmp/' 0

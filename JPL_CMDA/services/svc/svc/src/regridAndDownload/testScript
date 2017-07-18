@@ -1,0 +1,9 @@
+#./octaveWrapper '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/amip/ta_Amon_GISS-E2-R_amip_r1i1p1_188001-195012.nc' 'ta' '0, 360, 4', '-90, 90, 4', '100000,80000,50000,30000, 20000, 10000', 1  /tmp/xxx2.nc;
+
+#./octaveWrapper '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/amip/cli_Amon_GISS-E2-R_amip_r1i1p1_188001-195012.nc' 'cli' '0, 360, 4', '-90, 90, 4', '100000,80000,50000,30000, 20000, 10000', 1  /tmp/xxx2.nc;
+
+#./octaveWrapper 'ncc_noresm' 'ta' 199001 200012 '0, 360, 4' '-90, 90, 4' '100000,80000,50000,30000, 20000, 10000'  /tmp/;
+
+#./octaveWrapper 'giss_e2-r' 'ts' 199001 200012 '0, 360, 4' '-90, 90, 4' '-999999'  /tmp/;
+#./octaveWrapper 'gfdl_esm2g' 'zos' 199001 200012 '-999999,0,0' '-999999, 90, 4' '-999999'  /tmp/;
+./octaveWrapper 'gfdl_esm2g' 'zos' 199001 200012 '0,360,4' '-90, 90, 4' '-999999'  /tmp/;

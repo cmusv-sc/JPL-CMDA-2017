@@ -1,0 +1,8 @@
+a.out: main.c mergein.o distance.o mergein.h
+	gcc -g main.c -lm mergein.o distance.o -o a.out
+mergein.o: mergein.c distance.h mergein.h
+	gcc -c -g -fPIC -O3 mergein.c
+distance.o: distance.c distance.h
+	gcc -c -g -fPIC -O3 distance.c
+clean:
+	rm -f main.o mergein.o distance.o a.out

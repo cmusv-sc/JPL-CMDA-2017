@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure>
+
+<data_root_dir>
+<!-- /data1/sensors/atrain/caliop.calipso/VFM -->
+/mnt/nas-0-0/users/collocation/caliop.calipso/VFM
+</data_root_dir>
+
+<list_dir>
+/home/seungwon/
+</list_dir>
+
+<output_dir>
+/data3/collocation/caliop_vfm/2010
+</output_dir>
+
+<log_file>
+/home/seungwon/err.log.txt
+</log_file>
+
+<start_time>
+1/1/2010 0:00:00
+</start_time>
+
+<end_time>
+3/28/2010 23:59:59
+</end_time>
+
+<time_diff>
+<!-- CALIOP is on board Calipso, which *lags* CloudSat by "no more than 15 seconds"
+     per the A Train Fact Sheet.  Here we set the time difference to be -10 seconds -->
+-10
+</time_diff>
+
+<time_search_range>
+<!-- Within this time range, co-location searches for the nearest
+     neighbor in the source data (lat, lon) grid for a given (lat, lon)
+     spot in the target data grid. -->
+10
+<!-- The largest time span in A-Train is about 15mins from Aqua to Arua. -->
+</time_search_range>
+
+<footprint_size>
+<!-- footprint size of data set in km -->
+8
+</footprint_size>
+
+<space_search_factor>
+<!-- inflate footprint size by this fator in search -->
+1.5
+</space_search_factor>
+
+<invalid_data>
+<!-- when no nearest neighbor found, use this value -->
+-909090
+</invalid_data>
+
+<num_cores>
+<!-- number of cores you would like to use -->
+8
+</num_cores>
+
+<proc_size>
+<!-- number of target granules a process would handle -->
+1
+</proc_size>
+
+</configure>

@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure>
+
+<dataset_name>
+ecmwf_yotc_oper_an_ml_ncar_3
+</dataset_name>
+
+<data_root_dir>
+/data3/ecmwf/yotc_oper_an_ml
+</data_root_dir>
+
+<list_dir>
+<!-- directory contining granules lists (no final slash) -->
+/home/gblock/atrain/output/ecmwf_yotc_oper_an_ml_ncar
+</list_dir>
+
+<output_dir>
+/home/gblock/atrain/output/ecmwf_yotc_oper_an_pl_ncar
+</output_dir>
+
+<log_file>
+/home/gblock/atrain/output/ecmwf_yotc_oper_an_pl_ncar/err_3.log
+</log_file>
+
+<start_time>
+<!--01/06/2008 10:00:00-->
+02/01/2010 05:00:00
+</start_time>
+
+<end_time>
+<!--01/06/2008 10:30:00-->
+02/01/2010 06:00:00
+</end_time>
+
+<time_diff>
+0
+</time_diff>
+
+<time_search_range>
+<!-- Within this time range, co-location searches for the nearest
+     neighbor in the source data (lat, lon) grid for a given (lat, lon)
+     spot in the target data grid. -->
+10850
+<!-- Make it slightly larger than ecmwf time step, which is 1.5 hrs, to cover at least one time step -->
+</time_search_range>
+
+<footprint_size>
+<!-- footprint size of the data in km -->
+100
+</footprint_size>
+
+<space_search_factor>
+<!-- inflate footprint size by this fator in search -->
+1.5
+</space_search_factor>
+
+<invalid_data>
+<!-- when no nearest neighbor found within footprint, use this value -->
+-909090
+</invalid_data>
+
+</configure>

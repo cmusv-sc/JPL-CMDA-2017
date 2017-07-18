@@ -1,0 +1,1121 @@
+#!/home/svc/install/epd/bin/python
+'''
+execfile('/home/bytang/projects/cmac/trunk/services/svc/svc/src/randomForest/pythonWrapper')
+
+'''
+HOME='/home/svc'
+
+cr = {
+#                              1  2   3  4
+    # zzzz
+'import_':              1,   # 0  1   1  0
+# parameters_
+# def_change_labels:     # not working
+# def_getRootDir():
+# def_extractNC(desFn):
+# def_convertTime(time0, units):
+# def_clipEnd(x, w, percL, percR):
+# def_plotTser
+
+# class_SUBSET_REGION():
+  # def_noDataExit()
+  # def_getFileName2
+  # def_getFileName
+  # def_getUnits(self):
+  # def_checkTime
+  # def_subsetting():
+  # def_loadFile
+'init_class':           1,   # 1  1
+'command_arg':          1,   # 1  1
+'plot4__':              1,   # 1  1  # use agg data set
+'':        0,   # 1  1
+}
+
+#if cr['']       == 1:
+
+# 1 -- 
+# 
+
+if cr['import_']       == 1:
+  useFerret = 1
+  import os, sys,  time
+  import tempfile
+  #import math
+  import glob
+  import re
+  import pickle
+  import string
+
+  import numpy as np      
+  sys.path.insert(0, '../py')
+  import cmac
+
+  from netCDF4 import Dataset
+
+  if useFerret==0:
+    from netCDF4 import Dataset
+    import netCDF4 as nC4
+    import NC_btang_v4 as NC1
+    import pca_v4 as pca
+
+    import matplotlib 
+    matplotlib.use('Agg')  
+    import matplotlib.pylab as Mat
+    Mat.ioff()
+    #from mpl_toolkits.basemap import NetCDFFile
+    from mpl_toolkits.basemap import Basemap
+
+
+t00 = time.time()
+
+# parameters_
+num2month = {
+1: 'JAN',
+2: 'FEB',
+3: 'MAR',
+4: 'APR',
+5: 'MAY',
+6: 'JUN',
+7: 'JUL',
+8: 'AUG',
+9: 'SEP',
+10: 'OCT',
+11: 'NOV',
+12: 'DEC',
+}
+
+modelCenter = [
+'cccma',
+'csiro',
+'gfdl',
+'giss',
+'ipsl',
+'miroc',
+'ncar',
+'ncc',
+'ukmo',
+]
+
+obsCenter = [
+'nasa',
+'noaa',
+'argo',
+]
+
+oceanVar = [
+'ot',
+'os',
+]
+
+var3d = [
+'ta',
+'hus',
+'clw',
+'cli',
+'ot',
+'os',
+]
+
+regridVar = [
+'cli',
+'clw',
+]
+
+# def_change_labels(ax):
+def change_labels(ax):
+  x1 = Mat.getp(ax, 'xticklabels')
+  #x1 = Mat.getp(ax.xaxis, 'ticklabels') # not working
+  x1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    print t1
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'W'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'E'
+    x1New.append(t2)
+  #
+  x1 = Mat.getp(ax, 'yticklabels')
+
+  y1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'S'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'N'
+    y1New.append(t2)
+  Mat.setp(ax, xticklabels=x1New, yticklabels=y1New)
+  return x1New, y1New
+
+
+# def_extractNC(desFn):
+p1 = re.compile("S_FILENAME += *\'(.+\.nc)\'")
+def extractNC(desFn):
+  lines = open(desFn).read()
+  # S_FILENAME    = '/mnt/r1i1p1_plevRegridded_198412-200511.nc'
+
+  m1 = p1.search(lines)
+  return m1.groups()[0]
+
+# def_convertTime(time0, units):
+def convertTime(time0, units):
+  import matplotlib.dates as DA
+  import calendar
+  import string
+
+  # convert time
+  time9 = time0.copy()
+  print 'time9.shape: ',
+  print time9.shape
+  print units
+
+  temp1 = string.split(units, 'since')
+  if len(temp1)==2:
+    unit1a = string.lower(string.strip( temp1[0] ))
+    unit1b = string.strip( temp1[1] )
+  
+    # convert time9 to day
+    if string.find(unit1a, 'year')!=-1:
+      time9 *= (365.25)
+    elif string.find(unit1a, 'month')!=-1:
+      time9 *= (365.25/12)
+    elif string.find(unit1a, 'hour')!=-1:
+      time9 *= (1./24.)
+    elif string.find(unit1a, 'minute')!=-1:
+      time9 *= (1./24./60.)
+    elif string.find(unit1a, 'second')!=-1:
+      time9 *= (1./24./3600.)
+
+    # convert time9 to days since year 0001
+    temp4 = string.split(unit1b)
+    temp3 = string.split(temp4[0], '-')
+    year0 = int( temp3[0] )
+    month0 = int( temp3[1] )
+    day0 = int( temp3[2] )
+
+    temp5 = (year0, month0, day0, 0,0,0, 0,0,0)
+    t0 = calendar.timegm(temp5) - calendar.timegm((1,1,1, 0,0,0, 0,0,0))
+    t0 = t0/(3600.*24)
+
+    time9 += t0
+    return time9
+
+# def_clipEnd(x, w, percL, percR):
+def clipEnd(x, w, percL, percR):
+  indS = np.argsort(x)
+  x1 = x[indS]
+  w1 = w[indS]
+  sum1 = np.cumsum(w1)
+  threshL = sum1[-1]*percL
+  threshR = sum1[-1]*(1.0 - percR)
+  indL = max( np.searchsorted(sum1, threshL) - 1, 0 )
+  indR = min( np.searchsorted(sum1, threshR) + 1, len(x) )
+ 
+  return x1[indL], x1[indR]
+
+# def_plotTser
+def plotTser(tser,i1,i2,max1):
+  ii = 0
+  for i in range(i1,i2+1):
+    time9 = np.arange( len(tser[0,:]))
+    print time9.shape, tser[i,:].shape
+    #Mat.plot_date(time9, tser[i,:], '-')
+    Mat.plot(time9, tser[i,:], '-')
+    Mat.hold('on')
+    ii += 1
+  Mat.hold('off')
+  Mat.xlim(time9[0], time9[-1])
+  Mat.ylim(-max1, max1)
+
+  labels = ax.get_xticklabels()
+  #Mat.setp(labels, rotation=20, fontsize=8)
+  Mat.setp(labels, rotation=0, fontsize=8)
+
+  Mat.grid()
+  if i1==i2:
+    Mat.title('EOF %d'%(i1+1))
+  else:
+    Mat.title('EOFs %d-%d'%(i1+1, i2+1))
+
+# def_plotTser2
+def plotTser2(time9, tser,i1,i2,max1):
+  ii = 0
+  for i in range(i1,i2+1):
+    print time9.shape, tser[i,:].shape
+    Mat.plot_date(time9, tser[i,:], '-')
+    Mat.hold('on')
+    ii += 1
+  Mat.hold('off')
+  Mat.xlim(time9[0], time9[-1])
+  Mat.ylim(-max1, max1)
+
+  ax = Mat.gca()
+  nTime = len(time9)
+  if nTime<30:
+    major1 = matplotlib.dates.MonthLocator(range(1,13))
+  else:
+    major1 = matplotlib.dates.YearLocator()
+  ax.xaxis.set_major_locator(major1)
+
+  monthsFmt = matplotlib.dates.DateFormatter("%b '%y")
+  ax.xaxis.set_major_formatter(monthsFmt)
+
+  labels = ax.get_xticklabels()
+  #Mat.setp(labels, rotation=20, fontsize=8)
+  Mat.setp(labels, rotation=90, fontsize=7)
+
+  Mat.grid()
+  if i1==i2:
+    Mat.title('EOF %d'%(i1+1))
+  else:
+    Mat.title('EOFs %d-%d'%(i1+1, i2+1))
+
+#== def_find_bound(x):
+# for used in matplotlib
+def find_bound(x):
+  '''
+Modify x so it becomes the end points.
+'''
+  temp1 = np.zeros((len(x)+1,), dtype=x.dtype)
+  temp1[1:-1] = (x[1:,]+x[:-1])/2.
+  temp1[0] = x[0] - (temp1[1]-x[0])
+  temp1[-1] = x[-1] + (x[-1] - temp1[-2])
+
+  return temp1
+
+#== def_plotPattern
+def plotPattern(i, min1, max1):
+
+  #if patternDim==1:
+  #  varAxis2 = np.array(varAxis)
+  #  pl = Mat.plot(varAxis2, pattern2[i,:])
+  #  Mat.xlim(varAxis2[0], varAxis2[-1])
+  #  Mat.ylim(-max1, max1)
+  #  Mat.grid()
+  #  Mat.xlabel(xlabel1)
+
+  #if patternDim==2:
+
+  #im = m.pcolor(xx2, yy2, pattern2[i, ::-1, :], vmin=min2, vmax=max2, \
+  #      norm=matplotlib.colors.normalize(), shading='flat')
+
+  im = m.pcolor(lon2, lat2, pattern1[i, ::-1, :], vmin=min2, vmax=max2, shading='flat')
+  m.drawcoastlines(color=(.7,.7,.7))
+  Mat.title('EOF %d'%(i+1))
+
+  if i==nKeep-1:
+    hc = Mat.colorbar()
+
+    #labels = hc.get_yticklabels()
+    #hay = hc.get_yaxis()
+    #hfmt = hay.get_major_formatter()
+    #hfmt.fmt = '%g'
+    #hay.set_major_formatter(hfmt)
+
+  #m.drawmeridians(x32,linestyle='--', dashes=[1,4],labels=[1,0,0,1]) 
+  #m.drawparallels(y32,linestyle='--', dashes=[1,4],labels=[1,0,0,1]) 
+  #m.drawmeridians(x32) 
+  #m.drawparallels(y32) 
+
+# class_SUBSET_REGION():
+class SUBSET_REGION():
+  #== def___init__
+  def __init__(self):
+    self.dataDir, self.cmacDir = cmac.getRootDir()
+    if self.dataDir is None:
+      sys.exit(1)
+
+    self.scatterDir = '%s/trunk/services/svc/svc/src/scatterPlot2V'%self.cmacDir
+
+    ### self.ferretCmd = '/home/bytang/install/bin/ferret' 
+    # /mnt/xvdf/data/
+    if self.dataDir.find('xvdf')>-1:
+      self.ferretCmd = '/home/sflops/install/bin/ferret'
+    else:
+      self.ferretCmd = '/home/svc/install/bin/ferret' 
+
+    self.clipL = 0.02
+    self.clipR = 0.02
+
+    self.ferretMem = 100
+    self.isDiffPlot = 0
+
+    #self.dataDir = '/mnt/hgfs/cmacws/data1/data/cmip5'
+    ### self.desDir = '/home/bytang/projects/cmac/des/original'
+    #self.desDir = '/home/svc/cmac/des/original'
+
+    # zzzz
+    #self.desDir = '/home/bytang/projects/cmac/tmp/des'  # for Benyang's testing
+    self.desDir = os.path.split(self.dataDir)[0] + '/des'  # for deployment
+    #self.desDir = '%s/des'%self.scatterDir  # ad hoc fix for summer school
+
+    self.inFile = '' 
+    self.inFile2 = '' 
+#   self.inFileBU = '' 
+#   self.netcdfFile = '' 
+#   self.netcdfDirRemote = '' 
+#   self.pngFile = '' 
+#   self.pdfFile = '' 
+#   self.lockFile = '' 
+#
+#   self.isCoastline = 1 
+#   self.regionName = '' 
+#   self.dataName = '' 
+#   self.dateStr = '' 
+#
+#   self.regionTitle = 'same' 
+#   self.dataTitle = 'same' 
+#   self.dateTitle = 'same' 
+#
+#   self.offset = 0.0 
+#
+
+    if 0:
+      self.lon1S = -10.5
+      self.lon1E = 20.3
+      #self.dLon = 1.0
+
+    if 0:
+      self.lon1S = -180.0
+      self.lon1E = 180.0
+      #self.dLon = 1.0
+  
+    if 0:
+      self.lat1S = -70.1
+      self.lat1E = -20.9
+      #self.dLat = 1.0
+
+    if 1:
+      self.lon1S = -180.0
+      self.lon1E = 180.0
+
+    if 1:
+      self.lat1S = -80.0
+      self.lat1E =  80.0
+
+#
+    if 1:
+      self.center1 = 'ukmo'
+      self.model1  = 'hadgem2-a'
+      self.varName1='ts'
+
+    if 0:
+      self.center2 = 'giss'
+      self.model2  = 'e2-r'
+      #self.varName2='rsdt'
+      self.varName2='ts'
+
+    if 1:
+      self.center2 = 'gfdl'
+      #self.model2  = 'esm2g'
+      self.model2  = 'cm3'
+      #self.varName2='rsdt'
+      self.varName2='ta'  # working
+      self.varName2='clw' # not working
+      self.varName2='lai' # not working
+
+    if 0:
+      self.center2 = 'ukmo'
+      self.model2  = 'hadgem2-a'
+      self.varName2='ts'
+      #self.varName2='cli'
+
+    self.nDim = 3
+
+    self.presS = 3000
+    self.presE = 3000
+
+    self.yearS = 1990
+    self.yearE = 1991
+
+    self.monthS = 1
+    self.monthE = 1
+
+    self.dayS = 15
+    self.dayE = 15
+
+    self.nSample = 500
+
+    self.outDir = '.'
+  
+    self.noData = None
+
+  #== def_derived
+  def derived(self):
+    pass
+
+  # def_noDataExit()
+  def noDataExit(self, msg):
+    print "No Data !!!"
+    print msg
+    sys.exit(1)
+
+  # not used. Use the des file instead.
+  # def_getFileName(self, center, model, varName):
+  def getFileName(self, center, model, varName):
+    # the original is just for model
+    if center in modelCenter:
+      if varName in regridVar:
+        dir0 = '%s/%s/%s/regridded'%(self.dataDir, center, model)
+      else:
+        dir0 = '%s/%s/%s/original'%(self.dataDir, center, model)
+ 
+    else:
+      dir0 = '%s/%s/%s'%(self.dataDir, center, model)
+
+    desDir = self.desDir
+
+    filesNc = glob.glob('%s/%s_*.nc'%(dir0, varName))
+    desFn = '%s/%s_%s_%s.des'%(desDir, center, model, varName)
+    filesDes = glob.glob(desFn)
+    if 1:
+      print dir0
+      print 'filesNc, filesDes:'
+      print center, model, varName
+      print filesNc
+      print filesDes
+
+    # yyyy
+    if len(filesNc)==0:
+      self.noDataExit('no *.nc file.')
+
+    if len(filesDes)>1:
+      print 'more than 1 des files:'
+      for f in filesDes:
+        print f
+
+      self.noDataExit('more than 1 *.des files.')
+      return None
+
+    if len(filesNc)>1 and len(filesDes)==1:
+      return filesDes[0], filesNc[0]
+
+    if len(filesNc)>1 and len(filesDes)==0:
+      try:
+        temp1 = '/home/bytang/bin/mine/mkdes2 --f90 --des %s %s/%s_*.nc'%(desFn, dir0, varName)
+        print temp1
+        os.system(temp1)
+        files2a = glob.glob(desFn)
+        return files2a[0], filesNc[0]
+      except:
+        self.noDataExit('failed to generate the des file.')
+      
+    if len(filesNc)==1:
+      return filesNc[0], filesNc[0]
+ 
+    return None
+
+  # def_getFileName2(self, center, model, varName):
+  def getFileName2(self, center, model, varName):
+    dir0 = '%s/%s_%s'%(self.desDir, center, model)
+    fileNc = glob.glob('%s/%s.nc'%(dir0, varName))
+    print '%s/%s.nc'%(dir0, varName)
+    if len(fileNc)>0:
+      return fileNc[0], fileNc[0] 
+
+    else:
+      print '%s/%s.des'%(dir0, varName)
+      fileDes = glob.glob('%s/%s.des'%(dir0, varName))
+
+      if len(fileDes)==0:
+        return None
+
+      # def_extractNC(desFn):
+      return fileDes[0], extractNC(fileDes[0])
+
+  # def_getUnits(self):
+  def getUnits(self):
+    nc1 = Dataset(self.inFile1Nc, 'r')
+    data = nc1.variables[self.varName1]
+    self.units1 = data.units
+    nc1.close()
+
+    nc1 = Dataset(self.inFile2Nc, 'r')
+    data = nc1.variables[self.varName2]
+    self.units2 = data.units
+    nc1.close()
+
+  # def_checkTime
+  # not used yet
+  def checkTime(self, ncFile, varName):
+    # open file
+    nc1 = Dataset(ncFile, 'r')
+
+    # read time
+    data = nc1.variables[varName]
+    dims = data.dimensions
+    timeName = dims[0]
+    time1 = nc1.variables[timeName]
+
+    tS = nC4.num2date(time1[0], time1.units)
+    tE = nC4.num2date(time1[-1], time1.units)
+
+    tNumS = nC4.date2num(datetime.datetime(self.yearS, self.monthS, self.dayS, 0,0,0), time1.units)
+    tNumE = nC4.date2num(datetime.datetime(self.yearE, self.monthE, self.dayE, 0,0,0), time1.units)
+
+    if tNumS<time1[0]:
+      self.yearS = tS.year
+      self.monthS = tS.month
+      self.dayS = tS.day
+      print 'start time changed to: %d-%2d-%2d'%(self.yearS, self.monthS, self.dayS)
+
+
+    if tNumE>time1[-1]:
+      self.yearE = tE.year
+      self.monthE = tE.month
+      self.dayE = tE.day
+      print '  end time changed to: %d-%2d-%2d'%(self.yearE, self.monthE, self.dayE)
+
+    nc1.close()
+
+  # def_subsetting():
+  def subsetting(self, ncFile1, varName1, ncFile2=None, varName2='DATA1', 
+         varNameOut='DATA1', interp='', dim=4, lev=-1, isAve=0):
+
+    try:
+      temp1 = os.path.isfile(ncFile1)
+    except:
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      self.noData = 1
+      tempFile = None
+      return tempFile
+    
+    if not os.path.isfile(ncFile1):
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      self.noData = 1
+      tempFile = None
+      return tempFile
+      
+    aveStr = ''
+    if isAve==1:
+      aveStr = '@ave'
+
+    if self.noData ==1:
+      self.noDataExit('in subsetting: nc file is not there.')
+     
+    tempFile = tempfile.mkstemp(suffix='.nc', dir=self.outDir)
+
+    tmpFileJnl = tempfile.mkstemp(suffix='.jnl', dir=self.outDir)
+    #print varName, tempFile, tmpFileJnl
+
+    print type(self.yearS), type(self.monthS)
+    dimStr = ''
+    if dim==3:
+      dimStr = ', t="%02d-%s-%d":"%02d-%s-%d"%s'\
+%(self.dayS, num2month[self.monthS], self.yearS, self.dayE, num2month[self.monthE], self.yearE, aveStr)
+    elif dim==4:
+      if lev<0:
+        dimStr = ', k=1, t="%02d-%s-%d":"%02d-%s-%d"%s'\
+%(self.dayS, num2month[self.monthS], self.yearS, self.dayE, num2month[self.monthE], self.yearE, aveStr)
+      else:
+        dimStr = ', z=%g@itp, t="%02d-%s-%d":"%02d-%s-%d"%s'\
+%(lev, self.dayS, num2month[self.monthS], self.yearS, self.dayE, num2month[self.monthE], self.yearE, aveStr)
+
+      if 0:
+        dimStr = ', k=1, t="%02d-%s-%d":"%02d-%s-%d"%s'\
+%(self.dayS, num2month[self.monthS], self.yearS, self.dayE, num2month[self.monthE], self.yearE, aveStr)
+
+    #  
+    if ncFile2 is None:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  !show data
+
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, x=%f:%f, y=%f:%f %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  # 4
+  varNameOut,
+  varName1,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  #interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    else:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  use "%s"
+  !show data
+
+  
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, g=%s[d=2, l=1]%s %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  ncFile2, 
+  # 4
+  varNameOut,
+  varName1,
+  varName2,
+  interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    open(tmpFileJnl[1], 'w').write(script1)
+
+    temp1 = '%s -gif -script %s' %(self.ferretCmd, tmpFileJnl[1])
+
+    try:
+      os.system(temp1)
+    except:
+      self.noDataExit('subsetting: failed to run ferret')
+
+    #os.remove(tmpFileJnl)
+
+    if not os.path.isfile(tempFile[1]):
+      self.noDataExit('subsetting: ferret failed to generate a nc file.')
+
+    if os.stat(tempFile[1]).st_size<10:
+      self.noDataExit('subsetting: ferret failed to generate a nc file.')
+
+    return tempFile[1]
+
+if cr['init_class']       == 1:
+  a = SUBSET_REGION()
+
+if cr['command_arg']       == 1:
+  print 'zzzz'
+  if len(sys.argv)>1:
+    argv = sys.argv
+    pid = open(argv[1])
+    argDict = pickle.load(pid)
+    pid.close()
+
+    for k in argDict.keys():
+      temp1 = 'a.' + k + '=argDict[k]'   
+      print '%s: %s'%(k, argDict[k])
+      exec(temp1)
+
+    # time
+    a.timeS = int(a.timeS)
+    if a.timeS<10000000:
+      a.timeS = a.timeS*100 + 15
+
+    a.yearS = a.timeS / 10000
+    a.MonthS = a.timeS % 10000 / 100
+    a.dayS = a.timeS % 100
+    
+    a.timeE = int(a.timeE)
+    if a.timeE<10000000:
+      a.timeE = a.timeE*100 + 15
+
+    a.yearE = a.timeE / 10000
+    a.MonthE = a.timeE % 10000 / 100
+    a.dayE = a.timeE % 100
+
+    a.timeFull = 0
+
+    # others
+    a.var1 = str(a.var1)
+    a.model1 = str(a.model1)
+
+    a.lonS = float(a.lonS)
+    a.lonE = float(a.lonE)
+    a.latS = float(a.latS)
+    a.latE = float(a.latE)
+
+    try:
+      a.presS = float(a.presS)
+    except ValueError:
+      a.presS = -999999
+    if a.presS>0 and (a.var1 not in oceanVar):
+      a.presS *= 100.0
+
+    try:
+      a.presE = float(a.presE)
+    except ValueError:
+      a.presE = -999999
+    if a.presE>0 and (a.var1 not in oceanVar):
+      a.presE *= 100.0
+
+    print 'a.lon: ',
+    print a.lonS, a.lonE, a.presS, a.presE
+    a.lonMethod = int(a.lonMethod)
+    a.latMethod = int(a.latMethod)
+    a.presMethod = int(a.presMethod)
+    a.timeMethod = int(a.timeMethod)
+
+    a.colorMap = str(a.colorMap)
+    a.ferretLevel = str(a.ferretLevel)
+    import urllib
+    a.plotTitle = urllib.unquote( str(a.plotTitle) )
+
+    a.outDir = str(a.outDir)
+
+    a.inputSource = int(a.inputSource)
+
+    a.varA = str(a.varA)
+    a.varB = str(a.varB)
+    a.uploadServerFile = str(a.uploadServerFile)
+    a.onlineFile = str(a.onlineFile)
+    a.uploadFile = str(a.uploadFile)
+
+    if a.onlineFile.find('http://cmda-test.jpl.nasa.gov:8090/static')>=0:
+      temp1 = a.onlineFile.find('/static')
+      a.onlineFile = '/home/svc/new_github/CMDA/JPL_CMDA/services/svc/svc' + a.onlineFile[temp1:]
+
+    a.uploadDir = '/home/svc/upload'
+
+if cr['plot4__']       == 1:
+  import pyferret as pf
+  pf.start(quiet=True, unmapped=True)
+  pf.run('set memory/size=500')
+  pf.run('cancel mode logo' )
+  pf.run('cancel mode journal' )
+
+  #print 'a.data_url: ',
+  #print a.data_url
+
+  #if len(a.data_url)>10:
+  #  print a.data_url[-1]
+  #  if a.data_url[-1]=='c':
+
+  cwd1 = os.getcwd()
+  if a.inputSource==1:
+    a.var1 = a.varA
+
+    fList = [a.onlineFile, ]
+      
+    if a.onlineFile[:4]=='file':
+      fList = [a.onlineFile[8:], ]
+
+    if 0:
+      # -N for only downloading new file
+      temp1 = 'wget -N %s'%(a.onlineFile)
+      print temp1
+
+      cwd1 = os.getcwd()
+      os.chdir('/home/svc/upload')
+      os.system(temp1)
+      os.chdir(cwd1)
+
+      fn1 = a.onlineFile.split('/')[-1]
+      fList = ['%s/%s'%(a.uploadDir, fn1),]
+
+  elif a.inputSource==2:
+    fList = ['%s/%s'%(a.uploadDir, a.uploadServerFile),]
+    a.var1 = a.varB
+
+  # staged data
+  else:
+    # dataList dict
+    fid = open('dataList2.js')
+    ll = fid.readlines()
+    fid.close()
+
+    ll = [i for i in ll if i[:2]!='//']
+    ll = string.join(ll)
+
+    temp1 = ll.find('dataList=')
+    ll = ll[temp1:]
+    temp1 = ll.rfind('}')
+    ll = ll[:(temp1+1)]
+    
+    print ll[:5]
+    #dataList = eval(ll)
+    exec(ll)
+    print 'len(dataList): ',
+    print len(dataList)
+
+    #-- change dir
+    centerModel2 = a.model1
+    centerModel1 = a.model1.lower()
+
+    dd = dataList[centerModel2]
+    dataDir = '/mnt/data_2016/cmip5/%s/%s'%(centerModel1, dd[2][a.var1][2])
+
+    cwd1 = os.getcwd()
+    os.chdir(dataDir)
+
+    fList = glob.glob('%s_*.nc'%a.var1)
+    
+    print '# of files: ',
+    print len(fList), fList[0]
+
+  #-- get dim
+  nc = Dataset(fList[0])
+  ncV = nc.variables[a.var1] 
+  shape1 = ncV.shape
+  print 'shapezz: ', shape1
+  if len(shape1)==4:
+    is3d = 1
+  else:
+    is3d = 0
+    a.presMethod = 0
+
+  nc.close()
+
+  figFile = '%s/plot.png'%a.outDir
+  dataFile = '%s/data.nc'%a.outDir
+
+  if len(fList)>1:
+    ff = ''
+    for f1 in fList:
+      ff += f1 + ', '
+    ff = ff[:-2]
+
+    temp1 = str('def data/agg/t dd=%s'%(ff))
+    print temp1
+    pf.run(temp1)
+
+  else:
+    temp1 = str('use "%s"'%fList[0])
+    print temp1
+    pf.run(temp1)
+
+  #temp1 = 'show data'
+  #print temp1
+  #pf.run(temp1)
+
+
+  # figure out dim
+  dimMethod = '%d%d%d%d'%(
+a.timeMethod, 
+a.presMethod, 
+a.latMethod, 
+a.lonMethod, 
+)
+  print 'is3dzz: ', dimMethod
+
+  # plotType
+  if dimMethod.count('3')==2:
+    plotType = 'shade'   
+  else:
+    plotType = 'plot'   
+
+  print 'a.lonS: ',
+  print a.lonS
+  print type(a.lonS)
+  # indexing
+  if a.lonMethod==1:
+    lonStr = 'x=%.2f,'%(a.lonS)
+  elif a.lonMethod==2:
+    lonStr = 'x=%.2f:%.2f@ave,'%(a.lonS, a.lonE)
+  elif a.lonMethod==3:
+    lonStr = 'x=%.2f:%.2f,'%(a.lonS, a.lonE)
+
+  indexStr = lonStr
+
+  if a.latMethod==1:
+    latStr = 'y=%.2f, '%(a.latS)
+  elif a.latMethod==2:
+    latStr = 'y=%.2f:%.2f@ave, '%(a.latS, a.latE)
+  elif a.latMethod==3:
+    latStr = 'y=%.2f:%.2f, '%(a.latS, a.latE)
+
+  indexStr += latStr
+
+  if is3d:
+    if a.presMethod==1:
+      presStr = 'z=%.0f, '%(a.presS)
+    elif a.presMethod==2:
+      presStr = 'z=%.0f:%.0f@ave, '%(a.presS, a.presE)
+    elif a.presMethod==3:
+      presStr = 'z=%.0f:%.0f, '%(a.presS, a.presE)
+
+    indexStr += presStr
+
+  if a.timeMethod==1:
+    timeStr = 't="%02d-%s-%d", ' \
+        %(a.dayS, num2month[a.monthS], a.yearS)
+  elif a.timeMethod==2:
+    if a.timeFull:
+      timeStr = 't=@ave, ' 
+    else:
+      timeStr = 't="%02d-%s-%d":"%02d-%s-%d"@ave, ' \
+          %(a.dayS, num2month[a.monthS], a.yearS, a.dayE, num2month[a.monthE], a.yearE)
+  elif a.timeMethod==3:
+    if a.timeFull:
+      timeStr = '' 
+    else:
+      timeStr = 't="%02d-%s-%d":"%02d-%s-%d", ' \
+        %(a.dayS, num2month[a.monthS], a.yearS, a.dayE, num2month[a.monthE], a.yearE)
+  if 0:
+    if a.timeMethod==1:
+      timeStr = 't="%02d-%s-%d", ' \
+          %(a.dayS, num2month[a.monthS], a.yearS)
+    elif a.timeMethod==2:
+      timeStr = 't="%02d-%s-%d":"%02d-%s-%d"@ave, ' \
+          %(a.dayS, num2month[a.monthS], a.yearS, a.dayE, num2month[a.monthE], a.yearE)
+    elif a.timeMethod==3:
+      timeStr = 't="%02d-%s-%d":"%02d-%s-%d", ' \
+          %(a.dayS, num2month[a.monthS], a.yearS, a.dayE, num2month[a.monthE], a.yearE)
+
+  indexStr += timeStr
+
+  indexStr += 'd=1'
+
+  if 0:
+    temp1 = "def var aa=%s[%s]"%(a.var1, indexStr)
+    print temp1
+    pf.run(temp1)
+
+  # NASA/MODIS missing value is strnge.
+  if centerModel2=='NASA/MODIS':
+    #temp1 = str( 'let title1="`%s.long_name`" + " (" + "`%s.units`" + ")"'%(a.var1, a.var1) )
+    #print temp1
+    #pf.run(temp1)
+
+    #temp1 = str( 'define var/bad=-999999.0/title="`title1`" data2=if (%s gt 1000000.0) then (-999999.0) else %s'%(a.var1, a.var1) )
+
+    temp1 = str( 'define var/bad=-999999.0/title="`%s.long_name`"/units="`%s.units`" data2=if (%s gt 1000000.0) then (-999999.0) else %s'%(
+    a.var1, 
+    a.var1, 
+    a.var1, 
+    a.var1) )
+    print temp1
+    pf.run(temp1)
+
+  # shade
+  if plotType=='shade':
+
+    # aspect ratio
+    import math
+    dLat = float(a.latE - a.latS)
+    mLat = (a.latE + a.latS)/2.0
+    dLon = float(a.lonE - a.lonS) * math.cos(mLat/180.0*math.pi)
+
+    aspect1 = dLat/dLon
+    print 'aspect1: ',
+    print aspect1
+
+    marginL = marginR = marginD = marginU = 0.2 * max(dLon, dLat)
+    #marginL = 0.2 * dLon
+    #marginR = 0.2 * dLon
+    #marginD = 0.3 * dLat
+    #marginU = 0.2 * dLat
+    hor = marginL + dLon + marginR
+    vert = marginD + dLat + marginU
+
+
+    # to remove the thin white lines. A work around to a Ferret problem
+    temp1 = 'set window/outline=0.5/aspect=%.3f '%(vert/hor)
+    print temp1
+    pf.run(temp1)
+
+    temp1 = 'def vi/axes/xli=%.4f,%.4f/yli=%.4f,%.4f newasp'%(\
+marginL/hor, \
+(marginL+dLon)/hor, \
+marginD/vert, \
+(marginD+dLat)/vert)
+    print temp1
+    pf.run(temp1)
+
+    temp1 = 'set vi newasp'
+    print temp1
+    pf.run(temp1)
+
+    # pallette
+    temp1 = str( 'palette %s'%a.colorMap )
+    pf.run(temp1)
+
+    if len(a.ferretLevel)>0:
+      vminStr = '/level=%s'%(a.ferretLevel)
+    else:
+      vminStr = ''
+
+    if centerModel2=='NASA/MODIS':
+      temp1 = str( 'shade%s data2[%s]'%(vminStr, indexStr) )
+      print temp1
+      pf.run(temp1)
+
+    else:
+      temp1 = str( 'shade%s %s[%s]'%(vminStr,a.var1, indexStr) )
+      print temp1
+      pf.run(temp1)
+
+  # plot 
+  else:
+    if centerModel2=='NASA/MODIS':
+      temp1 = str( 'plot/symbol=1/line data2[%s]'%(indexStr) )
+      print temp1
+      pf.run(temp1)
+
+    else:
+      temp1 = str( 'plot/symbol=1/line %s[%s]'%(a.var1, indexStr) )
+      print temp1
+      pf.run(temp1)
+
+  #save 
+  temp1 = 'define var data1=%s[%s]'%( a.var1, indexStr )
+  print temp1
+  pf.run(temp1)
+
+  temp1 = 'save/clobber/file="%s" data1'%( dataFile)
+  print temp1
+  pf.run(temp1)
+
+  # title
+  temp1 = str( "go unlabel `($labnum_dset)`" )
+  print temp1
+  pf.run(temp1)
+
+  if a.plotTitle:
+    temp1 = str( "ppl title %s"%a.plotTitle )
+    pf.run(temp1)
+    
+  if plotType=='shade':
+    temp1 = "ppl shade"
+  else:
+    temp1 = "ppl plot"
+  print temp1
+  pf.run(temp1)
+
+  if plotType=='shade':
+    temp1 = 'go land'
+    print temp1
+    pf.run(temp1)
+
+  temp1 = str( 'frame /file="%s"'%figFile )
+  print temp1
+  pf.run(temp1)
+  
+  print 'figFile: %s'%figFile
+  print 'dataFile: %s'%dataFile
+
+  os.chdir(cwd1)
+

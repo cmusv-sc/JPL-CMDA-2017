@@ -1,0 +1,87 @@
+#!/usr/bin/octave -q
+
+addpath([pwd()  '/../util/']);
+
+pkg load netcdf;
+
+arg_list = argv();
+printf ("program name: %s\n", program_name());
+
+narg = length(arg_list);
+
+if narg < 2
+  error('Insufficient argument, need a model and a variable name!'); 
+end
+modelName = lower(arg_list{1});
+printf ("modelName: %s\n", modelName);
+varName = arg_list{2};
+printf ("varName: %s\n", varName);
+
+startTime = struct('year', 1980, 'month', 1);
+stopTime = struct('year', 2013, 'month', 12);
+
+if narg > 2
+  startTimeStr = arg_list{3};
+  printf ("startTimeStr: %s\n", startTimeStr);
+  startTime = struct('year', str2num(startTimeStr(1:4)), 'month', str2num(startTimeStr(5:6)));
+end
+
+if narg > 3
+  stopTimeStr = arg_list{4};
+  printf ("stopTimeStr: %s\n", stopTimeStr);
+  stopTime = struct('year', str2num(stopTimeStr(1:4)), 'month', str2num(stopTimeStr(5:6)));
+end
+
+overwrite = false;
+if narg > 4
+  overwrite = (arg_list{5} ~= 0);
+end
+
+[center,model] = strtok(modelName, '_');
+model = model(2:end); % get rid of '_'
+
+dataDir = [getDataRootDirectory() '/cmip5/' center '/' model '/']; 
+
+sourceDataDir = [dataDir '/original/'];
+
+targetDataDir = [dataDir '/regridded/'];
+if narg > 5
+  targetDataDir = arg_list{6};
+
+  printf("1. %s\n", arg_list{1})
+  printf("2. %s\n", arg_list{2})
+  printf("3. %s\n", arg_list{3})
+  printf("4. %s\n", arg_list{4})
+  printf("5. %s\n", arg_list{5})
+  printf("6. %s\n", arg_list{6})
+end
+
+if ~exist(sourceDataDir, 'dir')
+  warning(['Source file directory does not exist: ' sourceDataDir '!']);
+  return;
+end
+
+plev = plevForRegrid(); 
+
+dataFiles = dir([sourceDataDir '/' varName '_*.nc']);
+
+for ii = 1:length(dataFiles)
+  if ~exist(targetDataDir, 'dir')
+    mkdir(targetDataDir);
+  end
+  sourceFile = [sourceDataDir '/' dataFiles(ii).name];
+  if dataFileRelevant(sourceFile, startTime, stopTime)
+    targetFile = [targetDataDir '/' dataFiles(ii).name(1:(end-16)) 'plevRegridded_' dataFiles(ii).name(end+(-15:0))];
+
+    if exist(targetFile, 'file')
+      warning(['Target file exists: ' targetFile]);
+    
+      if ~overwrite
+        warning(['...Skipping ...']);
+        continue
+      end
+    end
+    % file does not exist
+    status = resampleVerticalGrid(sourceFile, targetFile, varName, plev);
+  end
+end

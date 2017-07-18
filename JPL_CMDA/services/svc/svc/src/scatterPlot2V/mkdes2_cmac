@@ -1,0 +1,535 @@
+#!/home/svc/install/bin/epd
+# vim: set syntax=python:
+'''
+test:
+# on cmac3
+
+mkdes2 --f90 --des temp1.des \
+/export/data1/data/cmip5/giss/e2-r/original/rsut_Amon_GISS-E2-R_historical_r1i1p1*.nc
+
+
+'''
+
+#== thinking_
+#== helpMsg_
+#=== get_options
+
+#== check_netCDF_exist
+#== constants_
+#== class_fileUnit:
+
+#==def_main():
+  #== loop_ncFiles
+    #== time_from_file
+    #== check_even_time
+
+  #== which_unit_to use
+  #== get_title
+  #== convert_to_a common unit
+  #== sort_time0
+
+  #== header_
+  #== tail_
+  #=== loop_file_2
+    #== check_time_overlap
+    #== generate_body
+    #== check_line_too_long.
+    #== write_desFile
+
+'''
+TODO:
+
+'''
+
+import os, sys, getopt, re, string, time, calendar
+import numpy as np
+from netCDF4 import Dataset
+import netCDF4 
+
+#== thinking_
+'''
+Numbers that are needed for making the des file:
+  for header:
+    units0 -- common units
+  for body:
+    time0, time1, dt -- beginning, ending times and interval
+
+'''
+#== helpMsg_
+helpMsg = '''
+
+######################
+#      mkdes         #
+######################
+
+Version: 2.0
+Author: Benyang Tang,  btang22@gmail.com
+
+
+=== Introduction ===
+
+A Ferret descriptor file is the entry point to a multiple-file netCDF dataset,
+linking data in multiple files to form a 2D or 3D time series.
+
+Writing a descriptor file is labor intense and error prone. This tool, mkdes,
+takes care of the detail; generating the descriptor file now is just a matter
+of issuing one command line given a set of netCDF files as arguments.
+
+mkdes needs Python. All Linux computers most unix computers have Python
+installed. type 'which python' to test.
+
+
+=== Download ===
+
+http://www.ocgy.ubc.ca/~tang/softwares/mkdes/mkdes.html
+
+
+=== Usage ===
+
+mkdes [--help --des=desFile --time-var=timeVariableName --dir=dir_prefix --modulo --title=Tilte --f90 --ncdump=ncdumpCommand] netCDF1 [netCDF2 ...]
+
+The arguments netCDF1, netCDF2, ... need not to be in any special order. mkdes
+is smart enough to figure out the time order.
+
+The time grids of each netCDF file have to be evenly spaced. But each netCDF
+file can have its own time interval. 
+
+The time grids from different netCDF files can overlap. mkdes will drop off the
+overlapping time levels. Here is an example:
+netCDF1 has time grids of [101, 102, 103, 104, 105, 106]
+netCDF2 has time grids of [103, 104]
+netCDF3 has time grids of [104, 105, 106]
+Then, mkdes will take the first 2 time levels from netCDF1, the first time
+level from netCDF2, and all the time levels from netCDF3.
+
+
+=== options ===
+ 
+--help  
+print this help message.
+
+--timevar=timeVariableName
+--time-var=timeVariableName
+Specify the time variable name. The default is, of caurse, time .
+
+When the time information is in the filename, instead of in the netcdf
+file, the --time-var can be
+  --time-var='sst_$y$_$m$.nc'  for files sst_1990_10.nc, sst_1990_11.nc etc.
+  --time-var='sst_$y$_$D$.nc'  for files sst_1990_200.nc, sst_1990_201.nc, ... sst_1990_365.nc, etc.
+  --time-var='sst_$y$.$m$.$d$.nc'  for files sst_1990.2.1.nc, sst_1990.2.2.nc, ... sst_1990.2.28, etc.
+
+--des=desFile
+Specify the resulting descriptor file. The default is a file named temp999.des
+in the current directory.
+
+--dir=dir_prefix
+Specify a directory which prefixes the netCDF filenames in the descriptor file.
+The default is no directory prefix. If you like to prefix the current
+directory, use --dir='.' .
+
+--modulo
+Specify whether the time is modulo. The default is not.
+
+--f90
+Specify whether the descriptor file is of f90 style (for Ferret in Linux) or of
+f77 (for other platforms). The default is f77.
+
+--ncdump=ncdumpCommand
+This script needs a tool called ncdump. If your system has netCDF library
+installed, it should have ncdump. mkdes will search several directories for
+ncdump.  If it fails to find ncdump, it will print a message telling that you
+need to use this option to specify the ncdump path.
+
+--title=Title
+Specify the title of the descriptor file. The default is to be read from the netCDF files.
+
+
+=== examples ===
+
+# to print this help message and do nothing else:
+mkdes --help
+
+# to generate a f77 style descriptor file, no directory prefixing, outputing the descriptor file as temp999.des:
+mkdes netCDF1 netCDF2 netCDF3
+
+# to prefix the current directory to the netCDF file names in the descriptor file:
+mkdes --dir='.' netCDF1 netCDF2
+
+# if the netCDF files names already have absolute paths, the option --dir has no effect:
+mkdes --dir='/home/myHome/' /u1/data/wind1997.cdf /u1/data/wind1998.cdf 
+
+# to generate descriptor file myDes.des:
+mkdes --des=myDes.des netCDF1 netCDF2
+
+# to generate a f90 descriptor file:
+mkdes --f90 netCDF1 netCDF2
+
+# If the time variable in the netCDF files is not time, but timeZZZ
+mkdes --timevar=timeZZZ netCDF1 netCDF2
+
+'''
+
+'''
+=== To Do:
+() date format
+() other names for time?
+() find the identical netCDF files
+'''
+#=== parameters
+
+#=== get_options
+optFormat = ''
+longOptFormat = ['help', 'time-var=', 'timevar=', 'ncdump=', 'f90', 'title=', 'modulo', 'des=', 'dir=']
+try:
+  opts, ncFiles = getopt.getopt(sys.argv[1:],optFormat,longOptFormat)
+except getopt.error, msg:
+  print msg
+  print helpMsg
+  sys.exit(1)
+
+ifSilent = 0
+
+ncdumpCmd = ''
+isF90 = 0
+title0 = ''
+isModulo = '.false.'
+desFile = 'temp999.des'
+dirPrefix = None
+timeVar = 'time'
+isFnTime = 0
+
+for o,a in opts:
+  if o=='--ncdump':
+    ncdumpCmd = a
+  if o=='--title':
+    title0 = a
+  if o in ['--f90', '--F90']:
+    isF90 = 1
+  if o in ['--modulo']:
+    isModulo = '.true.'
+  if o in ['--des']:
+    desFile = os.path.expanduser(a)
+  if o in ['--dir']:
+    dirPrefix = os.path.expanduser(a)
+  if o in ['--timevar']:
+    timeVar = a
+  if o in ['--time-var']:
+    timeVar = a
+  if o in ['--help']:
+    print helpMsg
+    sys.exit(0)
+ 
+print timeVar
+if '$' in timeVar:
+  isFnTime = 1
+
+#== what should be the dirPrefix
+currentDir = os.getcwd()
+if dirPrefix == '.':
+  dirPrefix = currentDir
+  
+#--- if no ncFiles
+if not ncFiles:
+  print 'Please specify at least one netCDF files.'
+  sys.exit(1)
+
+#== check_netCDF_exist
+#== check whether netCDF files exist
+ncFiles.sort()
+if len(ncFiles)>1:
+  fileIgnored = []
+  for i in range(len(ncFiles)):
+    ncFile = ncFiles[i]
+ 
+    # why? repeated ncFile?
+    if i < len(ncFiles):
+      if ncFile == ncFiles[i-1]:
+	fileIgnored.append(i)
+
+    if not os.path.isfile(ncFile):
+      print 'file %s does not exist. Do nothing and exiting.' %(ncFile)
+      sys.exit(1)
+      
+  if fileIgnored:
+    fileIgnored.reverse()
+    for i in fileIgnored:
+      del ncFiles[i]
+  
+#== constants_
+
+#== class_fileUnit:
+class fileUnit:
+  def __init__(self, ncFile, times, dt1, unit1, t0Tuple, t0Epoch, y0):
+    self.ncFile = ncFile
+    self.times = times
+    self.dt = dt1
+    self.unit = unit1    # from here down, not used
+    self.t0Tuple = t0Tuple
+    self.t0Epoch = t0Epoch
+    self.y0 = y0
+
+#=================
+#==def_main():
+def main():
+#=================
+
+  #== loop_ncFiles
+  fileTime = {}
+  for ncFile in ncFiles:
+    #== time_from_file
+    nc = Dataset(ncFile)
+
+    time1a = nc.variables[timeVar]
+
+    # find t0
+    # 'days since 1876-1-1'
+    t0Str = time1a.units.split(' since ')[1].split('.')[0]
+
+    formatI = [
+                '%Y-%m-%d %H:%M:%S',
+                '%Y-%m-%d',
+                ]
+
+    #--- try formats one by one
+    t0Tuple = None
+    for f in formatI:
+      try:
+        t0Tuple = time.strptime(t0Str, f)
+        break
+      except: pass
+
+    if not t0Tuple:
+      print 'Cannot figure out the following time unit in %s: \n%s.' %(ncFile,time1a.units)
+     
+    # t0 is the starting time of time1a.units, in seconds since epoch
+    t0 = calendar.timegm(t0Tuple)
+
+    times = time1a[:]
+  
+    #== check_even_time
+    #--- check whether times are evenly spaced
+    if len(times)>2:
+      temp5 = times[:-1]
+      temp6 = times[1:]
+      dtMean = (temp6-temp5).mean()
+      dtStd = (temp6-temp5).std()
+      
+      if dtStd/dtMean > 0.05:
+        print 'time is not evenly spaced in %s . Only the first 2 time levels are used.' %(ncFile)
+        times = times[:2]
+
+    datetimes = netCDF4.num2date(times, time1a.units)
+    fileTime[ncFile] = (datetimes, time1a.units, t0)
+
+    nc.close()
+
+  #== which_unit_to use
+  # find the earlist t0
+  t0s = [fileTime[ncFile][2] for ncFile in ncFiles]
+  t0s = np.array(t0s)
+  temp1 = t0s.argmin()
+
+  ncFile0 = ncFiles[temp1]
+  units0 = fileTime[ncFile0][1]
+
+  #== get_title
+  nc = Dataset(ncFile0)
+  try:
+    title1 = nc.title
+  except:
+    title1 = ' '
+  nc.close()
+
+  #== convert_to_a common unit
+  count1 = -1
+  fileDict = {}
+  for ncFile in ncFiles:
+    count1 += 1
+    times = netCDF4.date2num(fileTime[ncFile][0], units0)
+
+    if len(times)==2:
+      dt1 = times[1] - times[0]
+    elif len(times)==1:
+      dt1 = 1.00
+    else:
+      temp1 = times[:-1]
+      temp2 = times[1:]
+      dt1 = (temp2-temp1).mean()
+
+    print 'ncFile, times[0], dt1: ',
+    print ncFile, times[0], dt1
+
+    fileDict[times[0]] = \
+         fileUnit(ncFile, times, dt1, units0, 0, 0, 0)
+
+  #== sort_time0
+  time0s = fileDict.keys()
+  time0s.sort()
+
+  #== header_
+  header0 = '''*
+* Created by mkdes v1.0
+* '''
+
+  temp4 = units0.split(' since ')
+  if temp4[0] in ['minutes', 'minute']: unit1 = '%5.1f' %(60)
+  if temp4[0] in ['hours','hour']: unit1 = '%5.1f' %(3600)
+  if temp4[0] in ['days', 'day']: unit1 = '%5.1f' %(24*3600)
+  if temp4[0] in ['months', 'month']: unit1 = '%5.1f' %(24*3600*30)
+  if temp4[0] in ['years','year']: unit1 = '%5.1f' %(365.25*24*3600)
+
+  t0 = temp4[1]
+  if t0.find(':')<0:
+    t0 += ' 00:00:00'
+  
+  # change date format to that of des 
+  # a workaround for year<1900
+  #a1 = '1879-01-02 07:23:26'
+  a1 = t0
+  year0 = a1[:4]
+  year9 = '2000'
+  a1 = a1.replace(year0,year9)
+  a2 = time.strptime(a1,'%Y-%m-%d %H:%M:%S')
+  a3 = time.strftime('%d-%b-%Y %H:%M:%S', a2)
+  a3 = a3.replace(year9, year0)
+  t0a = a3
+ 
+  headerInfo = (header0, title1, t0a, unit1, isModulo)
+
+  if isF90:
+    header1 = '''
+%s
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = '%s',
+   D_T0TIME      = '%s',
+   D_TIME_UNIT   = %s,
+   D_TIME_MODULO = %s,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+''' %headerInfo       
+
+  else:
+    header1 = '''
+%s
+ $FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ $END
+
+ $BACKGROUND_RECORD
+   D_TITLE       = '%s',
+   D_T0TIME      = '%s',
+   D_TIME_UNIT   = %s,
+   D_TIME_MODULO = %s,
+ $END
+ 
+ $MESSAGE_RECORD 
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ $END
+   
+ $EXTRA_RECORD
+ $END           
+''' %headerInfo
+
+  #== tail_
+  if isF90:
+    tail1 = '''
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /
+'''
+
+  else:
+    tail1 = '''
+ $STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**',
+ $END
+'''
+
+  #=== loop_file_2
+  body1 = ''
+  for i in range(len(time0s)):
+    time0I = time0s[i]
+    ncFile = fileDict[time0I].ncFile
+    timeI = fileDict[time0I].times
+    nTime = len(timeI)
+    dt1 = fileDict[time0I].dt
+
+    #== check_time_overlap
+    nTimeNew = nTime
+    if i != len(time0s)-1:
+      timeI_ = fileDict[time0s[i+1]].times
+      if timeI_[0] <= timeI[0]+(nTime-1)*dt1:
+        nTimeNew = int( (timeI_[0] - timeI[0] - .0001*dt1) / dt1 ) + 1
+
+    if nTime != nTimeNew:
+      print '\n%s :\n%d time levels in file;  %d levels are used.' %(ncFile, nTime, nTimeNew)      
+    else:
+      print '\n%s :\n%d time levels in file;  all are used.' %(ncFile, nTime)      
+
+    #== generate_body
+    nTime = nTimeNew
+
+    if dirPrefix and (not os.path.isabs(ncFile)):
+      ncFile1 = os.path.join(dirPrefix,ncFile)
+    else: 
+      ncFile1 = ncFile
+
+    if isF90:
+      temp1 = '''
+ &STEPFILE_RECORD
+   S_FILENAME    = '%s',
+   S_AUX_SET_NUM = 0,
+   S_START       = %10.4f,
+   S_END         = %10.4f,
+   S_DELTA       = %10.4f,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+''' %(ncFile1, timeI[0], timeI[0]+(nTime-1)*dt1, dt1)
+
+    else:
+      temp1 = '''
+ $STEPFILE_RECORD
+   S_FILENAME    = '%s',
+   S_AUX_SET_NUM = 0,
+   S_START       = %10.4f,
+   S_END         = %10.4f,
+   S_DELTA       = %10.4f,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ $END
+''' %(ncFile1, timeI[0], timeI[0]+(nTime-1)*dt1, dt1)
+
+    #== check_line_too_long.
+    #== check to see whether the line is too long.
+    if not isF90:
+      temp2 = string.split(temp1,'\n')[2]
+      if len(temp2)>75:
+        print '''Warning: The following line may be too long:
+%s 
+If Ferret does not take the generated descriptor file, see here for help:
+http://ferret.wrc.noaa.gov/Ferret/Mail_Archives/fu_2002/msg00164.html
+''' %(temp2)
+      
+    body1 = body1 + temp1
+
+    #== write_desFile
+    open(desFile,'w').write( header1 + body1 + tail1)
+
+main()

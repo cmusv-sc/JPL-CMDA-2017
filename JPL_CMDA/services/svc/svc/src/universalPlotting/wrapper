@@ -1,0 +1,4 @@
+#!/bin/sh
+
+/home/svc/install/bin/pythonfe7 ./pythonWrapper $*
+

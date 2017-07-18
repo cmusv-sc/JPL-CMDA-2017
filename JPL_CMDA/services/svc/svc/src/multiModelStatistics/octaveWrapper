@@ -1,0 +1,154 @@
+#!/usr/bin/octave -q
+addpath([pwd()  '/../util/']);
+
+pkg load netcdf;
+
+arg_list = argv();
+printf ("%s:\n", program_name());
+
+narg = length(arg_list);
+for ii = 1:narg
+  printf("%s\n", arg_list{ii})
+end
+
+if narg < 9
+  error('Insufficient argument, need a model and a variable name!'); 
+end
+
+varName = arg_list{1};
+sourceList = lower(strchop(arg_list{2}, ','));
+plev = str2num(arg_list{3});
+lonSpec = str2num(arg_list{4});
+lon = lonSpec(1):lonSpec(3):lonSpec(2);
+latSpec = str2num(arg_list{5});
+lat = latSpec(1):latSpec(3):latSpec(2);
+
+startTimeStr = arg_list{6};
+startTime = struct('year', str2num(startTimeStr(1:4)), 'month', str2num(startTimeStr(5:6)));
+
+endTimeStr = arg_list{7};
+endTime = struct('year', str2num(endTimeStr(1:4)), 'month', str2num(endTimeStr(5:6)));
+
+output_dir = arg_list{8};
+queryURL = arg_list{9};
+
+nSource = length(sourceList);
+
+nLon = length(lon);
+nLat = length(lat);
+nT = numberOfMonths(startTime, endTime);
+
+isTwoDim = false;
+if isempty(plev) 
+  isTwoDim = true;
+else
+  if isNA(plev(1))
+    isTwoDim = true;
+  else
+    nP = length(plev);
+  end
+end
+
+if isTwoDim
+  sumData = zeros(nLon, nLat, nT, 'double');
+  sumData2 = zeros(nLon, nLat, nT, 'double');
+else
+  sumData = zeros(nLon, nLat, nP, nT, 'double');
+  sumData2 = zeros(nLon, nLat, nP, nT, 'double');
+end
+
+figFile = [];
+for sI = 1:nSource
+  thisSource = sourceList{sI};
+  thisSourceFileFullPath = getDataFilePaths(thisSource, varName, startTime, endTime);
+  nFile = length(thisSourceFileFullPath);
+  thisData = nan(size(sumData));
+  for fileI = 1:nFile
+    thisFile = thisSourceFileFullPath{fileI};
+    thisLon = ncread(thisFile, 'lon');
+    thisLat = ncread(thisFile, 'lat');
+    [startTime_thisFile, endTime_thisFile] = getStartAndStopDates(thisFile);
+    monthIdx1 = numberOfMonths(startTime, startTime_thisFile);
+    monthIdx2 = numberOfMonths(startTime, endTime_thisFile);
+    v = single(ncread(thisFile, varName));
+    nMonths_thisFile = numberOfMonths(startTime_thisFile, endTime_thisFile);
+    idx2Data_start = 1;
+    idx2Data_stop = nMonths_thisFile;
+
+    if monthIdx1 <= 1
+      idx2Data_start = 1 + (1 - monthIdx1);
+      monthIdx1 = 1;
+    end
+
+    if monthIdx2 >= nT
+      idx2Data_stop = idx2Data_stop - (monthIdx2 - nT);
+      monthIdx2 = nT;
+    end
+
+    if isTwoDim
+      thisData(:,:,monthIdx1:monthIdx2) = lonLatMeshRegrid(v(:,:,idx2Data_start:idx2Data_stop), thisLon, thisLat, lon, lat);
+    else
+      thisPlev = ncread(thisFile, 'plev')/100; % assume hPa
+      thisData(:,:,:,monthIdx1:monthIdx2) = threeDimMeshRegrid(v(:,:,:,idx2Data_start:idx2Data_stop), thisLon, thisLat, thisPlev, lon, lat, plev);
+    end
+  end
+  sumData = sumData + thisData;
+  sumData2 = sumData2 + thisData.^2;
+end
+
+if nSource > 0
+  meanData = (sumData/nSource); % cannot cast to integer yet because we need the precision.
+  if nSource > 1
+    stdData = single(sqrt((sumData2/nSource - meanData.^2)/(nSource - 1)));
+  else
+    stdData = nan(size(meanData), 'single');
+  end
+  meanData = single(meanData);
+end
+
+figFile = [varName '_MultiModel'];
+dataFile = [figFile '_' date2Str(startTime) '-' date2Str(endTime) '.nc'];
+figFile = [figFile '_' date2Str(startTime) '-' date2Str(endTime) '.jpeg'];
+
+figFilePath = [output_dir '/' figFile];
+dataFilePath = [output_dir '/' dataFile];
+printf("figFile: %s\n", figFile)
+printf("figFilePath: %s\n", figFilePath)
+printf("dataFile: %s\n", dataFile)
+printf("dataFilePath: %s\n", dataFilePath)
+
+vm_name = [varName 'Mean'];
+vs_name = [varName 'Std'];
+
+if exist(dataFilePath, 'file')
+  delete(dataFilePath);
+end
+
+if isTwoDim
+  nccreate(dataFilePath, vm_name, 'Dimensions', {'lon', nLon, 'lat', nLat, 'time', nT}, 'Datatype', 'single', 'Format', 'classic');
+  nccreate(dataFilePath, vs_name, 'Dimensions', {'lon', nLon, 'lat', nLat, 'time', nT}, 'Datatype', 'single');
+else
+  nccreate(dataFilePath, vm_name, 'Dimensions', {'lon', nLon, 'lat', nLat, 'plev', nP, 'time', nT}, 'Datatype', 'single', 'Format', 'classic');
+  nccreate(dataFilePath, vs_name, 'Dimensions', {'lon', nLon, 'lat', nLat, 'plev', nP, 'time', nT}, 'Datatype', 'single');
+end
+refTime = startTime;
+refTime.day = 1;
+time_bnds = createTimeBnds(startTime, endTime, refTime);
+obs4MIPs_write_lon_and_bnds(dataFilePath, lon);
+obs4MIPs_write_lat_and_bnds(dataFilePath, lat);
+obs4MIPs_write_time_and_bnds(dataFilePath, time_bnds, refTime);
+if ~isTwoDim
+  [status, p_sort_idx] = obs4MIPs_write_plev(dataFilePath, plev*100); % hPa -> Pa, pressure levels are sorted from high to low
+  meanData = meanData(:,:,p_sort_idx,:);
+end
+ncwrite(dataFilePath, vm_name, meanData);
+ncwriteatt(dataFilePath, vm_name, 'units', ncreadatt(thisFile, varName, 'units')); 
+ncwriteatt(dataFilePath, vm_name, 'long_name', [ncreadatt(thisFile, varName, 'long_name') ' Multiple Model Mean']); 
+ncwriteatt(dataFilePath, vm_name, 'missing_value', 1e20);
+ncwriteatt(dataFilePath, vm_name, '_FillValue', 1e20);
+ncwrite(dataFilePath, vs_name, stdData);
+ncwriteatt(dataFilePath, vs_name, 'units', ncreadatt(thisFile, varName, 'units')); 
+ncwriteatt(dataFilePath, vs_name, 'long_name', [ncreadatt(thisFile, varName, 'long_name') ' Multiple Model Standard Deviation']); 
+ncwriteatt(dataFilePath, vs_name, 'missing_value', 1e20);
+ncwriteatt(dataFilePath, vs_name, '_FillValue', 1e20);
+ncwriteatt(dataFilePath, '/', 'url_query_string', ['var=' vm_name '&' queryURL]);

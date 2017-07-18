@@ -1,0 +1,2 @@
+#./octaveWrapper / ncc_noresm ta 50000 '100 140' '-20 20' ncc_noresm ta 70000 '240 260' '-20 20' ncc_noresm ta 60000 '160 240' '-40 -20' ncc_noresm ts -999999 '40 200' '20 40' 199001 200312 /tmp/ 0
+./octaveWrapper /home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/static/anomaly/597fd99118b973cda4408635976fdda3/data_anomaly.nc /tmp 0

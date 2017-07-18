@@ -1,0 +1,48 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'CSIRO-Mk3-6-0 model output prepared for CMIP5 AMIP',
+   D_T0TIME      = '01-Jan-1850 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/csiro/mk3.6/regridded/cli_Amon_CSIRO-Mk3-6-0_amip_r1i1p1_plevRegridded_197901-200912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 47100.5000,
+   S_END         = 54400.1226,
+   S_DELTA       =    30.4151,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/csiro/mk3.6/regridded/cli_Amon_CSIRO-Mk3-6-0_amip_r1i1p1_plevRegridded_199901-200912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 54400.5000,
+   S_END         = 58384.5000,
+   S_DELTA       =    30.4122,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

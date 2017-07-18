@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/./clt_Amon_IPSL-CM5A-LR_amip_r1i1p1_199501-200912.nc

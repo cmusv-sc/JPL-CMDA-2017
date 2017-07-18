@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure>
+
+<data_root_dir>
+/mnt/nas-0-0/users/collocation/caliop.calipso/40kmAProfile
+</data_root_dir>
+
+<list_dir>
+/home/seungwon/
+</list_dir>
+
+<output_dir>
+/data2/collocation/caliop40km_aprof/2009
+</output_dir>
+
+<log_file>
+/home/seungwon/err.log.txt
+</log_file>
+
+<start_time>
+<!-- 09/15/2008 1:00:00AM -->
+2/16/2009 0:00:00
+</start_time>
+
+<end_time>
+<!-- 09/15/2008 1:00:00PM -->
+12/31/2009 23:59:59
+</end_time>
+
+<time_diff>
+<!-- CALIOP is on board Calipso, which *lags* CloudSat by "no more than 15 seconds"
+     per the A Train Fact Sheet.  Here we set the time difference to be -10 seconds -->
+-10
+</time_diff>
+
+<time_search_range>
+<!-- Within this time range, co-location searches for the nearest
+     neighbor in the source data (lat, lon) grid for a given (lat, lon)
+     spot in the target data grid. -->
+10
+<!-- The largest time span in A-Train is about 15mins from Aqua to Arua. -->
+</time_search_range>
+
+<footprint_size>
+<!-- footprint size of data set in km -->
+8
+</footprint_size>
+
+<space_search_factor>
+1.5
+</space_search_factor>
+
+<num_cores>
+<!-- number of cores you would like to use -->
+8
+</num_cores>
+
+<proc_size>
+<!-- number of target granules a process would handle -->
+8
+</proc_size>
+
+<cell_search_limit>
+<!-- When qry_range is large compared to the grid overlaid
+     on target points, only search in C by C cells around
+     each query point -->
+10
+</cell_search_limit>
+
+<invalid_data>
+<!-- when no nearest neighbor found, use this value -->
+-909090
+</invalid_data>
+
+</configure>

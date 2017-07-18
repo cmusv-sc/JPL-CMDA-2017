@@ -1,0 +1,6 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+AMSR-E	Daily EASE-Grid Brightness Temperature	rain rate	mm/hr
+AMSR-E	Daily EASE-Grid Brightness Temperature	sea surface temperature	Celsius
+AMSR-E	Daily EASE-Grid Brightness Temperature	columnar water vapor	mm
+AMSR-E	Daily EASE-Grid Brightness Temperature	cloud liquid water	mm
+AMSR-E	Daily EASE-Grid Brightness Temperature	10m surface wind	meter/sec

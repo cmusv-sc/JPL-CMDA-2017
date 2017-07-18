@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+<!-- 
+/home/btang/projects/cmac/git2/CMDA0/JPL_CMDA/frontend/public/html/universalPlotting2.html
+
+== storage__  
+-->
+<!-- src_js__ -->
+<!--
+// dList__
+// onload__
+// ready__
+  // onlineFileCheck__
+      // uploadAction__
+-->
+
+<!-- input_source -->
+<!-- online_file -->
+<!-- upload_file -->
+<!-- staged_files -->
+<!-- data_subsubsetting -->
+<!-- lonWidget_ -->
+<!-- latWidget_ -->
+<!-- presWidget_ -->
+<!-- timeWidget_ -->
+  
+<!-- 
+// vue__
+    // vue_data_para
+    // other_data
+  // methods__
+  // computed__
+// inputs__
+// mappting__
+-->
+
+<!-- storage__ -->
+<!-- 
+       {{onlineFileVarDict[key]['longName']}}
+  <div class="col-sm-8 left1" v-if="onlineFileVarDict.length>0">
+    <input v-model="varA" size=15>
+    <div id="image" v-html="imageHtml" class="borderedText"></div>
+
+-->
+
+<!-- src_js__ -->
+<!-- for Bootstrap -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="shortcut icon" type="image/x-icon" href="cmda1.ico">
+<link rel="stylesheet" href="js2/bootstrap.min.css">
+<script src="js2/jquery.min.js"></script>
+<script src="js2/jq-ajax-progress.js"></script>
+<script src="js2/bootstrap.min.js"></script>
+<script src='js2/js.cookie-2.1.3.min.js'></script>
+<script src='js2/vue.js'></script>
+<script src="js2/lodash.min.js"></script>
+
+<link rel="stylesheet" href="js2/style_uploadr.css">
+
+<!-- cmac related -->
+<link rel="stylesheet" href="common.css">
+<script src='js2/dataList2.js'></script>
+<script src='js2/varList.js'></script>
+<script src='js2/common-v5.js'></script>
+
+<title>A Universal Plotting Tool</title>
+
+<script>
+
+// still needed by addDataList
+// dList__
+var dList = [
+{  "name": "Data", 
+   "isPressure": 0, 
+   "pressure2url": 0, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+];
+
+
+// onload__
+window.onload = function() {
+addDataList(1); 
+processQS5();
+}  // onload = function()
+
+// ready__
+$(document).ready(function(){
+  $("#action1").click(function(event) {
+    ajaxCall("universalPlotting3");
+  });
+
+  // onlineFileCheck__
+  $("#onlineFileCheck").click(function(event) {
+    $("#onlineFileCheckProgress").text('checking...'); 
+    $.ajax({
+      type: 'GET',
+      url: "http://cmda-test.jpl.nasa.gov:8090/fileCheck?file="+escape(vueApp.onlineFile),
+      data: null,
+      dataType: "json",
+      contentType: false,
+      cache: false,
+      processData: false,
+      async: false,
+      success: function(data) {
+        alert(data.message + '\n' + data.check);
+        if (data.success==true) {
+          $("#onlineFileCheckProgress").text('File check finished.'); 
+          //console.log(data.varList);
+          console.log(data.varDict);
+         
+          vueApp.onlineFileVarDict = data.varDict;
+          vueApp.onlineFileVarList = data.varList;
+          vueApp.onlineFileDimList = data.dimList;
+          vueApp.varA = vueApp.onlineFileVarList[0];
+          vueApp.onlineFileShow = true;
+        } else {
+          $("#onlineFileCheckProgress").text('File check failed.'); 
+          vueApp.onlineFileShow = false;
+        }
+      },  // success()
+    }); // ajax
+  }); // onlineFileCheck click
+
+
+    // Set up the drag/drop zone.
+    initDropbox();
+
+    // Set up the handler for the file input box.
+    $("#filePicker").on("change", function() {
+        handleFiles(this.files);
+    });
+
+    // Handle the submit button.
+    $("#uploadButton2").on("click", function(e) {
+        // If the user has JS disabled, none of this code is running but the
+        // file multi-upload input box should still work. In this case they'll
+        // just POST to the upload endpoint directly. However, with JS we'll do
+        // the POST using ajax and then redirect them ourself when done.
+        e.preventDefault();
+        doUpload();
+    })
+
+// remember the last picked variable. not used yet
+$("#uploadDataFileBrowse").change( function(){
+  // save them for future use
+  $("#uploadDataFileBrowse").data("size", this.files[0].size);
+  $("#uploadDataFileBrowse").data("name", this.files[0].name);
+  $("#uploadDataFileBrowse").data("lastModified", this.files[0].lastModified);
+  //console.log($("#uploadDataFileBrowse").files[0].name); // not working
+
+  //console.log(this.files[0].size);
+  //console.log( $("#uploadDataFileBrowse").data("size") );
+  //console.log( $("#uploadDataFileBrowse").data("lastModified") );
+  $("#uploadProgress").val('Not yet uploaded.');
+});
+
+      $("#download_data").click(function(event) {
+        var durl = $("#data_url").val();
+        // alert(durl);
+        window.location.assign(durl);
+      });
+
+
+      $("#action1").click(function(event) {
+        ajaxCall("universalPlotting3");
+      });
+
+      // uploadAction__
+      $("#uploadAction").click(function(event) {
+        //var formData = new FormData($('#uploadAction')[0]);
+        var formData = new FormData();
+        $("#uploadProgress").val('uploading...'); 
+        formData.append('file', $('input[type=file]')[0].files[0]);
+        formData.append('serverFile', $('#uploadDataFilename').val());
+        $.ajax({
+            type: 'POST',
+            url: "http://cmda-test.jpl.nasa.gov:8090/fileUpload",
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            async: false,
+            success: function(data) {
+              if (data.success==true) {
+                $("#uploadProgress").val('File has been uploaded.'); 
+                //console.log(data.varList);
+                //console.log(data.varDict);
+                alert(data.message + '\n' + data.check);
+                $("#uploadDataFilename").val(data.filename);
+  var list1=document.getElementById("uploadDataVar");
+  for (var i=list1.length-1; i>=0; i--) {
+    list1.remove(i);
+  }
+  for (var i=0; i<data.varList.length; i++) {
+    var vv=data.varList[i];
+    if (data.varDict[vv]['nDim']>1) {
+      //console.log(vv);
+      list1.add(new Option(vv,vv));
+    }
+  }
+  $("#uploadDataVar").change();
+            } else { // success==true
+              $("#uploadProgress").text(data.message); 
+            }
+            },
+        });
+    });
+
+
+  });  // ready(function())
+
+  </script>
+
+</head>
+
+<body>
+<div class="container-fluid">
+<div id='vueId'>
+<div class="row center1">
+<div class="col-sm-8 col-sm-offset-2 col-xs-12 color-head">
+<h3>A Universal Plotting Tool</h3>
+A Universal Plotting Tool
+</div> <!-- col-sm -->
+<div class="col-sm-offset-2">
+</div> <!-- col-sm -->
+</div> <!-- row center1 -->
+
+
+<!-- input_source -->
+<div class="row">
+ <div class="col-sm-4 right1">
+ Pick Data Source:
+ </div>
+  <div class="col-sm-8 left1">
+      <label class="input-inline" ><input type="radio" name='sourceRadio' value='1' v-model="inputSource">Online File </label>
+      <label class="input-inline" ><input type="radio" name='sourceRadio' value='2' v-model="inputSource">Upload Files </label>
+      <label class="input-inline" ><input type="radio" name='sourceRadio' value='3' v-model="inputSource">Staged Files </label>
+ </div>
+</div> <!-- row -->
+
+<!-- online_file -->
+<div v-show="inputSource=='1'">
+<div class="row center1 subtitle1" >
+Online File
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Online Data File:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <input v-model="onlineFile" size=100>
+    <input id="onlineFileCheck" type="button" value='Check File'>
+    <input id="onlineFileCheckProgress" type="text" value="">
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Variable Name:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1" v-if="onlineFileShow">
+    <select v-model="varA" >
+     <option v-for="key in onlineFileVarList" v-bind:value="key" >
+{{onlineFileVarDict[key]['longName']}}
+     </option>
+    </select>
+    name:<input type="text" v-bind:value="varA" readonly v-bind:size="varA.length">
+    dim: <input type="text" v-bind:value="String(onlineFileVarDict[varA]['dim'])" readonly v-bind:size="String(onlineFileVarDict[varA]['dim']).length">
+    units: <input type="text" v-bind:value="onlineFileVarDict[varA]['units']" readonly v-bind:size="onlineFileVarDict[varA]['units'].length">
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+ </div>
+ <div class="col-sm-8 left1">
+      <label class="checkbox-inline"><input type="checkbox" id="userDataOpendap" checked >OPeNDAP</label>
+ </div>
+</div> <!-- row -->
+
+</div> <!-- inputSection -->
+
+<!-- upload_file -->
+<div v-show="inputSource=='2'">
+<div class="row center1 subtitle1" >
+Upload files
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+ Select files to upload:
+ </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+  <form id="uploadForm" 
+        action = "http://cmda-test.jpl.nasa.gov:8090/fileUpload2" 
+        method = "POST" 
+        enctype = "multipart/form-data">
+
+    <input id="filePicker" type="file" name="file" accept=".nc,.cdf" multiple><p>
+
+    <div id="dropbox">
+        Drag and Drop Files Here
+    </div><p>
+
+    <fieldset id="progress" style="display: none">
+        <legend>Files Progress</legend>
+
+        <div class="progress-trough">
+            <div id="progressBar" class="progress-bar">0%</div>
+        </div>
+    </fieldset><p>
+
+    <input type="submit" value="Upload!" id="uploadButton">
+    <button  id="uploadButton2">Upload (button)</button>
+
+  </form>
+
+  <input id="uploadDataFilename" type="hidden" value='' /> 
+  </div> <!-- col-sm -->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Variable Name:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1" v-if="uploadFileShow">
+    <select v-model="varB" >
+     <option v-for="key in uploadFileVarList" v-bind:value="key" >
+{{uploadFileVarDict[key]['longName']}}
+     </option>
+    </select>
+    name:<input type="text" v-bind:value="varB" readonly v-bind:size="varB.length">
+    dim: <input type="text" v-bind:value="String(uploadFileVarDict[varB]['dim'])" readonly v-bind:size="String(uploadFileVarDict[varB]['dim']).length">
+    units: <input type="text" v-bind:value="uploadFileVarDict[varB]['units']" readonly v-bind:size="uploadFileVarDict[varB]['units'].length">
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+</div> <!-- uploadSection -->
+   
+
+<!-- staged_files -->
+<div v-show="inputSource=='3'">
+
+<div class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Staged Files
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Model:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data1" v-model="model1" v-on:click="pickVar1Default()">
+   </select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   Variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select v-model="var1" >
+     <option v-for="key in varValid" v-bind:value="key" v-on:click="saveVar1Default()">
+       {{varList[key][0]}}
+     </option>
+    </select>
+   name: <input type="text" v-bind:value="var1" readonly v-bind:size="var1.length">
+   dim: <input type="text" v-bind:value="varList[var1][2]" readonly size=1>
+   units: <input type="text" v-bind:value="varList[var1][3]" readonly v-bind:size="varList[var1][3].length">
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+</div> <!-- color0 -->
+</div> <!-- cmip5Section -->
+
+ 
+<!-- data_subsubsetting -->
+<div class="color3">
+<div class="row center1 subtitle1" >
+Data Subsetting
+</div> <!-- row -->
+
+<!-- lonWidget_ -->
+<div class="row">
+  <div class="col-sm-4 right1">
+    longitude (deg):
+  </div>
+
+  <div class="col-sm-4 left1">
+<select v-model="lonMethod" v-on:change="putLonS()">
+    <option value="1">pick a value</option>
+    <option value="2">average over</option>
+    <option value="3">form an axis</option>
+</select>
+      <input v-model="lonS" v-on:change="saveLonS()" size=7>
+      <input v-show="lonMethod!='1'" v-model="lonE" size=7>
+  </div>
+</div> <!-- row -->
+
+<!-- latWidget_ -->
+<div class="row">
+  <div class="col-sm-4 right1">
+    latitude (deg):
+  </div>
+
+  <div class="col-sm-4 left1">
+<select v-model="latMethod" v-on:change="putLatS()">
+    <option value="1">pick a value</option>
+    <option value="2">average over</option>
+    <option value="3">form an axis</option>
+</select>
+      <input v-model="latS" v-on:change="saveLatS()" size=7>
+      <input v-show="latMethod!='1'" v-model="latE" size=7>
+  </div>
+</div> <!-- row -->
+
+<!-- presWidget_ -->
+<div v-show="is3D==1">
+<div id="pressureRow" class="row">
+  <div class="col-sm-4 right1">
+    pressure (hPa):
+  </div>
+
+  <div class="col-sm-4 left1">
+<select v-model="presMethod" v-on:change="putPresS()">
+    <option value="1">pick a value</option>
+    <option value="2">average over</option>
+    <option value="3">form an axis</option>
+</select>
+      <input v-model="presS" v-on:change="savePresS()" size=7>
+      <input v-show="presMethod!='1'" v-model="presE" size=7>
+  </div>
+</div> <!-- row -->
+</div> <!-- is3D -->
+
+<!-- timeWidget_ -->
+<div class="row">
+  <div class="col-sm-4 right1">
+    Time (year-month-day):
+  </div>
+
+  <div class="col-sm-8 left1">
+<select v-model="timeMethod" v-on:change="putTimeS()">
+    <option value="1">pick a value</option>
+    <option value="2">average over</option>
+    <option value="3">form an axis</option>
+</select>
+
+      <input v-model="timeS" v-on:change="saveTimeS()" size=7>
+      <input v-show="timeMethod!='1'" v-model="timeE" size=7>
+      <button class="btn btn-default" v-show="timeMethod!='1'" v-on:click="timeFullRangeV()">Use Full Range</button> 
+      {{this.timeDashV(this.timeSLim) + ' to ' + this.timeDashV(this.timeELim)}}
+  </div>
+</div> <!-- row -->
+
+</div> <!-- color3 -->
+
+ 
+<div class="color0">
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Display Options:
+  </div>
+</div>
+
+<div class="color0">
+<div class="row">
+  <div class="col-sm-2 left1">
+  </div>
+  <div class="col-sm-2 right1">
+    Ferret Level Type:
+  </div>
+  <div class="col-sm-6 left1">
+<select v-model="ferretLevel0" v-on:change="moveFerretLevel()">
+    <option value="10">10 levels</option>
+    <option value="10V">10 levels, variance-based</option>
+    <option value="10C">10 levels, zero-centered</option>
+    <option value="10H">10 levels, histogram-based</option>
+    <option value="0.5D">interval=0.5</option>
+    <option value="(-inf)(0,35,1)(inf)">vmin=0, vmax=35, interval=1, open-ended</option>
+    <option value="(0,35,1)">vmin=0, vmax=35, interval=1; outside values cropped</option>
+    <option value="(0,35,1)(25,28,0.5)">vmin=0, vmax=35, interval=1; within (25,28), interval=0.5</option>
+</select>
+
+&nbsp&nbsp Modify It: <input type="text" v-model="ferretLevel" style="width: 200px; border: none;"/>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    Specify Colormap:
+  </div> <!-- col-sm-4 level2-->
+  <div class="col-sm-8 left1">
+    <select id="colorMap">
+    <option value="rainbow">rainbow</option>
+    <option value="centered">centered</option>
+    <option value="bright_centered">bright_centered</option>
+    <option value="white_centered">white_centered</option>
+    <option value="grayscale">grayscale</option>
+    <option value="inverse_grayscale">inverse_grayscale</option>
+    <option value="red_blue_centered">red_blue_centered</option>
+    <option value="topo">topo</option>
+    <option value="ocean_temp">ocean_temp</option>
+    <option value="yellow_orange_brown">yellow_orange_brown</option>
+    <option value="brown_orange_yellow">brown_orange_yellow</option>
+    <option value="warm_cmyk">warm_cmyk</option>
+    <option value="terrestrial">terrestrial</option>
+    </select>
+  </div>
+</div> <!-- row -->
+  <div class="col-sm-4 right1">
+    Plot Title:
+  </div>
+  <div class="col-sm-8 left1">
+  <input v-model="plotTitle" >  
+  </div>
+
+<div  class="row">
+
+</div> <!-- row -->
+</div> <!-- color0 -->
+
+<!-- purpose__ -->
+<div class="color2">
+<div class="row">
+  <div class="col-sm-4 right1">
+    Analysis Purpose:
+  </div> <!-- col -->
+  <div class="col-sm-8 left1">
+    <textarea v-model="purpose" value="" spellcheck=false rows="2" cols="50"> </textarea>
+  </div> <!-- col -->
+</div> <!-- row -->
+</div> <!-- color2 -->
+
+<!-- action_button -->
+<div class="color4">
+<div class="row">
+  <div class="col-sm-6 center1">
+    <button id="action1" v-bind:disabled="action1Disabled" class="btn btn-primary" >Generate Data</button>
+  </div>
+  <div class="col-sm-6 center1">
+    <button id="downloadData" v-bind:disabled="downloadDataDisabled" class="btn btn-primary">Download Data</button>
+  </div>
+</div> <!-- row -->
+</div> <!-- color4 -->
+
+<div class="row">
+  <div class="col-sm-6 right1 subtitle1">
+    <span class="subtitle1">Browser URL:</span>  
+  </div>
+
+  <div class="col-sm-6 right1">
+    <button v-on:click="makeBrowserUrlV()" class="btn btn-default">Refresh</button>  
+    <a class="btn btn-default" v-bind:href="browserUrl" target="_blank">Open a page with the browserUrl</a>  
+    <button v-on:click="copyBrowserUrlV()" class="btn btn-default">Copy to clipboard</button>  
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col-sm-12 center1">
+    <textarea id="browserUrl" v-model="browserUrl" spellcheck=false rows=5></textarea>
+  </div>
+</div>
+
+<!-- image__ -->
+<div class="row" id="Image0" center1>
+  <div class="col-sm-12 center1">
+    <div id="image" class="borderedText"></div>
+  </div>
+</div> <!-- row -->
+ 
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Data File URL:
+  </div>
+</div>
+<div class="row" >
+  <div class="col-sm-12 center1">
+    <textarea readonly cols="150" rows="2">{{data_url}}</textarea>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Service Response Text:
+  </div>
+</div>
+<div class="row" >
+  <div class="col-sm-12" v-html="responseHtml" style="border: 1px;">
+  </div>
+</div> <!-- row -->
+
+</div> <!-- vueId-->
+</div> <!-- container -->
+
+<script>
+onlineFileVarDict = {'not yet picked': {'dim':[,],'units':' ','longName':'' }};
+// vue__
+var vueApp = new Vue({
+  el: "#vueId",
+  data: {
+
+    // vue_data_para
+    var1: 'cl',
+    model1: 'GFDL/ESM2G',
+    lonMethod: '3',
+    latMethod: '3',
+    presMethod: '1',
+    timeMethod: '1',
+    presS: '500',
+    presE: '800',
+    timeS: '2000-01-15',
+    timeE: '2000-12-15',
+    lonS: '0',
+    lonE: '360',
+    latS: '-90',
+    latE: '90',
+
+    ferretLevel0: '10',
+    ferretLevel: '10',
+    colorMap: 'rainbow',
+    plotTitle: '',
+
+    varA: 'not yet picked',
+    varB: ' ',
+    inputSource: "3",
+    onlineFile: '/home/svc/upload/coads_climatology_1490081487.cdf',
+    //onlineFile: 'http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/cmap/enh/precip.mon.mean.nc',
+    uploadFile: '',
+    uploadServerFile: '',
+
+    purpose: '',
+
+    // other_data
+    varList: varList,
+    dataList: dataList,
+
+    onlineFileVarDict: {},
+    onlineFileVarList: [],
+    onlineFileDimList: [],
+    onlineFileShow: false,
+
+    uploadFileVarDict: {},
+    uploadFileVarList: [],
+    uploadFileDimList: [],
+    uploadFileShow: false,
+
+
+    action1Disabled: false,
+    downloadDataDisabled: false,
+
+    var1Bu: 'cl',
+
+    lonSBu1: '180',
+    lonSBu23: '0',
+
+    latSBu1: '0',
+    latSBu23: '-90',
+
+    presSBu1: '500',
+    presSBu23: '200',
+
+    timeSBu1: '2000-01-15',
+    timeSBu23: '2000-01-15',
+
+    browserUrl: '',
+
+    responseHtml: '',
+    data_url: '',
+    imageHtml: '',
+  },
+
+  // methods__
+  methods: {
+    makeBrowserUrlV: function() {
+      makeBrowserUrl();
+    },
+
+    copyBrowserUrlV: function() {
+      copyBrowserUrl();
+    },
+
+    moveFerretLevel: function() {
+      this.ferretLevel = this.ferretLevel0;
+    },
+
+    timeFullRangeV: function() {
+      timeFullRange();
+      this.timeSBu23 = this.timeS;
+    },
+
+    timeDashV: function(t1){
+      return timeDash(t1);
+    },
+
+    savePresS: function() {
+      if (this.presMethod==1) this.presSBu1=this.presS;
+      else this.presSBu23=this.presS;
+    },
+
+    putPresS: function() {
+      if (this.presMethod==1) this.presS = this.presSBu1;
+      else this.presS = this.presSBu23;
+    },
+
+    saveLonS: function() {
+      if (this.lonMethod==1) this.lonSBu1=this.lonS;
+      else this.lonSBu23=this.lonS;
+    },
+
+    putLonS: function() {
+      if (this.lonMethod==1) this.lonS = this.lonSBu1;
+      else this.lonS = this.lonSBu23;
+    },
+
+    saveLatS: function() {
+      if (this.latMethod==1) this.latSBu1=this.latS;
+      else this.latSBu23=this.latS;
+    },
+
+    putLatS: function() {
+      if (this.latMethod==1) this.latS = this.latSBu1;
+      else this.latS = this.latSBu23;
+    },
+
+    saveTimeS: function() {
+      if (this.timeMethod==1) this.timeSBu1=this.timeS;
+      else this.timeSBu23=this.timeS;
+    },
+
+    putTimeS: function() {
+      if (this.timeMethod==1) this.timeS = this.timeSBu1;
+      else this.timeS = this.timeSBu23;
+    },
+
+    pickVar1Default: function() {
+      if (this.varValid.indexOf(this.var1Bu)>-1) {
+        this.var1 = this.var1Bu;
+      } else {
+        this.var1 = this.varValid[0];
+      }
+    },
+
+    saveVar1Default: function() {
+      this.var1Bu = this.var1;
+    },
+  }, // methods
+
+  // computed__
+  computed: {
+
+    varListKeys: function() {
+      return Object.keys(this.varList);
+    },
+
+    varValid: function () {
+      var that = this;
+      return Object.keys(this.dataList[this.model1][2]).filter(function (kk) {
+        return that.varListKeys.indexOf(kk)>-1
+      })
+    },
+
+    timeSLim: function() {
+      if this.inputSource=="3":
+        return this.dataList[this.model1][2][this.var1][0];
+      elif this.inputSource=="2":
+        return 0
+    },
+
+    timeELim: function() {
+      if this.inputSource=="3":
+        return this.dataList[this.model1][2][this.var1][1];
+    },
+
+    is3D: function() {
+      return this.varList[this.var1][2]==3? 1:0;
+    },
+
+    nAxis: function() {
+      var aa = this.lonMethod + this.latMethod + this.timeMethod;
+      if (this.is3D==1) {
+        aa = aa +  this.presMethod;
+      }
+      return (aa.match(/3/g)||[]).length;
+    },
+
+  }, // computed
+})  // vue
+
+for (var key in vueApp.onlineFileVarDict) {
+console.log(key);
+console.log(vueApp.onlineFileVarDict[key]);
+}
+
+// inputs__
+// format: RestFulName: [htmlId, functionName, additionalParams]
+var inputs = {
+'var1': ['var1', 'urlDirect'],
+'model1': ['model1', 'urlModel'],
+//
+'lonMethod': ['lonMethod', 'urlDirect'],
+'latMethod': ['latMethod', 'urlDirect'],
+'presMethod': ['presMethod', 'urlDirect'],
+'timeMethod': ['timeMethod', 'urlDirect'],
+'lonS': ['lonS', 'urlDirect'],
+'lonE': ['lonE', 'urlDirect'],
+'latS': ['latS', 'urlDirect'],
+'latE': ['latE', 'urlDirect'],
+'presS': ['presS', 'urlPres'],
+'presE': ['presE', 'urlPres'],
+'timeS': ['timeS', 'urlYearMonthDay'],
+'timeE': ['timeE', 'urlYearMonthDay'],
+'ferretLevel': ['ferretLevel', 'urlDirect'],
+'colorMap': ['colorMap', 'urlDirect'],
+'plotTitle': ['plotTitle', 'urlEscape'],
+'plotType': ['plotType', 'urlDirect'],
+//
+'inputSource': ['inputSource', 'urlDirect'],
+'varA': ['varA', 'urlDirect'],
+'varB': ['varB', 'urlDirect'],
+'onlineFile': ['onlineFile', 'urlEscape'],
+'uploadFile': ['uploadFile', 'urlEscape'],
+'uploadServerFile': ['uploadServerFile', 'urlDirect'],
+//
+'purpose': ['purpose', 'url2escape'],
+};
+
+// mappting__
+var mapping = {};
+var key99;
+var arg99;
+for (var k in inputs) {
+  key99 = k;
+  arg99 = inputs[k];
+  mapping[k] = eval('new ' + inputs[k][1] + '()');
+}
+
+
+</script>
+  <script src='js2/uploadr.js'></script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+ECMWF	ERA Interim Daily Surface Fields	Large-scale snowfall	m of water equivalent
+ECMWF	ERA Interim Daily Surface Fields	Total column ozone	kg m**-2
+ECMWF	ERA Interim Daily Surface Fields	Surface net solar radiation, clear sky	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Surface solar radiation downwards	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	East-West surface stress	N m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Total column water	kg m**-2
+ECMWF	ERA Interim Daily Surface Fields	Albedo	(0 - 1)
+ECMWF	ERA Interim Daily Surface Fields	Stratiform precipitation (Large-scale precipitation)	m
+ECMWF	ERA Interim Daily Surface Fields	Top net solar radiation, clear sky	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Convective precipitation	m
+ECMWF	ERA Interim Daily Surface Fields	Large-scale precipitation fraction	s
+ECMWF	ERA Interim Daily Surface Fields	Skin temperature	K
+ECMWF	ERA Interim Daily Surface Fields	2 metre temperature	K
+ECMWF	ERA Interim Daily Surface Fields	Convective snowfall	m of water equivalent
+ECMWF	ERA Interim Daily Surface Fields	Total precipitation	m
+ECMWF	ERA Interim Daily Surface Fields	Total cloud cover	(0 - 1)
+ECMWF	ERA Interim Daily Surface Fields	High cloud cover	(0 - 1)
+ECMWF	ERA Interim Daily Surface Fields	Mean sea level pressure	Pa
+ECMWF	ERA Interim Daily Surface Fields	Boundary layer height	m
+ECMWF	ERA Interim Daily Surface Fields	Total column liquid water	kg m**-2
+ECMWF	ERA Interim Daily Surface Fields	Runoff	m
+ECMWF	ERA Interim Daily Surface Fields	Top solar radiation	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	North-South surface stress	N m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Surface latent heat flux	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Medium cloud cover	(0 - 1)
+ECMWF	ERA Interim Daily Surface Fields	Surface solar radiation	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Low cloud cover	(0 - 1)
+ECMWF	ERA Interim Daily Surface Fields	Convective available potential energy	J kg**-1
+ECMWF	ERA Interim Daily Surface Fields	Total column ice water	kg m**-2
+ECMWF	ERA Interim Daily Surface Fields	Surface sensible heat flux	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Top thermal radiation	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Surface pressure	Pa
+ECMWF	ERA Interim Daily Surface Fields	Total column water vapour	kg m**-2
+ECMWF	ERA Interim Daily Surface Fields	Snowfall	m of water equivalent
+ECMWF	ERA Interim Daily Surface Fields	TOA incident solar radiation	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Surface thermal radiation	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Surface net thermal radiation, clear sky	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Top net thermal radiation, clear sky	W m**-2 s
+ECMWF	ERA Interim Daily Surface Fields	Evaporation	m of water
+ECMWF	ERA Interim Daily Surface Fields	Surface thermal radiation downwards	W m**-2 s

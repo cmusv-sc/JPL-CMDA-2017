@@ -1,0 +1,5 @@
+./octaveWrapper '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/original/rlut_Amon_GISS-E2-R_historical_r1i1p1_195101-197512.nc' 'rlut' '0, 360, 4', '-90, 90, 4' 1  /tmp/xxx2.nc;
+
+#inputFile = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/original/ta_Amon_GISS-E2-R_historical_r1i1p1_195101-200512.nc';
+
+#varName = 'ta';

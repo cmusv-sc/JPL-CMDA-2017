@@ -1,0 +1,3 @@
+CloudSat granule 17368 has wrong time array values (one day difference). 
+This leads to zero match rate with ECMWF data. 
+I removed this file from the directory.

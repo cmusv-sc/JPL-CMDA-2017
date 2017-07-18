@@ -1,0 +1,4 @@
+#./octaveWrapper ukmo_hadgem2-a clt 199001 199512 '0 100' '0 20' /tmp/ 7
+#./octaveWrapper ncc_noresm ts 199001 199612 '0 100' '0 20' /tmp/
+#./octaveWrapper ncc_noresm ts 199001 199612 '0 100' '0 20' /tmp/ 3
+./octaveWrapper nasa_modis lst_night 200901 200912 '0 100' '0 20' /tmp/ 0

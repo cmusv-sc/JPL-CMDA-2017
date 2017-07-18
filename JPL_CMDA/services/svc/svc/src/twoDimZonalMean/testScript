@@ -1,0 +1,5 @@
+#./octaveWrapper ukmo_hadgem2-a clt 199001 199512 '-20 20' '6,7,8' ./tmp
+#./octaveWrapper ukmo_hadgem2-es ts 198001 199112 '-90 90' ./tmp
+#./octaveWrapper ukmo_hadgem2-es ts 198001 199112 '-90 90' '6,7,8' ./tmp
+#./octaveWrapper ukmo_hadgem2-es ts 199001 300012 '-90 90' '12,1,2' /tmp
+./octaveWrapper ukmo_hadgem2-es ts 199001 300012 '-90 90' '12,1,2' /tmp 7

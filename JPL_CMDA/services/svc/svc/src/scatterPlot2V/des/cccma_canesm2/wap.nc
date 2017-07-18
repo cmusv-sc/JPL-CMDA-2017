@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/cccma/canesm2/./wap_Amon_CanESM2_historical_r1i1p1_185001-200512.nc

@@ -1,0 +1,138 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'HadGEM2-ES model output prepared for CMIP5 historical',
+   D_T0TIME      = '01-Dec-1859 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_199501-199512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 48645.0000,
+   S_END         = 48975.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_199601-199612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 49005.0000,
+   S_END         = 49335.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_199701-199712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 49365.0000,
+   S_END         = 49695.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_199801-199812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 49725.0000,
+   S_END         = 50055.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_199901-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 50085.0000,
+   S_END         = 50415.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_200001-200012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 50445.0000,
+   S_END         = 50775.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_200101-200112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 50805.0000,
+   S_END         = 51135.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_200201-200212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 51165.0000,
+   S_END         = 51495.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_200301-200312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 51525.0000,
+   S_END         = 51855.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_200401-200412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 51885.0000,
+   S_END         = 52215.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/break/rsuscs_Amon_HadGEM2-ES_historical_r1i1p1_200501-200511.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 52245.0000,
+   S_END         = 52545.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

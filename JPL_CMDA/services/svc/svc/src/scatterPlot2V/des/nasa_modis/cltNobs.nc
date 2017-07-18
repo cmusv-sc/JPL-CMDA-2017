@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/nasa/modis/./cltNobs_MODIS_L3_C5_200003-201109.nc

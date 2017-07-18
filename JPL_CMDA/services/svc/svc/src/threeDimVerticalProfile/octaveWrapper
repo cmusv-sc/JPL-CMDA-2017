@@ -1,0 +1,87 @@
+#!/usr/bin/octave -q
+
+addpath([pwd()  '/../util/']);
+
+pkg load netcdf;
+
+arg_list = argv();
+printf ("%s:\n", program_name());
+
+narg = length(arg_list);
+
+if narg < 2
+  error('Insufficient argument, need a model and a variable name!'); 
+end
+sourceName = lower(arg_list{1});
+varName = arg_list{2};
+
+startTime = struct('year', 1980, 'month', 1);
+stopTime = struct('year', 2004, 'month', 12);
+
+if narg > 2
+  startTimeStr = arg_list{3};
+  startTime = struct('year', str2num(startTimeStr(1:4)), 'month', str2num(startTimeStr(5:6)));
+end
+
+if narg > 3
+  stopTimeStr = arg_list{4};
+  stopTime = struct('year', str2num(stopTimeStr(1:4)), 'month', str2num(stopTimeStr(5:6)));
+end
+
+printf("%s", arg_list{1})
+printf("%s", arg_list{2})
+printf("%s", arg_list{3})
+printf("%s", arg_list{4})
+
+if narg > 4
+  lonRange = str2num(arg_list{5});
+  printf("%s", arg_list{5})
+end
+
+latRange = 90*[-1,1];
+
+if narg > 5
+  latRange = str2num(arg_list{6});
+  printf("%s", arg_list{6})
+end
+
+monthIdx = 1:12;
+
+if narg > 6
+  monthIdx = str2num(arg_list{7});
+  printf("%s", arg_list{7})
+end
+
+if narg > 7
+  output_dir = arg_list{8};
+end
+
+printf("1. %s\n", arg_list{1})
+printf("2. %s\n", arg_list{2})
+printf("3. %s\n", arg_list{3})
+printf("4. %s\n", arg_list{4})
+printf("5. %s\n", arg_list{5})
+printf("6. %s\n", arg_list{6})
+printf("7. %s\n", arg_list{7})
+printf("8. %s\n", arg_list{8})
+
+if narg > 8
+  displayOpt = str2num(arg_list{9});
+  printf("9. %s", arg_list{9})
+else
+  displayOpt = 2;
+end
+
+
+dataFileFullPath = getDataFilePaths(sourceName, varName, startTime, stopTime);
+
+figFile = [sourceName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_' seasonStr(monthIdx) '.jpeg'];
+dataFile = [sourceName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_' seasonStr(monthIdx) '.nc'];
+figFilePath = [output_dir '/' figFile];
+dataFilePath = [output_dir '/' dataFile];
+printf("figFile: %s\n", figFile)
+printf("figFilePath: %s\n", figFilePath)
+printf("dataFile: %s\n", dataFile)
+printf("dataFilePath: %s\n", dataFilePath)
+displayVerticalProfile(dataFileFullPath, figFilePath, varName, startTime, stopTime, lonRange, latRange, monthIdx, dataFilePath, displayOpt);
+title([varName ' vertical profile for ' sourceName]);

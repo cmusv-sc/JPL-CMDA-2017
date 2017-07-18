@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure>
+
+<data_root_dir>
+<!-- /data1/sensors/atrain/modis.aqua/5.1/MYD04_L2 -->
+<!-- /wsnews/sensors/atrain/modis.aqua/5.1/MYD04_L2/ -->
+/data3/modis.aqua/5.1/MYD04_L2/2008
+</data_root_dir>
+
+<list_dir>
+/home/leipan/aero
+</list_dir>
+
+<output_dir>
+<!-- /mnt/nas-0-0/users/leipan/tmp/ -->
+/data2/leipan/modis_aerosol/20080103
+</output_dir>
+
+<log_file>
+/home/leipan/err.log.txt
+</log_file>
+
+<start_time>
+1/1/2008 0:00:01
+<!--2/23/2007 12:20:00PM-->
+<!-- 1/15/2008 1:00:00AM -->
+</start_time>
+
+<end_time>
+3/31/2008 23:59:59
+<!--2/23/2007 12:40:00PM-->
+<!-- 1/20/2008 11:50:00PM -->
+</end_time>
+
+<time_diff>
+<!-- MODIS is on board Aqua, which is 30s to 2min ahead of CloudSat.
+     Here we set the time difference to be 3min. -->
+180
+</time_diff>
+
+<time_search_range>
+<!-- Within this time range, co-location searches for the nearest
+     neighbor in the source data (lat, lon) grid for a given (lat, lon)
+     spot in the target data grid. -->
+900
+<!-- The largest time span in A-Train is about 15mins from Aqua to Arua. -->
+</time_search_range>
+
+<footprint_size>
+<!-- footprint size of the data in km -->
+15
+</footprint_size>
+
+<space_search_factor>
+<!-- inflate footprint size by this fator in search -->
+1.5
+</space_search_factor>
+
+<invalid_data>
+<!-- when no nearest neighbor found within footprint, use this value -->
+-909090
+</invalid_data>
+
+<missing_value>
+<!-- when source data has no value at the location, use this value -->
+-999
+</missing_value>
+
+<num_cores>
+<!-- number of cores you would like to use -->
+8
+</num_cores>
+
+<proc_size>
+<!-- number of target granules a process would handle -->
+2
+</proc_size>
+
+<cell_search_limit>
+<!-- When qry_range is large compared to the grid overlaid
+     on target points, only search in C by C cells around
+     each query point -->
+40
+</cell_search_limit>
+
+
+</configure>

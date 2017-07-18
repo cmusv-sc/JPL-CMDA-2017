@@ -1,0 +1,32 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+CERES FM3	Level 2 SSF	CERES LW TOA flux - upwards	Watts per square meter
+CERES FM3	Level 2 SSF	CERES broadband surface albedo	N/A
+CERES FM3	Level 2 SSF	CERES viewing zenith at surface	degrees
+CERES FM3	Level 2 SSF	Radiance and Mode flags	N/A
+CERES FM3	Level 2 SSF	Altitude of surface above sea level	meters
+CERES FM3	Level 2 SSF	CERES SW filtered radiance - upwards	Watts per square meter per steradian
+CERES FM3	Level 2 SSF	CERES SW ADM type for inversion process	N/A
+CERES FM3	Level 2 SSF	CERES solar zenith at surface	degrees
+CERES FM3	Level 2 SSF	CERES downward WN surface flux - Model A	Watts per square meter
+CERES FM3	Level 2 SSF	CERES viewing azimuth at surface wrt North	degrees
+CERES FM3	Level 2 SSF	CERES WN radiance - upwards	Watts per square meter per steradian
+CERES FM3	Level 2 SSF	Surface type index	N/A
+CERES FM3	Level 2 SSF	CERES TOT filtered radiance - upwards	Watts per square meter per steradian
+CERES FM3	Level 2 SSF	CERES net SW surface flux - Model A	Watts per square meter
+CERES FM3	Level 2 SSF	CERES LW ADM type for inversion process	N/A
+CERES FM3	Level 2 SSF	CERES net SW surface flux - Model B	Watts per square meter
+CERES FM3	Level 2 SSF	CERES SW TOA flux - upwards	Watts per square meter
+CERES FM3	Level 2 SSF	CERES downward SW surface flux - Model B	Watts per square meter
+CERES FM3	Level 2 SSF	CERES downward SW surface flux - Model A	Watts per square meter
+CERES FM3	Level 2 SSF	CERES WN TOA flux - upwards	Watts per square meter
+CERES FM3	Level 2 SSF	CERES WN surface emissivity	N/A
+CERES FM3	Level 2 SSF	CERES WN filtered radiance - upwards	Watts per square meter per steradian per micron
+CERES FM3	Level 2 SSF	CERES relative azimuth at surface	degrees
+CERES FM3	Level 2 SSF	CERES LW radiance - upwards	Watts per square meter per steradian
+CERES FM3	Level 2 SSF	CERES LW surface emissivity	N/A
+CERES FM3	Level 2 SSF	CERES net LW surface flux - Model A	Watts per square meter
+CERES FM3	Level 2 SSF	CERES net LW surface flux - Model B	Watts per square meter
+CERES FM3	Level 2 SSF	CERES SW radiance - upwards	Watts per square meter per steradian
+CERES FM3	Level 2 SSF	CERES downward LW surface flux - Model A	Watts per square meter
+CERES FM3	Level 2 SSF	CERES downward LW surface flux - Model B	Watts per square meter
+CERES FM3	Level 2 SSF	Surface type percent coverage	N/A

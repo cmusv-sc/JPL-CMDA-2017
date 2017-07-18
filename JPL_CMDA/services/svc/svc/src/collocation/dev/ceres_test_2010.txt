@@ -1,0 +1,1468 @@
+datarootdir:  /mnt/nas-0-0/users/collocation/ceres.aqua
+self.dataset_name:  ceres
+dataset_registry.get_dset_container - missing registration for  ceres
+dataset_registry.get_dataset_container - using  ceres
+self.outputdir:  /home/seungwon/test
+self.time_search_range:  900
+self.footprint_size:  30
+self.space_search_factor:  1.5
+self.cell_search_limit:  4
+self.invalid_data:  -909090
+self.missing_value:  None
+self.num_cores:  8
+self.proc_size:  10
+src data set type:  ceres
+dataset_registry.get_dataset_container - using  ceres
+list_file:  /home/seungwon//ceres_granules.list.pkl
+self.dataset_name:  cloudsat
+dataset_registry.get_dataset_container - using  cloudsat
+self.outputdir:  /home/seungwon/test
+***** warning in file_list.__init__ - missing time_diff in config file
+      config filename:  cloudsat_config.xml
+      using :  120
+self.time_search_range:  900
+self.footprint_size:  3
+self.space_search_factor:  1.5
+self.cell_search_limit:  4
+self.invalid_data:  -909090
+self.missing_value:  None
+self.num_cores:  8
+self.proc_size:  10
+list_file1:  /home/seungwon/cloudsat_granules.list.pkl
+User specified start time: 2010-04-01 00:00:00 end time: 2010-04-01 23:59:59
+afl.start_t:  2010-04-01 00:00:00
+*** right after bisect_left(), index1:  18897
+afl.end_t:  2010-04-01 23:59:59
+cloudsat (start) time range: 2010-03-31 23:01:39 2010-04-01 23:44:54
+cloudsat file range: /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/090/2010090230239_20877_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091234554_20892_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+index1:  18897 , index2:  18912
+User specified cloudsat granule number range: 20877 20892
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2006/06/01/CER_SSF_Aqua-FM3-MODIS_Edition2C_034040.subset_20090728_102157UT.2006060100
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x170a0790>
+num_cores:  8
+proc_size:  10
+group_size:  80
+tot_granules:  16
+num_groups:  1
+num_processes:  2
+index_range: 
+[[18897 18904]
+ [18905 18912]]
+
+
+
+
+
+
+------------- group:  0  ------------
+process started:  0
+--------- inside sdriver(), gid:  0 , pid:  0  ----------
+index1:  18897 , index2:  18904
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/090/2010090230239_20877_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20877
+file start/end time: 2010-03-31 23:01:39 2010-04-01 00:42:37.200000
+target Unix Time =  [  1.27007656e+09   1.27007656e+09   1.27007656e+09 ...,   1.27008249e+09
+   1.27008249e+09   1.27008249e+09]
+target Unix Time Range =  1270076559.41 1270082492.21
+target Unix Time Size =  37079
+
+target Latitude =  [-0.00569953 -0.01536865 -0.02503777 ...,  0.02575723  0.01608799
+  0.00641887]
+target Latitude Range =  -81.8592605591 81.8589630127
+target Latitude Size =  37079
+
+target Longitude =  [ 40.89188004  40.88983154  40.88778305 ...,  16.17711067  16.17506218
+  16.17301178]
+target Longitude Range =  -179.995300293 179.991912842
+target Longitude Size =  37079
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-03-31 22:43:39
+****** target granule end time after adjustment: 2010-04-01 00:54:37.200000
+idx1:  30408
+idx1 (after shift):  30408
+idx2:  30410
+idx2 (after shift):  30410
+st1:  2010-03-31 22:43:39  et1:  2010-04-01 00:54:37.200000 idx1:  30408  idx2:  30410
+src (start) time range: 2010-03-31 22:00:00 2010-04-01 00:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010033122 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040100
+idx1:  30408 , idx2:  30410
+
+loop over src files j:  30408
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010033122
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010033122
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010033122
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d210>
+src Unix Time size =  98722
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27007640e+09
+   1.27007640e+09   1.27007640e+09]
+src Unix Time Range =  1270072800.01 1270076399.99
+src Latitude size =  98722
+src Latitude Range =  -45.212310791 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ...,   7.12646484   7.07272339
+   7.02148438]
+src Longitude Range =  -179.999557495 179.994033813
+src Longitude size =  98722
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,   32.25145721   32.66240311
+   33.04541397]
+****** src data acquired! ******
+
+loop over src files j:  30409
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010033123
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010033123
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010033123
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3de50>
+src Unix Time size =  197534
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27008000e+09
+   1.27008000e+09   1.27008000e+09]
+src Unix Time Range =  1270072800.01 1270079998.56
+src Latitude size =  197534
+src Latitude Range =  -89.7962799072 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ...,  29.74990463  29.66995239
+  29.58255005]
+src Longitude Range =  -179.999557495 179.994033813
+src Longitude size =  197534
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ..., -171.89154053 -172.23144531
+ -172.59375   ]
+****** src data acquired! ******
+
+loop over src files j:  30410
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040100
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqu--------- inside sdriver(), gid:  0 , pid:  1  ----------
+index1:  18905 , index2:  18912
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091121343_20885_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20885
+file start/end time: 2010-04-01 12:12:43 2010-04-01 13:53:41.200000
+target Unix Time =  [  1.27012402e+09   1.27012402e+09   1.27012402e+09 ...,   1.27012996e+09
+   1.27012996e+09   1.27012996e+09]
+target Unix Time Range =  1270124023.56 1270129956.2
+target Unix Time Size =  37080
+
+target Latitude =  [-0.00839803 -0.01806795 -0.02773787 ...,  0.02763068  0.0179606
+  0.00829052]
+target Latitude Range =  -81.8576889038 81.8574676514
+target Latitude Size =  37080
+
+target Longitude =  [-156.87942505 -156.88146973 -156.88352966 ...,  178.4079895   178.40594482
+  178.40390015]
+target Longitude Range =  -179.999984741 179.99911499
+target Longitude Size =  37080
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 11:54:43
+****** target granule end time after adjustment: 2010-04-01 14:05:41.200000
+idx1:  30421
+idx1 (after shift):  30421
+idx2:  30424
+idx2 (after shift):  30424
+st1:  2010-04-01 11:54:43  et1:  2010-04-01 14:05:41.200000 idx1:  30421  idx2:  30424
+src (start) time range: 2010-04-01 11:00:00 2010-04-01 14:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040111 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040114
+idx1:  30421 , idx2:  30424
+
+loop over src files j:  30421
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040111
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040111
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040111
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d850>
+src Unix Time size =  98756
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27012320e+09
+   1.27012320e+09   1.27012320e+09]
+src Unix Time Range =  1270119600.0 1270123199.98
+src Latitude size =  98756
+src Latitude Range =  -84.7323608398 89.7858581543
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ...,  47.10263824  47.08052826
+  47.05701447]
+src Longitude Range =  -179.5103302 179.740890503
+src Longitude size =  98756
+src Longitude =  [  76.30045319   77.84151459   79.2586441  ..., -160.90220642 -160.11209106
+ -159.38778687]
+****** src data acquired! ******
+
+loop over src files j:  30422
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040112
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040112
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040112
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d750>
+src Unix Time size =  197570
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27012680e+09
+   1.27012680e+09   1.27012680e+09]
+src Unix Time Range =  1270119600.0 1270126798.61
+src Latitude size =  197570
+src Latitude Range =  -89.8141021729 89.7858581543
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ...,  -9.49829102  -9.53460693
+  -9.57115936]
+src Longitude Range =  -179.999237061 179.998886108
+src Longitude size =  197570
+src Longitude =  [  7.63004532e+01   7.78415146e+01   7.92586441e+01 ...,   6.69399977e-01
+   3.59670699e-01   2.83275414e-02]
+****** src data acquired! ******
+
+loop over src files j:  30423
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040113
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua-FM3-MODIS_Edition2D_035041.2010040100
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040100
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d210>
+src Unix Time size =  296198
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27008360e+09
+   1.27008360e+09   1.27008360e+09]
+src Unix Time Range =  1270072800.01 1270083598.81
+src Latitude size =  296198
+src Latitude Range =  -89.7962799072 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ..., -63.50102234 -63.28193665
+ -63.04385376]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  296198
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,  -34.00637817  -34.52957153
+  -35.07748413]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37079
+src_time_len:  296198
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4470852  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37079  len(dist):  37079
+1. self.nn_idx[]:  [101370 101370 101370 ..., 264018 264018 264018]
+****** self.good_cnt:  37079
+****** midEnd.good_cnt:  37079
+****** success match rate (%):  100.0 for target granule  20877
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091004132_20878_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20878
+file start/end time: 2010-04-01 00:40:32 2010-04-01 02:21:30.200000
+target Unix Time =  [  1.27008249e+09   1.27008249e+09   1.27008249e+09 ...,   1.27008842e+09
+   1.27008843e+09   1.27008843e+09]
+target Unix Time Range =  1270082492.36 1270088425.16
+target Unix Time Size =  37081
+
+target Latitude =  [-0.00325025 -0.01291937 -0.02258849 ...,  0.0274137   0.01774426
+  0.00807482]
+target Latitude Range =  -81.8582839966 81.8578491211
+target Latitude Size =  37081
+
+target Longitude =  [ 16.17096138  16.16891098  16.16686249 ...,  -8.54404926  -8.54609966
+  -8.54814911]
+target Longitude Range =  -179.998779297 179.999038696
+target Longitude Size =  37081
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 00:22:32
+****** target granule end time after adjustment: 2010-04-01 02:33:30.200000
+idx1:  30410
+idx1 (after shift):  30410
+idx2:  30412
+idx2 (after shift):  30412
+st1:  2010-04-01 00:22:32  et1:  2010-04-01 02:33:30.200000 idx1:  30410  idx2:  30412
+src (start) time range: 2010-04-01 00:00:00 2010-04-01 02:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040100 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040102
+idx1:  30411 , idx2:  30412
+
+loop over src files j:  30411
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040101
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040101
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040101
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d110>
+src Unix Time size =  394998
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27008720e+09
+   1.27008720e+09   1.27008720e+09]
+src Unix Time Range =  1270072800.01 1270087199.07
+src Latitude size =  394998
+src Latitude Range =  -89.7962799072 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ...,  63.80906296  63.59649658
+  63.36585999]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  394998
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,   37.66115952   38.17163849
+   38.70588684]
+****** src data acquired! ******
+a/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040113
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040113
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d850>
+src Unix Time size =  296306
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27013040e+09
+   1.27013040e+09   1.27013040e+09]
+src Unix Time Range =  1270119600.0 1270130398.87
+src Latitude size =  296306
+src Latitude Range =  -89.8141021729 89.9100036621
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ..., -28.15646362 -28.07566071
+ -27.98926544]
+src Longitude Range =  -179.999237061 179.999603271
+src Longitude size =  296306
+src Longitude =  [  76.30045319   77.84151459   79.2586441  ...,  158.4214325   158.07978821
+  157.71476746]
+****** src data acquired! ******
+
+loop over src files j:  30424
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040114
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040114
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040114
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d750>
+src Unix Time size =  395125
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27013400e+09
+   1.27013400e+09   1.27013400e+09]
+src Unix Time Range =  1270119600.0 1270133999.12
+src Latitude size =  395125
+src Latitude Range =  -89.9135437012 89.9100036621
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ...,  62.30031586  62.10088348
+  61.88486481]
+src Longitude Range =  -179.99987793 179.999603271
+src Longitude size =  395125
+src Longitude =  [ 76.30045319  77.84151459  79.2586441  ..., -60.92654419 -61.43508911
+ -61.96990967]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37080
+src_time_len:  395125
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4414254  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37080  len(dist):  37080
+1. self.nn_idx[]:  [119624 119624 119624 ..., 282426 282426 282426]
+****** self.good_cnt:  37080
+****** midEnd.good_cnt:  37080
+****** success match rate (%):  100.0 for target granule  20885
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091135236_20886_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20886
+file start/end time: 2010-04-01 13:51:36 2010-04-01 15:32:34.200000
+target Unix Time =  [  1.27012996e+09   1.27012996e+09   1.27012996e+09 ...,   1.27013589e+09
+   1.27013589e+09   1.27013589e+09]
+target Unix Time Range =  1270129956.36 1270135889.16
+target Unix Time Size =  37081
+
+target Latitude =  [-0.00137956 -0.01104964 -0.02071972 ...,  0.02445936  0.01478912
+  0.00511904]
+target Latitude Range =  -81.8569869995 81.857749939
+target Latitude Size =  37081
+
+target Longitude =  [ 178.40184021  178.39979553  178.39775085 ...,  153.68638611  153.68432617
+  153.68228149]
+target Longitude Range =  -179.995559692 179.993408203
+target Longitude Size =  37081
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 13:33:36
+****** target granule end time after adjustment: 2010-04-01 15:44:34.200000
+idx1:  30423
+idx1 (after shift):  30423
+idx2:  30425
+idx2 (after shift):  30425
+st1:  2010-04-01 13:33:36  et1:  2010-04-01 15:44:34.200000 idx1:  30423  idx2:  30425
+src (start) time range: 2010-04-01 13:00:00 2010-04-01 15:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040113 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040115
+idx1:  30425 ,
+loop over src files j:  30412
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040102
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040102
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040102
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d210>
+src Unix Time size =  493818
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27009080e+09
+   1.27009080e+09   1.27009080e+09]
+src Unix Time Range =  1270072800.01 1270090799.33
+src Latitude size =  493818
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ..., -30.19207764 -30.10749817
+ -30.01587677]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  493818
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,  175.95265198  176.30253601
+  176.67250061]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37081
+src_time_len:  493818
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4435065  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37081  len(dist):  37081
+1. self.nn_idx[]:  [264018 264083 264083 ..., 426822 426822 426822]
+****** self.good_cnt:  37081
+****** midEnd.good_cnt:  37081
+****** success match rate (%):  100.0 for target granule  20878
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091022025_20879_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20879
+file start/end time: 2010-04-01 02:19:25 2010-04-01 04:00:23.200000
+target Unix Time =  [  1.27008843e+09   1.27008843e+09   1.27008843e+09 ...,   1.27009436e+09
+   1.27009436e+09   1.27009436e+09]
+target Unix Time Range =  1270088425.32 1270094358.12
+target Unix Time Size =  37081
+
+target Latitude =  [-0.00159462 -0.01126406 -0.0209335  ...,  0.02578426  0.01611466
+  0.00644494]
+target Latitude Range =  -81.8576889038 81.8574447632
+target Latitude Size =  37081
+
+target Longitude =  [ -8.55019951  -8.55224991  -8.55429935 ..., -33.26525879 -33.2673111
+ -33.26935959]
+target Longitude Range =  -179.997314453 179.995254517
+target Longitude Size =  37081
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 02:01:25
+****** target granule end time after adjustment: 2010-04-01 04:12:23.200000
+idx1:  30412
+idx1 (after shift):  30412
+idx2:  30414
+idx2 (after shift):  30414
+st1:  2010-04-01 02:01:25  et1:  2010-04-01 04:12:23.200000 idx1:  30412  idx2:  30414
+src (start) time range: 2010-04-01 02:00:00 2010-04-01 04:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040102 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040104
+idx1:  30413 , idx2:  30414
+
+loop over src files j:  30413
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040103
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040103
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040103
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3dd50>
+src Unix Time size =  592553
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27009440e+09
+   1.27009440e+09   1.27009440e+09]
+src Unix Time Range =  1270072800.01 1270094399.59
+src Latitude size =  592553
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ...,  -7.44517517  -7.4850769
+  -7.52 idx2:  30425
+
+loop over src files j:  30425
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040115
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040115
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040115
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d550>
+src Unix Time size =  493926
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27013760e+09
+   1.27013760e+09   1.27013760e+09]
+src Unix Time Range =  1270119600.0 1270137599.38
+src Latitude size =  493926
+src Latitude Range =  -89.9135437012 89.9100036621
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ..., -64.99021912 -64.75582886
+ -64.50447083]
+src Longitude Range =  -179.99987793 179.999603271
+src Longitude size =  493926
+src Longitude =  [ 76.30045319  77.84151459  79.2586441  ...,  11.15554523  11.67098808
+  12.21636868]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37081
+src_time_len:  493926
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4479066  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37081  len(dist):  37081
+1. self.nn_idx[]:  [282426 282426 282426 ..., 445113 445113 445113]
+****** self.good_cnt:  37081
+****** midEnd.good_cnt:  37081
+****** success match rate (%):  100.0 for target granule  20886
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091153129_20887_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20887
+file start/end time: 2010-04-01 15:30:29 2010-04-01 17:11:27.200000
+target Unix Time =  [  1.27013589e+09   1.27013589e+09   1.27013589e+09 ...,   1.27014182e+09
+   1.27014182e+09   1.27014182e+09]
+target Unix Time Range =  1270135889.32 1270141822.12
+target Unix Time Size =  37081
+
+target Latitude =  [-0.00455104 -0.01422112 -0.0238912  ...,  0.02597292  0.01630268
+  0.00663244]
+target Latitude Range =  -81.8572540283 81.8588562012
+target Latitude Size =  37081
+
+target Longitude =  [ 153.68023682  153.67817688  153.6761322  ...,  128.96524048  128.9631958
+  128.96115112]
+target Longitude Range =  -179.999053955 179.964904785
+target Longitude Size =  37081
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 15:12:29
+****** target granule end time after adjustment: 2010-04-01 17:23:27.200000
+idx1:  30425
+idx1 (after shift):  30425
+idx2:  30427
+idx2 (after shift):  30427
+st1:  2010-04-01 15:12:29  et1:  2010-04-01 17:23:27.200000 idx1:  30425  idx2:  30427
+src (start) time range: 2010-04-01 15:00:00 2010-04-01 17:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040115 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040117
+idx1:  30426 , idx2:  30427
+
+loop over src files j:  30426
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040116
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040116
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040116
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d2d0>
+src Unix Time size =  592681
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27014120e+09
+   1.27014120e+09   1.27014120e+09]
+src Unix Time Range =  1270119600.0 1270141199.64
+src Latitude size =  592681
+src Latitude Range =  -89.9135437012 89.9548492432
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ...,  31.71527863  31.62878418
+  31.53536224]
+src Longitude Range =  -179.99987793 179.999603271
+src Longitude size =  592681
+src Longitude =  [  76.30045319   77.84151459   79.2586441  ...,  146.31808472  146.66401672
+  147.0329895 ]
+****** src data acquired! ******
+
+loop over src files j:  30427
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040117
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040117
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040117
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d550>
+src Unix Time size =  691500
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27014480e+09
+   1.27014480e+09   1.27014480e+09]
+src Unix Time Range =  1270119600.0 1270144799.9
+src Latitude size =  691500
+src Latitude Range =  -89.9531860352 89.9548492432
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ...,   5.37316895   5.41435242
+   5.45677948]
+src Longitude Range =  -179.99987793 179.999603271
+src Longitude size =  691500
+src Longitude =  [ 76.30045319  77.84151459  79.2586441  ..., -56.4473877  -56.14035034
+ -55.81481934]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37081
+src_time_len:  691500
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4485913  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37081  len(dist):  37081
+1. self.nn_idx[]:  [445113 445230 445230 ..., 607916 607916 607916]
+****** self.good_cnt:  37081
+****** midEnd.good_cnt:  37081
+****** success match rate (%):  100.0 for target granule  20887
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091171022_20888_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20888
+file start/end time: 2010-04-01 17:09:22 2010-04-01 18:50:20.200000
+target Unix Time =  [  1.27014182e+09   1.27014182e+09   1.27014182e+09 ...,   1.27014775e+09
+   1.27014776e+09   1.27014776e+09]
+target Unix Time Range =  1270141822.28 1270147755.24
+target Unix Time Size =  37082
+
+target Latitude =  [-0.0030378  -0.01270804 -0.02237828 ...,  0.02136052  0.0116906
+  0.00202068]
+target Latitude Range =  -81.8591918945 81.85887146
+target Latitude Size =  37082
+
+target Longitude =  [ 128.95909119  128.95704651  128.95500183 ...,  104.24383545  104.24179077
+  104.23973846]
+target Longitude Range =  -179.983291626 179.955703735
+target Longitude Size =  37082
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 16:51:22
+****** target granule end time after adjustment: 2010-04-01 19:02:20.200000
+idx1:  30426
+idx1 (after shift):  30426
+idx2:  30429
+idx2 (after shift):  30429
+st1:  2010-04-01 16:51:22  et1:  2010-04-01 19:02:20.200000 idx1:  30426  idx2:  30429
+src (start) time range: 2010-04-01 16:00:00 2010-04-01 19:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040116 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040119
+idx1:  30428 , idx2:  30429
+
+loop over src files j:  30428
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040118
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040118
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040118
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d610>
+src Unix Time size =  790225
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27014840e+09
+   1.27014840e+09   1.645111]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  592553
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,  -26.650177    -26.34194946
+  -26.0123291 ]
+****** src data acquired! ******
+
+loop over src files j:  30414
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040104
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040104
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040104
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d210>
+src Unix Time size =  691372
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27009800e+09
+   1.27009800e+09   1.27009800e+09]
+src Unix Time Range =  1270072800.01 1270097999.85
+src Latitude size =  691372
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ...,  45.13102722  45.14080048
+  45.14726639]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  691372
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,  135.21531677  135.65594482
+  136.12316895]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37081
+src_time_len:  691372
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4473612  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37081  len(dist):  37081
+1. self.nn_idx[]:  [426822 426822 426885 ..., 589624 589624 589624]
+****** self.good_cnt:  37081
+****** midEnd.good_cnt:  37081
+****** success match rate (%):  100.0 for target granule  20879
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091035918_20880_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20880
+file start/end time: 2010-04-01 03:58:18 2010-04-01 05:39:16.200000
+target Unix Time =  [  1.27009436e+09   1.27009436e+09   1.27009436e+09 ...,   1.27010029e+09
+   1.27010029e+09   1.27010029e+09]
+target Unix Time Range =  1270094358.28 1270100291.08
+target Unix Time Size =  37081
+
+target Latitude =  [-0.00322482 -0.01289458 -0.02256434 ...,  0.02513213  0.01546221
+  0.00579238]
+target Latitude Range =  -81.8577804565 81.8589706421
+target Latitude Size =  37081
+
+target Longitude =  [-33.2714119  -33.27346039 -33.2755127  ..., -57.98604202 -57.98809052
+ -57.99014282]
+target Longitude Range =  -179.978012085 179.992340088
+target Longitude Size =  37081
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 03:40:18
+****** target granule end time after adjustment: 2010-04-01 05:51:16.200000
+idx1:  30413
+idx1 (after shift):  30413
+idx2:  30415
+idx2 (after shift):  30415
+st1:  2010-04-01 03:40:18  et1:  2010-04-01 05:51:16.200000 idx1:  30413  idx2:  30415
+src (start) time range: 2010-04-01 03:00:00 2010-04-01 05:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040103 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040105
+idx1:  30415 , idx2:  30415
+
+loop over src files j:  30415
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040105
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040105
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040105
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d790>
+src Unix Time size =  790135
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27010160e+09
+   1.27010160e+09   1.2701027014840e+09]
+src Unix Time Range =  1270119600.0 1270148399.98
+src Latitude size =  790225
+src Latitude Range =  -89.9531860352 89.9548492432
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ..., -43.25720215 -43.28807068
+ -43.31791687]
+src Longitude Range =  -179.99987793 179.999603271
+src Longitude size =  790225
+src Longitude =  [  76.30045319   77.84151459   79.2586441  ...,  100.06017303  100.47783661
+  100.9229126 ]
+****** src data acquired! ******
+
+loop over src files j:  30429
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040119
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040119
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040119
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d550>
+src Unix Time size =  889032
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27015200e+09
+   1.27015200e+09   1.27015200e+09]
+src Unix Time Range =  1270119600.0 1270151999.99
+src Latitude size =  889032
+src Latitude Range =  -89.9531860352 89.9548492432
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ...,  79.8546524   79.94556427
+  80.03675842]
+src Longitude Range =  -179.99987793 179.999603271
+src Longitude size =  889032
+src Longitude =  [  76.30045319   77.84151459   79.2586441  ..., -124.47618103 -123.56411743
+ -122.60491943]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37082
+src_time_len:  889032
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4489379  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37082  len(dist):  37082
+1. self.nn_idx[]:  [607916 608033 608033 ..., 770719 770719 770719]
+****** self.good_cnt:  37082
+****** midEnd.good_cnt:  37082
+****** success match rate (%):  100.0 for target granule  20888
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091184915_20889_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20889
+file start/end time: 2010-04-01 18:48:15 2010-04-01 20:29:13.200000
+target Unix Time =  [  1.27014776e+09   1.27014776e+09   1.27014776e+09 ...,   1.27015369e+09
+   1.27015369e+09   1.27015369e+09]
+target Unix Time Range =  1270147755.4 1270153688.2
+target Unix Time Size =  37078
+
+target Latitude =  [-0.00764924 -0.01731916 -0.02698908 ...,  0.02620365  0.01653421
+  0.00686477]
+target Latitude Range =  -81.8601303101 81.8606414795
+target Latitude Size =  37078
+
+target Longitude =  [ 104.23768616  104.23564148  104.23358917 ...,   79.52488708   79.52284241
+   79.5207901 ]
+target Longitude Range =  -179.96446228 179.966903687
+target Longitude Size =  37078
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 18:30:15
+****** target granule end time after adjustment: 2010-04-01 20:41:13.200000
+idx1:  30428
+idx1 (after shift):  30428
+idx2:  30430
+idx2 (after shift):  30430
+st1:  2010-04-01 18:30:15  et1:  2010-04-01 20:41:13.200000 idx1:  30428  idx2:  30430
+src (start) time range: 2010-04-01 18:00:00 2010-04-01 20:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040118 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040120
+idx1:  30430 , idx2:  30430
+
+loop over src files j:  30430
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040120
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040120
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D160e+09]
+src Unix Time Range =  1270072800.01 1270101599.98
+src Latitude size =  790135
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ..., -82.93293762 -82.98905945
+ -83.02671814]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  790135
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,  -74.63061523  -71.68133545
+  -68.50601196]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37081
+src_time_len:  790135
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4481177  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37081  len(dist):  37081
+1. self.nn_idx[]:  [589624 589624 589624 ..., 752428 752428 752428]
+****** self.good_cnt:  37081
+****** midEnd.good_cnt:  37081
+****** success match rate (%):  100.0 for target granule  20880
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091053811_20881_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20881
+file start/end time: 2010-04-01 05:37:11 2010-04-01 07:18:09.200000
+target Unix Time =  [  1.27010029e+09   1.27010029e+09   1.27010029e+09 ...,   1.27010622e+09
+   1.27010622e+09   1.27010622e+09]
+target Unix Time Range =  1270100291.24 1270106224.2
+target Unix Time Size =  37082
+
+target Latitude =  [-0.00387738 -0.01354714 -0.0232169  ...,  0.02260601  0.01293621
+  0.00326629]
+target Latitude Range =  -81.8593292236 81.8607406616
+target Latitude Size =  37082
+
+target Longitude =  [-57.99219131 -57.99424362 -57.99629211 ..., -82.70794678 -82.70999908
+ -82.71204376]
+target Longitude Range =  -179.994979858 179.948913574
+target Longitude Size =  37082
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 05:19:11
+****** target granule end time after adjustment: 2010-04-01 07:30:09.200000
+idx1:  30415
+idx1 (after shift):  30415
+idx2:  30417
+idx2 (after shift):  30417
+st1:  2010-04-01 05:19:11  et1:  2010-04-01 07:30:09.200000 idx1:  30415  idx2:  30417
+src (start) time range: 2010-04-01 05:00:00 2010-04-01 07:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040105 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040107
+idx1:  30416 , idx2:  30417
+
+loop over src files j:  30416
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040106
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040106
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040106
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d850>
+src Unix Time size =  888908
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27010520e+09
+   1.27010520e+09   1.27010520e+09]
+src Unix Time Range =  1270072800.01 1270105199.99
+src Latitude size =  888908
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ...,  58.60810852  58.63975525
+  58.67207336]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  888908
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,  -74.20956421  -74.58532715
+  -74.97390747]
+****** src data acquired! ******
+
+loop over src files j:  30417
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040107
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040107
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_0350_035041.2010040120
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d350>
+src Unix Time size =  987836
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27015560e+09
+   1.27015560e+09   1.27015560e+09]
+src Unix Time Range =  1270119600.0 1270155599.99
+src Latitude size =  987836
+src Latitude Range =  -89.9651184082 89.9780731201
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ..., -60.02210999 -60.05786133
+ -60.09338379]
+src Longitude Range =  -179.99987793 179.999603271
+src Longitude size =  987836
+src Longitude =  [ 76.30045319  77.84151459  79.2586441  ..., -98.55493164 -98.84454346
+ -99.13903809]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37078
+src_time_len:  987836
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4483554  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37078  len(dist):  37078
+1. self.nn_idx[]:  [770719 770719 770719 ..., 933521 933521 933521]
+****** self.good_cnt:  37078
+****** midEnd.good_cnt:  37078
+****** success match rate (%):  100.0 for target granule  20889
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091202808_20890_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20890
+file start/end time: 2010-04-01 20:27:08 2010-04-01 22:08:06.200000
+target Unix Time =  [  1.27015369e+09   1.27015369e+09   1.27015369e+09 ...,   1.27015962e+09
+   1.27015962e+09   1.27015962e+09]
+target Unix Time Range =  1270153688.36 1270159621.32
+target Unix Time Size =  37082
+
+target Latitude =  [-0.00280467 -0.01247411 -0.02214355 ...,  0.02302857  0.01335929
+  0.00369001]
+target Latitude Range =  -81.8605041504 81.8609008789
+target Latitude Size =  37082
+
+target Longitude =  [ 79.51873779  79.51669312  79.51464081 ...,  54.8031311   54.80108261
+  54.79903412]
+target Longitude Range =  -179.947677612 179.998931885
+target Longitude Size =  37082
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 20:09:08
+****** target granule end time after adjustment: 2010-04-01 22:20:06.200000
+idx1:  30430
+idx1 (after shift):  30430
+idx2:  30432
+idx2 (after shift):  30432
+st1:  2010-04-01 20:09:08  et1:  2010-04-01 22:20:06.200000 idx1:  30430  idx2:  30432
+src (start) time range: 2010-04-01 20:00:00 2010-04-01 22:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040120 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040122
+idx1:  30431 , idx2:  30432
+
+loop over src files j:  30431
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040121
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040121
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040121
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d790>
+src Unix Time size =  1086563
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27015920e+09
+   1.27015920e+09   1.27015920e+09]
+src Unix Time Range =  1270119600.0 1270159199.99
+src Latitude size =  1086563
+src Latitude Range =  -89.9651184082 89.9780731201
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ...,  21.72896576  21.75027466
+  21.77133942]
+src Longitude Range =  -179.99987793 179.999603271
+src Longitude size =  1086563
+src Longitude =  [ 76.30045319  77.84151459  79.2586441  ...,  58.39604187  58.24551773
+  58.09562302]
+****** src data acquired! ******
+
+loop over src files j:  30432
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040122
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2041.2010040107
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d790>
+src Unix Time size =  987714
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27010880e+09
+   1.27010880e+09   1.27010880e+09]
+src Unix Time Range =  1270072800.01 1270108799.99
+src Latitude size =  987714
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ..., -20.4675293  -20.48751068
+ -20.50754547]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  987714
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,   85.8743515    85.71631622
+   85.55545807]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37082
+src_time_len:  987714
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4490481  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37082  len(dist):  37082
+1. self.nn_idx[]:  [752428 752428 752428 ..., 915230 915230 915230]
+****** self.good_cnt:  37082
+****** midEnd.good_cnt:  37082
+****** success match rate (%):  100.0 for target granule  20881
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091071704_20882_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20882
+file start/end time: 2010-04-01 07:16:04 2010-04-01 08:57:02.200000
+target Unix Time =  [  1.27010622e+09   1.27010622e+09   1.27010622e+09 ...,   1.27011216e+09
+   1.27011216e+09   1.27011216e+09]
+target Unix Time Range =  1270106224.36 1270112157.32
+target Unix Time Size =  37080
+
+target Latitude =  [-0.00640363 -0.01607355 -0.02574347 ...,  0.02433669  0.01466693
+  0.00499717]
+target Latitude Range =  -81.8612213135 81.8611068726
+target Latitude Size =  37080
+
+target Longitude =  [ -82.71409607  -82.71614838  -82.71819305 ..., -107.42977142 -107.43182373
+ -107.43387604]
+target Longitude Range =  -179.963729858 179.96762085
+target Longitude Size =  37080
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 06:58:04
+****** target granule end time after adjustment: 2010-04-01 09:09:02.200000
+idx1:  30416
+idx1 (after shift):  30416
+idx2:  30419
+idx2 (after shift):  30419
+st1:  2010-04-01 06:58:04  et1:  2010-04-01 09:09:02.200000 idx1:  30416  idx2:  30419
+src (start) time range: 2010-04-01 06:00:00 2010-04-01 09:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040106 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040109
+idx1:  30418 , idx2:  30419
+
+loop over src files j:  30418
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040108
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040108
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040108
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d9d0>
+src Unix Time size =  1086437
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27011240e+09
+   1.27011240e+09   1.27011240e+09]
+src Unix Time Range =  1270072800.01 1270112400.0
+src Latitude size =  1086437
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ..., -18.31150818 -18.29159546
+ -18.2715683 ]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  1086437
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ..., -112.97077942 -113.11791992
+ -113.26475525]
+****** src data acquired! ******
+
+loop over src files j:  30419
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040109
+****** Reading src data from file:  /mnt/nas-0-0/users/collocatio10/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040122
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040122
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d350>
+src Unix Time size =  1185370
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27016280e+09
+   1.27016280e+09   1.27016280e+09]
+src Unix Time Range =  1270119600.0 1270162799.99
+src Latitude size =  1185370
+src Latitude Range =  -89.9651184082 89.9780731201
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ...,  16.56672668  16.54524231
+  16.52423859]
+src Longitude Range =  -179.99987793 179.999603271
+src Longitude size =  1185370
+src Longitude =  [  76.30045319   77.84151459   79.2586441  ..., -140.25643921 -140.42843628
+ -140.59765625]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37082
+src_time_len:  1185370
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4479974  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37082  len(dist):  37082
+1. self.nn_idx[]:  [ 933521  933521  933521 ..., 1096326 1096326 1096326]
+****** self.good_cnt:  37082
+****** midEnd.good_cnt:  37082
+****** success match rate (%):  100.0 for target granule  20890
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091220701_20891_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20891
+file start/end time: 2010-04-01 22:06:01 2010-04-01 23:46:59.200000
+target Unix Time =  [  1.27015962e+09   1.27015962e+09   1.27015962e+09 ...,   1.27016555e+09
+   1.27016555e+09   1.27016555e+09]
+target Unix Time Range =  1270159621.48 1270165554.28
+target Unix Time Size =  37081
+
+target Latitude =  [-0.00597927 -0.01564855 -0.02531783 ...,  0.02703075  0.01736159
+  0.00769247]
+target Latitude Range =  -81.8599243164 81.859588623
+target Latitude Size =  37081
+
+target Longitude =  [ 54.79698181  54.79493332  54.79288483 ...,  30.0826416   30.0805912
+  30.0785408 ]
+target Longitude Range =  -179.994552612 179.979125977
+target Longitude Size =  37081
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 21:48:01
+****** target granule end time after adjustment: 2010-04-01 23:58:59.200000
+idx1:  30431
+idx1 (after shift):  30431
+idx2:  30433
+idx2 (after shift):  30433
+st1:  2010-04-01 21:48:01  et1:  2010-04-01 23:58:59.200000 idx1:  30431  idx2:  30433
+src (start) time range: 2010-04-01 21:00:00 2010-04-01 23:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040121 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040123
+idx1:  30433 , idx2:  30433
+
+loop over src files j:  30433
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040123
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040123
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040123
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3df90>
+src Unix Time size =  1284093
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27016640e+09
+   1.27016640e+09   1.27016640e+09]
+src Unix Time Range =  1270119600.0 1270166400.0
+src Latitude size =  1284093
+src Latitude Range =  -89.9651184082 89.9780731201
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ..., -55.21476746 -55.18592834
+ -55.15579224]
+src Longitude Range =  -179.99987793 179.999649048
+src Longitude size =  1284093
+src Longitude =  [ 76.30045319  77.84151459  79.2586441  ...,  22.0693779   21.62265205
+  21.19416046]
+****** src data acqn/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040109
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040109
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d790>
+src Unix Time size =  1185244
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27011600e+09
+   1.27011600e+09   1.27011600e+09]
+src Unix Time Range =  1270072800.01 1270115999.99
+src Latitude size =  1185244
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ...,  56.41327667  56.38270187
+  56.35222244]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  1185244
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,   46.16048431   45.87612915
+   45.59705353]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37080
+src_time_len:  1185244
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4488943  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37080  len(dist):  37080
+1. self.nn_idx[]:  [ 915230  915230  915230 ..., 1078034 1078034 1078034]
+****** self.good_cnt:  37080
+****** midEnd.good_cnt:  37080
+****** success match rate (%):  100.0 for target granule  20882
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091085557_20883_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20883
+file start/end time: 2010-04-01 08:54:57 2010-04-01 10:35:55.200000
+target Unix Time =  [  1.27011216e+09   1.27011216e+09   1.27011216e+09 ...,   1.27011809e+09
+   1.27011809e+09   1.27011809e+09]
+target Unix Time Range =  1270112157.48 1270118090.44
+target Unix Time Size =  37080
+
+target Latitude =  [-0.00467259 -0.01434235 -0.02401211 ...,  0.01988037  0.01021061
+  0.00054085]
+target Latitude Range =  -81.861328125 81.859916687
+target Latitude Size =  37080
+
+target Longitude =  [-107.43592072 -107.43797302 -107.44002533 ..., -132.15231323 -132.15437317
+ -132.15641785]
+target Longitude Range =  -179.957641602 179.984222412
+target Longitude Size =  37080
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 08:36:57
+****** target granule end time after adjustment: 2010-04-01 10:47:55.200000
+idx1:  30418
+idx1 (after shift):  30418
+idx2:  30420
+idx2 (after shift):  30420
+st1:  2010-04-01 08:36:57  et1:  2010-04-01 10:47:55.200000 idx1:  30418  idx2:  30420
+src (start) time range: 2010-04-01 08:00:00 2010-04-01 10:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040108 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040110
+idx1:  30420 , idx2:  30420
+
+loop over src files j:  30420
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040110
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040110
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040110
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3de90>
+src Unix Time size =  1284015
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27011960e+09
+   1.27011960e+09   1.27011960e+09]
+src Unix Time Range =  1270072800.01 1270119599.98
+src Latitude size =  1284015
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ..., -84.10832214 -83.97395325
+ -83.83996582]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  1284015
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ...,   70.8901062    72.85913086
+   uired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37081
+src_time_len:  1284093
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4487202  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37081  len(dist):  37081
+1. self.nn_idx[]:  [1096326 1096326 1096326 ..., 1259129 1259129 1259129]
+****** self.good_cnt:  37081
+****** midEnd.good_cnt:  37081
+****** success match rate (%):  100.0 for target granule  20891
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091234554_20892_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20892
+file start/end time: 2010-04-01 23:44:54 2010-04-02 01:25:52.200000
+target Unix Time =  [  1.27016555e+09   1.27016555e+09   1.27016555e+09 ...,   1.27017149e+09
+   1.27017149e+09   1.27017149e+09]
+target Unix Time Range =  1270165554.44 1270171487.4
+target Unix Time Size =  37082
+
+target Latitude =  [ -1.97664811e-03  -1.16457678e-02  -2.13148873e-02 ...,   1.93838719e-02
+   9.71475244e-03   4.56320013e-05]
+target Latitude Range =  -81.8587493896 81.8585662842
+target Latitude Size =  37082
+
+target Longitude =  [ 30.07649231  30.07444191  30.07239151 ...,   5.35946894   5.35741901
+   5.35536909]
+target Longitude Range =  -179.999984741 179.994247437
+target Longitude Size =  37082
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 23:26:54
+****** target granule end time after adjustment: 2010-04-02 01:37:52.200000
+idx1:  30433
+idx1 (after shift):  30433
+idx2:  30435
+idx2 (after shift):  30435
+st1:  2010-04-01 23:26:54  et1:  2010-04-02 01:37:52.200000 idx1:  30433  idx2:  30435
+src (start) time range: 2010-04-01 23:00:00 2010-04-02 01:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040123 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040201
+idx1:  30434 , idx2:  30435
+
+loop over src files j:  30434
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040200
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040200
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040200
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d990>
+src Unix Time size =  1382826
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27017000e+09
+   1.27017000e+09   1.27017000e+09]
+src Unix Time Range =  1270119600.0 1270169999.99
+src Latitude size =  1382826
+src Latitude Range =  -89.9651184082 89.9780731201
+src Latitude =  [-83.70477295 -83.5693512  -83.4342804  ...,  86.18132019  86.33950043
+  86.46931458]
+src Longitude Range =  -179.99987793 179.999694824
+src Longitude size =  1382826
+src Longitude =  [ 76.30045319  77.84151459  79.2586441  ..., -23.85385132 -19.7348938
+ -15.55407715]
+****** src data acquired! ******
+
+loop over src files j:  30435
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040201
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040201
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040201
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3df90>
+src Unix Time size =  1481642
+src Unix Time =  [  1.27011960e+09   1.27011960e+09   1.27011960e+09 ...,   1.27017360e+09
+   1.27017360e+09   1.27017360e+09]
+src Unix Time Range =  1270119600.0 1270173598.65
+src Latitude size =  1481642
+src Latitude Range =  -89.9651184082 89.9780731201
+src Latitude =  [-83.70477295 -83.5693512  -83.74.64154816]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37080
+src_time_len:  1284015
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4486939  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37080  len(dist):  37080
+1. self.nn_idx[]:  [1078034 1078034 1078034 ..., 1240836 1240836 1240836]
+****** self.good_cnt:  37080
+****** midEnd.good_cnt:  37080
+****** success match rate (%):  100.0 for target granule  20883
+
+
+
+
+****** Reading target data from file:  /mnt/nas-0-0/users/collocation/cloudsat/CLDCLASS/R04/2010/091/2010091103450_20884_CS_2B-CLDCLASS_GRANULE_P_R04_E03.hdf
+granule num: 20884
+file start/end time: 2010-04-01 10:33:50 2010-04-01 12:14:48.200000
+target Unix Time =  [  1.27011809e+09   1.27011809e+09   1.27011809e+09 ...,   1.27012402e+09
+   1.27012402e+09   1.27012402e+09]
+target Unix Time Range =  1270118090.6 1270124023.4
+target Unix Time Size =  37081
+
+target Latitude =  [-0.00912891 -0.01879867 -0.02846843 ...,  0.02061173  0.01094181
+  0.00127189]
+target Latitude Range =  -81.8593902588 81.8586273193
+target Latitude Size =  37081
+
+target Longitude =  [-132.15846252 -132.16052246 -132.16256714 ..., -156.87327576 -156.87532043
+ -156.87738037]
+target Longitude Range =  -179.987518311 179.980361938
+target Longitude Size =  37081
+****** target data acquired! ******
+
+
+****** target granule start time after adjustment: 2010-04-01 10:15:50
+****** target granule end time after adjustment: 2010-04-01 12:26:48.200000
+idx1:  30420
+idx1 (after shift):  30420
+idx2:  30422
+idx2 (after shift):  30422
+st1:  2010-04-01 10:15:50  et1:  2010-04-01 12:26:48.200000 idx1:  30420  idx2:  30422
+src (start) time range: 2010-04-01 10:00:00 2010-04-01 12:00:00
+src file range: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040110 /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040112
+idx1:  30421 , idx2:  30422
+
+loop over src files j:  30421
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040111
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040111
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040111
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3d990>
+src Unix Time size =  1382771
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27012320e+09
+   1.27012320e+09   1.27012320e+09]
+src Unix Time Range =  1270072800.01 1270123199.98
+src Latitude size =  1382771
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 -44.92524719 -44.89698792 ...,  47.10263824  47.08052826
+  47.05701447]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  1382771
+src Longitude =  [-122.64126587 -122.37156677 -122.10868835 ..., -160.90220642 -160.11209106
+ -159.38778687]
+****** src data acquired! ******
+
+loop over src files j:  30422
+src file: /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040112
+****** Reading src data from file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040112
+dset_nemo.get_front_end - dset name =  ceres
+****** src_data:  ceres
+****** src_file:  /mnt/nas-0-0/users/collocation/ceres.aqua/2010/CER_SSF_Aqua-FM3-MODIS_Edition2D_035041.2010040112
+src_front_end:  <front_end_ceres.front_end_ceres object at 0x17d3de90>
+src Unix Time size =  1481585
+src Unix Time =  [  1.27007280e+09   1.27007280e+09   1.27007280e+09 ...,   1.27012680e+09
+   1.27012680e+09   1.27012680e+09]
+src Unix Time Range =  1270072800.01 1270126798.61
+src Latitude size =  1481585
+src Latitude Range =  -89.9348144531 89.9660644531
+src Latitude =  [-44.95323181 4342804  ..., -49.17608643 -49.17800903
+ -49.17993164]
+src Longitude Range =  -179.999923706 179.999694824
+src Longitude size =  1481642
+src Longitude =  [  76.30045319   77.84151459   79.2586441  ...,  168.34454346  167.85853577
+  167.33847046]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37082
+src_time_len:  1481642
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4465687  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37082  len(dist):  37082
+1. self.nn_idx[]:  [1259129 1259129 1259129 ..., 1421859 1421859 1421859]
+****** self.good_cnt:  37082
+****** midEnd.good_cnt:  37082
+****** success match rate (%):  100.0 for target granule  20892
+--------- exiting sdriver(), gid:  0 , pid:  1  ----------
+-44.92524719 -44.89698792 ...,  -9.49829102  -9.53460693
+  -9.57115936]
+src Longitude Range =  -179.999557495 179.999465942
+src Longitude size =  1481585
+src Longitude =  [ -1.22641266e+02  -1.22371567e+02  -1.22108688e+02 ...,   6.69399977e-01
+   3.59670699e-01   2.83275414e-02]
+****** src data acquired! ******
+dset_nemo.is_uniform_grid:  ceres False
+****** in middle end co_locate() ... 
+tgt_time_len:  37081
+src_time_len:  1481585
+********** self.target_time[] is sorted.
+********** self.src_time[] is sorted.
+*** spatial_search_range:  49.5
+****** C:  4
+cnt dist calculation:  4476200  cnt in footprint but w/o dist calc:  0
+len(self.nn_idx):  37081  len(dist):  37081
+1. self.nn_idx[]:  [1240836 1240836 1240836 ..., 1403639 1403639 1403639]
+****** self.good_cnt:  37081
+****** midEnd.good_cnt:  37081
+****** success match rate (%):  100.0 for target granule  20884
+--------- exiting sdriver(), gid:  0 , pid:  0  ----------
+process started:  1
+process done:  0
+process done:  1
+*** elapsed time:  0  days,  0  hours,  4  minutes,  4  seconds

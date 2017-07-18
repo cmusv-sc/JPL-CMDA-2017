@@ -1,0 +1,112 @@
+#!/usr/bin/octave -q
+addpath([pwd()  '/../util/']);
+
+pkg load netcdf;
+
+arg_list = argv();
+printf ("program name: %s\n", program_name());
+
+narg = length(arg_list);
+
+if narg < 13
+  error('Insufficient argument, need specifications of the variable and environmental variables for conditional sampling: model or observation variable name!'); 
+end
+
+% Specify the data source name, in format "modelCenter_modelName" for a GCM or "dataCenter_instrument" for observational data
+sourceName = lower(arg_list{1});
+varName = arg_list{2};
+
+% Specify the temporal range, start/stop time in format "yyyymm"
+startTimeStr = arg_list{3};
+startTime = struct('year', str2num(startTimeStr(1:4)), 'month', str2num(startTimeStr(5:6)));
+
+stopTimeStr = arg_list{4};
+stopTime = struct('year', str2num(stopTimeStr(1:4)), 'month', str2num(stopTimeStr(5:6)));
+
+% Regional boundaries: longitude and latitude boundaries
+lonRange = str2num(arg_list{5});
+latRange = str2num(arg_list{6});
+
+% pressure range for 3-d variable, using empty or negative values for 2-d variables
+plevRange = str2num(arg_list{7});
+
+% using month index within a year to select a season
+monthIdx = str2num(arg_list{8});
+
+% Source name for the first large scale environmental variable used for conditional sampling
+% in format "modelCenter_modelName"  for models and "dataCenter_instrumentName" for observational data
+largeScaleSourceName1 = lower(arg_list{9});
+
+% first large scale variable name as specified by the CMIP5 standard output document.
+% e.g. tos for SST, omega500 for up draft etct
+largeScaleVarName1 = arg_list{10};
+
+% Boundary values of bins for sorting the first large scale variable, expected to
+% be monotonically increasing
+largeScaleValueBinB1 = str2num(arg_list{11});
+
+disp(largeScaleValueBinB1);
+largeScaleValueBinB1 = binBoundarySpec(largeScaleValueBinB1);
+
+% Pressure level for the large scale variable, the longitude and latitude regions are asssumed to be the same as the physical
+% variable under study.
+% using empty or negative values for 2-d variables
+% Note that the longitude, latitude, and time are the same for both the large scale variable
+% and the physical quantity to be conditionally sampled.
+
+largeScalePlev1 = str2num(arg_list{12});
+
+% Source name for the second large scale environmental variable used for conditional sampling
+% in format "modelCenter_modelName"  for models and "dataCenter_instrumentName" for observational data
+largeScaleSourceName2 = lower(arg_list{13});
+
+% second large scale variable name as specified by the CMIP5 standard output document.
+% e.g. tos for SST, omega500 for up draft etct
+largeScaleVarName2 = arg_list{14};
+% Boundary values of bins for sorting the large scale variable, expected to
+% be monotonically increasing
+largeScaleValueBinB2 = str2num(arg_list{15});
+largeScaleValueBinB2 = binBoundarySpec(largeScaleValueBinB2);
+
+% Pressure level for the large scale variable, the longitude and latitude regions are asssumed to be the same as the physical
+% variable under study.
+% using empty or negative values for 2-d variables
+% Note that the longitude, latitude, and time are the same for both the large scale variable
+% and the physical quantity to be conditionally sampled.
+
+largeScalePlev2 = str2num(arg_list{16});
+
+% Output directory name, required by the program.
+output_dir = arg_list{17};
+
+% display option added to determine whether to use a linear or log scales in display
+% Here we encoded 3-bit information: z_bit, y_bit, x_bit
+% x-axis scale: x_bit = 0 (linear), 1 (log)
+% y-axis scale: y_bit = 0 (linear), 1 (log)
+% z-axis scale: z_bit = 0 (linear), 1 (log), it is for the physical quantity value, so
+% for a map, this represents the colormap scale.
+% So displayOpt = 6 = 110 (in binary) => z_bit = 1, y_bit = 1, x_bit = 0;
+% So displayOpt = 3 = 011 (in binary) => z_bit = 0, y_bit = 1, x_bit = 0;
+displayOpt = str2num(arg_list{18});
+
+% Printing the argument list
+for ii = 1:18
+printf("%d. %s\n", ii, arg_list{ii});
+end
+
+dataFileFullPath = getDataFilePaths(sourceName, varName, startTime, stopTime);
+largeScaleDataFileFullPath1 = getDataFilePaths(largeScaleSourceName1, largeScaleVarName1, startTime, stopTime);
+largeScaleDataFileFullPath2 = getDataFilePaths(largeScaleSourceName2, largeScaleVarName2, startTime, stopTime);
+
+figFile = [sourceName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_' seasonStr(monthIdx) '_sortedBy_' largeScaleSourceName1 '_' largeScaleVarName1 '_and_' largeScaleSourceName2 '_' largeScaleVarName2 '.jpeg'];
+dataFile = [sourceName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_' seasonStr(monthIdx) '_sortedBy_' largeScaleSourceName1 '_' largeScaleVarName1 '_and_' largeScaleSourceName2 '_' largeScaleVarName2 '.nc']
+
+figFilePath = [output_dir '/' figFile];
+dataFilePath = [output_dir '/' dataFile]; 
+printf("figFile: %s\n", figFile)
+printf("figFilePath: %s\n", figFilePath)
+printf("dataFile: %s\n", dataFile)
+printf("dataFilePath: %s\n", dataFilePath)
+
+status = -1;
+displayConditionalSampling2Var(dataFileFullPath, varName, startTime, stopTime, lonRange, latRange, monthIdx, plevRange,  largeScaleDataFileFullPath1, largeScaleVarName1, largeScaleValueBinB1, largeScalePlev1, largeScaleDataFileFullPath2, largeScaleVarName2, largeScaleValueBinB2, largeScalePlev2, dataFilePath, figFilePath, displayOpt);

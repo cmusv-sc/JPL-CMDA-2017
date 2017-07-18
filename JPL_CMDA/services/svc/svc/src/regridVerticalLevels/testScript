@@ -1,0 +1,2 @@
+#./octaveWrapper ncc_noresm cli
+./octaveWrapper ncc_noresm clw

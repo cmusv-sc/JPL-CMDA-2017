@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure>
+
+<data_root_dir>
+<!-- /data1/sensors/atrain/mls.aura/mls-temp -->
+/mnt/nas-0-0/users/collocation/mls.aura/mls-temp
+</data_root_dir>
+
+<list_dir>
+/home/seungwon/
+</list_dir>
+
+<output_dir>
+/data3/collocation/mls/temp
+</output_dir>
+
+<log_file>
+/home/seungwon/err.log.txt
+</log_file>
+
+<start_time>
+05/01/2008 0:00:00
+</start_time>
+
+<end_time>
+04/30/2010 23:59:59
+</end_time>
+
+<time_diff>
+825
+</time_diff>
+
+<time_search_range>
+<!-- Within this time range, co-location searches for the nearest
+     neighbor in the source data (lat, lon) grid for a given (lat, lon)
+     spot in the target data grid. -->
+900
+<!-- The largest time span in A-Train is about 15mins from Aqua to Aura. -->
+</time_search_range>
+
+<footprint_size>
+<!-- footprint of src data set -->
+425
+</footprint_size>
+
+<space_search_factor>
+<!-- inflate footprint size by this fator in search -->
+1.5
+</space_search_factor>
+
+<invalid_data>
+<!-- when no nearest neighbor found, use this value -->
+-909090
+</invalid_data>
+
+<num_cores>
+<!-- number of cores you would like to use -->
+4
+</num_cores>
+
+<proc_size>
+<!-- number of target granules a process would handle -->
+10
+</proc_size>
+
+</configure>

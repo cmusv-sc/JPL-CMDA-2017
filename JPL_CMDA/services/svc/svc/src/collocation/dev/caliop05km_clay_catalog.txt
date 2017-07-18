@@ -1,0 +1,63 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+Caliop	05Km Cloud Layer	Day_Night_Flag	N/A
+Caliop	05Km Cloud Layer	Measured_Two_Way_Transmittance_Uncertainty_532	N/A
+Caliop	05Km Cloud Layer	Volume_Depolarization_Ratio_Statistics	N/A
+Caliop	05Km Cloud Layer	Initial_532_Lidar_Ratio	sr
+Caliop	05Km Cloud Layer	Final_532_Lidar_Ratio	sr
+Caliop	05Km Cloud Layer	CAD_Score	N/A
+Caliop	05Km Cloud Layer	Layer_IAB_QA_Factor	N/
+Caliop	05Km Cloud Layer	Layer_Base_Altitude	km
+Caliop	05Km Cloud Layer	Surface_Elevation_Detection_Frequency	N/A
+Caliop	05Km Cloud Layer	IGBP_Surface_Type	N/A
+Caliop	05Km Cloud Layer	FeatureFinderQC	N/A
+Caliop	05Km Cloud Layer	Integrated_Attenuated_Total_Color_Ratio	N/A
+Caliop	05Km Cloud Layer	Ice_Water_Path	N/A
+Caliop	05Km Cloud Layer	Integrated_Attenuated_Backscatter_Uncertainty_1064	1/sr
+Caliop	05Km Cloud Layer	Column_Integrated_Attenuated_Backscatter_532	1/s
+Caliop	05Km Cloud Layer	Perpendicular_Column_Reflectance_RMS_Variation_532	N/A
+Caliop	05Km Cloud Layer	Parallel_Column_Reflectance_RMS_Variation_532	N/A
+Caliop	05Km Cloud Layer	Attenuated_Backscatter_Statistics_532	1/km 1/sr
+Caliop	05Km Cloud Layer	Integrated_Attenuated_Backscatter_532	1/sr
+Caliop	05Km Cloud Layer	Off_Nadir_Angle	deg
+Caliop	05Km Cloud Layer	Particulate_Depolarization_Ratio_Statistics	N/A
+Caliop	05Km Cloud Layer	Column_IAB_Cumulative_Probability	N/A
+Caliop	05Km Cloud Layer	NSIDC_Surface_Type	N/A
+Caliop	05Km Cloud Layer	Solar_Zenith_Angle	deg
+Caliop	05Km Cloud Layer	Integrated_Volume_Depolarization_Ratio_Uncertainty	N/A
+Caliop	05Km Cloud Layer	Number_Layers_Found	N/A
+Caliop	05Km Cloud Layer	Overlying_Integrated_Attenuated_Backscatter_532	1/
+Caliop	05Km Cloud Layer	Perpendicular_Column_Reflectance_Uncertainty_532	N/A
+Caliop	05Km Cloud Layer	Feature_Optical_Depth_Uncertainty_532	N/A
+Caliop	05Km Cloud Layer	Integrated_Volume_Depolarization_Ratio	N/A
+Caliop	05Km Cloud Layer	Integrated_Attenuated_Backscatter_Uncertainty_532	1/sr
+Caliop	05Km Cloud Layer	Calibration_Altitude_532	km
+Caliop	05Km Cloud Layer	Horizontal_Averaging	km
+Caliop	05Km Cloud Layer	Tropopause_Height	km
+Caliop	05Km Cloud Layer	Solar_Azimuth_Angle	deg
+Caliop	05Km Cloud Layer	Midlayer_Temperature	degrees C
+Caliop	05Km Cloud Layer	Perpendicular_Column_Reflectance_532	N/A
+Caliop	05Km Cloud Layer	Integrated_Attenuated_Backscatter_1064	1/sr
+Caliop	05Km Cloud Layer	Layer_Top_Altitude	km
+Caliop	05Km Cloud Layer	Normalization_Constant_Uncertainty_532	N/A
+Caliop	05Km Cloud Layer	Cirrus_Shape_Parameter_Invalid_Points	N/A
+Caliop	05Km Cloud Layer	Parallel_Column_Reflectance_Uncertainty_532	N/A
+Caliop	05Km Cloud Layer	Attenuated_Backscatter_Statistics_1064	1/km 1/sr
+Caliop	05Km Cloud Layer	DEM_Surface_Elevation	km
+Caliop	05Km Cloud Layer	ExtinctionQC_532	N/A
+Caliop	05Km Cloud Layer	Tropopause_Temperature	degrees C
+Caliop	05Km Cloud Layer	Lidar_Surface_Elevation	km
+Caliop	05Km Cloud Layer	Scattering_Angle	deg
+Caliop	05Km Cloud Layer	Attenuated_Total_Color_Ratio_Statistics	N/A
+Caliop	05Km Cloud Layer	Ice_Water_Path_Uncertainty	N/A
+Caliop	05Km Cloud Layer	Cirrus_Shape_Parameter_Uncertainty	N/A
+Caliop	05Km Cloud Layer	Cirrus_Shape_Parameter	N/A
+Caliop	05Km Cloud Layer	Integrated_Particulate_Depolarization_Ratio_Uncertainty	N/A
+Caliop	05Km Cloud Layer	Measured_Two_Way_Transmittance_532	N/A
+Caliop	05Km Cloud Layer	Two_Way_Transmittance_Measurement_Region	km
+Caliop	05Km Cloud Layer	Opacity_Flag	N/A
+Caliop	05Km Cloud Layer	Spacecraft_Position	kilometers
+Caliop	05Km Cloud Layer	Feature_Optical_Depth_532	N/A
+Caliop	05Km Cloud Layer	Layer_Effective_532_Multiple_Scattering_Factor	N/A
+Caliop	05Km Cloud Layer	Feature_Classification_Flags	N/A
+Caliop	05Km Cloud Layer	Integrated_Particulate_Depolarization_Ratio	N/A
+Caliop	05Km Cloud Layer	Lidar_Ratio_532_Selection_Method	N/A

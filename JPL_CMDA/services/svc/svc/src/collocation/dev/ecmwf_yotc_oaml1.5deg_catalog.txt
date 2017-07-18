@@ -1,0 +1,12 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+ECMWF	YOTC Operational Analysis Model Levels	Cloud liquid water content	kg kg**-1
+ECMWF	YOTC Operational Analysis Model Levels	Geopotential	m**2 s**-2
+ECMWF	YOTC Operational Analysis Model Levels	Vertical velocity	Pa s**-1
+ECMWF	YOTC Operational Analysis Model Levels	Divergence	s**-1
+ECMWF	YOTC Operational Analysis Model Levels	Logarithm of surface pressure	-
+ECMWF	YOTC Operational Analysis Model Levels	Ozone mass mixing ratio	kg kg**-1
+ECMWF	YOTC Operational Analysis Model Levels	Vorticity (relative)	s**-1
+ECMWF	YOTC Operational Analysis Model Levels	Cloud ice water content	kg kg**-1
+ECMWF	YOTC Operational Analysis Model Levels	Temperature	K
+ECMWF	YOTC Operational Analysis Model Levels	Specific humidity	kg kg**-1
+ECMWF	YOTC Operational Analysis Model Levels	Cloud cover	(0 - 1)

@@ -1,0 +1,78 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'Obs-GPCP output prepared for Obs4MIPs NASA-GSFC observations',
+   D_T0TIME      = '01-Jan-1900 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/gpcp/./pr_GPCP-SG_L3_v2.2_197901-197912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 28869.5000,
+   S_END         = 29203.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/gpcp/./pr_GPCP-SG_L3_v2.2_198001-198912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 29234.5000,
+   S_END         = 32856.5000,
+   S_DELTA       =    30.4370,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/gpcp/./pr_GPCP-SG_L3_v2.2_199001-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 32887.5000,
+   S_END         = 36508.5000,
+   S_DELTA       =    30.4286,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/gpcp/./pr_GPCP-SG_L3_v2.2_200001-200912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 36539.5000,
+   S_END         = 40161.5000,
+   S_DELTA       =    30.4370,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/gpcp/./pr_GPCP-SG_L3_v2.2_201001-201106.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 40192.5000,
+   S_END         = 40708.0000,
+   S_DELTA       =    30.3235,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

@@ -1,0 +1,58 @@
+#liveFilter {
+    width: 800px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    background: #fff;
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+}
+#liveFilter .liveFilterContainer {
+    border: solid 1px #ccc;
+    padding: 6px;
+    background: #f5f5f5;
+}
+#liveFilter .liveFilterContainer .liveFilterInput {
+    border: solid 1px #ccc;
+    padding: 4px 30px 4px 4px;
+    font-size: 16px;
+    color: #666;
+}
+#liveFilter .liveFilterContainer .liveFilterInput.default {
+    color: #ccc;
+    font-style: italic;
+}
+#liveFilter .liveFilterContainer .clearField {
+    background: #80bce8;
+    width: 20px;
+    padding: 0 6px 3px 6px;
+    color: #fff;
+    text-decoration: none;
+    line-height: 0;
+    font-weight: bold;
+}
+#liveFilter .liveFilterList {
+    width: 600px;
+    border: solid 1px #ccc;
+    border-top: 0;
+}
+#liveFilter .liveFilterList tr th:first-child, #liveFilter .liveFilterList tr td:first-child {
+    padding-left: 5px;
+}
+#liveFilter .liveFilterList tr th {
+    text-align: left;
+    padding: 3px 0;
+}
+#liveFilter .liveFilterList tr td {
+    border-top: solid 1px #eee;
+    padding: 3px 0;
+    color: #333;
+}
+#liveFilter .clearField {
+    display: none;
+}
+#liveFilter .noResults {
+    display: none;
+    padding: 10px;
+    color: #fff;
+    background: #982929;
+    margin: 2px;
+}

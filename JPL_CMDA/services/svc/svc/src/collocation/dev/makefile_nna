@@ -1,0 +1,6 @@
+c_nna.so: c_nna.o
+	ld -shared -O3 c_nna.o -o _c_nna.so
+c_nna.o: c_nna.c
+	gcc -c -fPIC -O3 c_nna.c
+clean:
+	rm -f c_nna.o _c_nna.so

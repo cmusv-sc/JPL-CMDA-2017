@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure>
+
+<data_root_dir>
+<!-- /data1/sensors/atrain/ceres.aqua -->
+/mnt/nas-0-0/users/collocation/ceres.aqua
+</data_root_dir>
+
+<list_dir>
+/home/seungwon/
+</list_dir>
+
+<output_dir>
+<!-- /mnt/nas-0-0/users/leipan/tmp/ceres -->
+/data3/collocation/ceres.aqua
+</output_dir>
+
+<log_file>
+/home/seungwon/err.log.txt
+</log_file>
+
+<start_time>
+6/15/2006 0:00:00
+<!-- 08/01/2007 1:00:00AM-->
+<!-- 01/15/2008 1:00:00AM-->
+</start_time>
+
+<end_time>
+4/30/2008 23:59:59
+<!-- 6/30/2008 23:59:59 -->
+<!-- 08/07/2007 11:20:00PM-->
+<!-- 01/21/2008 11:50:00PM-->
+</end_time>
+
+<time_diff>
+<!-- CERES is on board Aqua, which is 30s to 2min ahead of CloudSat.
+     Here we set the time difference to be 3min. -->
+180
+</time_diff>
+
+<time_search_range>
+<!-- Within this time range, co-location searches for the nearest
+     neighbor in the source data (lat, lon) grid for a given (lat, lon)
+     spot in the target data grid. -->
+900
+<!-- The largest time span in A-Train is about 15mins from Aqua to Arua. -->
+</time_search_range>
+
+<footprint_size>
+<!-- footprint of src data set -->
+30
+</footprint_size>
+
+<space_search_factor>
+<!-- inflate footprint size by this fator in search -->
+1.5
+</space_search_factor>
+
+<invalid_data>
+<!-- when no nearest neighbor found, use this value -->
+-909090
+</invalid_data>
+
+<num_cores>
+<!-- number of cores you would like to use -->
+8
+</num_cores>
+
+<proc_size>
+<!-- number of target granules a process would handle -->
+10
+</proc_size>
+
+<cell_search_limit>
+<!-- When qry_range is large compared to the grid overlaid
+     on target points, only search in C by C cells around
+     each query point -->
+4
+</cell_search_limit>
+
+
+</configure>

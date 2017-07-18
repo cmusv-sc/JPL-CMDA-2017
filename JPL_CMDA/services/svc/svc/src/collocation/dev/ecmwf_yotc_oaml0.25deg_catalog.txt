@@ -1,0 +1,5 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+ECMWF	0.25 Degree YOTC Operational Analysis Model Levels	Cloud liquid water content	kg kg**-1
+ECMWF	0.25 Degree YOTC Operational Analysis Model Levels	Vertical velocity	Pa s**-1
+ECMWF	0.25 Degree YOTC Operational Analysis Model Levels	Divergence	s**-1
+ECMWF	0.25 Degree YOTC Operational Analysis Model Levels	Ozone mass mixing ratio	kg kg**-1

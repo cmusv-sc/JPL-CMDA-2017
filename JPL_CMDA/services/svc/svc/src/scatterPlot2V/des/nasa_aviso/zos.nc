@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/nasa/aviso/./zos_AVISO_L4_199210-201012.nc

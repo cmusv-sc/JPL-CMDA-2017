@@ -1,0 +1,5 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+Caliop	Vertical Feature Mask	Day_Night_Flag	N/A
+Caliop	Vertical Feature Mask	Land_Water_Mask	N/A
+Caliop	Vertical Feature Mask	Spacecraft_Position	kilometers
+Caliop	Vertical Feature Mask	Feature_Classification_Flags	N/A

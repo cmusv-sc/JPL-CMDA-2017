@@ -1,0 +1,80 @@
+body {
+  padding-top: 50px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Pingfang SC', 'Hiragino Sans GB',
+            'Microsoft Yahei', 微软雅黑, sans-serif;
+  letter-spacing: -0.2px;
+}
+.navbar {
+  margin-bottom: 0;
+}
+.navbar-brand {
+  color: #449d44;
+}
+
+
+.container .main-content h2 {
+  padding-left: 10px;
+  /*//border-left: 5px solid #F50057;*/
+  border-left: 5px solid #00BFA5;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+.container .main-content h3 {
+  /*//color: #F50057;*/
+  color: #00BFA5;
+  font-weight: normal;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+.container .main-content a {
+  text-decoration: none;
+  color: #1e6bb8;
+}
+.container .main-content a:hover {
+  text-decoration: underline;
+}
+.container .main-content p {
+  font-size: 1.9rem;
+  font-weight: 300;
+  color: #333;
+  margin-bottom: 20px;
+}
+.container .main-content ul li {
+  font-size: 1.9rem;
+  font-weight: 300;
+  color: #333;
+  margin-bottom: 0;
+}
+.container .main-content .thigh {
+  font-weight: 600;
+}
+
+footer {
+  border-top: 1px solid #eee;
+  padding: 30px 0;
+  margin-top: 30px;
+  text-align: left;
+}
+
+/* Responsive */
+/* Nav */
+
+@media screen and (min-width: 426px) and (max-width: 800px) {
+  /* iPad */
+  .container .main-content h2 {
+    margin-top: 70px;
+  }
+}
+@media screen and (max-width:425px) {
+  /* Phone */
+  .nav>li>a {
+    padding: 10px 15px;
+  }
+  iframe {
+    width: 100%;
+    height: 250px;
+  }
+  .navbar-brand {
+    letter-spacing: -0.5px;
+  }
+}

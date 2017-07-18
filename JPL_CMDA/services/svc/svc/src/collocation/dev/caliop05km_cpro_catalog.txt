@@ -1,0 +1,23 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+Caliop	05Km Cloud Profile	Cloud_Layer_Fraction	N/A
+Caliop	05Km Cloud Profile	Particulate_Depolarization_Ratio_Profile_532	N/A
+Caliop	05Km Cloud Profile	Temperature	degrees C
+Caliop	05Km Cloud Profile	Profile_QA_Flag	N/A
+Caliop	05Km Cloud Profile	Surface_Elevation_Statistics	km
+Caliop	05Km Cloud Profile	Cloud_Multiple_Scattering_Profile_532	N/A
+Caliop	05Km Cloud Profile	Perpendicular_Backscatter_Coefficient_532	sr^-1km^-1
+Caliop	05Km Cloud Profile	Cloud_Multiple_Scattering_Uncertainty_532	N/A
+Caliop	05Km Cloud Profile	Particulate_Depolarization_Ratio_Uncertainty_532	N/A
+Caliop	05Km Cloud Profile	Total_Backscatter_Coefficient_532	sr^-1km^-1
+Caliop	05Km Cloud Profile	Total_Backscatter_Coefficient_Uncertainty_532	sr^-1km^-1
+Caliop	05Km Cloud Profile	Relative_Humidity	per
+Caliop	05Km Cloud Profile	Ice_Water_Content_Profile_Uncertainty	N/A
+Caliop	05Km Cloud Profile	Samples_Averaged	N/A
+Caliop	05Km Cloud Profile	Perpendicular_Backscatter_Coefficient_Uncertainty_532	sr^-1km^-1
+Caliop	05Km Cloud Profile	Ice_Water_Content_Profile	N/A
+Caliop	05Km Cloud Profile	Pressure	hPA
+Caliop	05Km Cloud Profile	Molecular_Number_Density	m^-3
+Caliop	05Km Cloud Profile	Tropopause_Temperature	degrees C
+Caliop	05Km Cloud Profile	Extinction_Coefficient_Uncertainty_532	km^-1
+Caliop	05Km Cloud Profile	Extinction_Coefficient_532	km^-1
+Caliop	05Km Cloud Profile	Tropopause_Height	km

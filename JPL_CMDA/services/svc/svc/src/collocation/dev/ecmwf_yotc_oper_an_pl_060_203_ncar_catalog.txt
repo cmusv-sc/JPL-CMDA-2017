@@ -1,0 +1,4 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+ECMWF	YOTC Operational Analysis Pressure Level, Parameters 060 to 203 (NCAR)	Specific humidity	kg kg**-1
+ECMWF	YOTC Operational Analysis Pressure Level, Parameters 060 to 203 (NCAR)	Ozone mass mixing ratio	kg kg**-1
+ECMWF	YOTC Operational Analysis Pressure Level, Parameters 060 to 203 (NCAR)	Potential vorticity	K m**2 kg**-1 s**-1

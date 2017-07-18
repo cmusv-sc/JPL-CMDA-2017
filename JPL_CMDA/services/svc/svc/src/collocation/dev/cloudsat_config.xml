@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure>
+
+<dataset_name>
+cloudsat
+</dataset_name>
+
+<data_root_dir>
+/export/data1/data/mls/Cloud/cloudsat/2b-cwc-rvod/r04/
+</data_root_dir>
+
+<list_dir>
+/home/swlee/collocation/input
+</list_dir>
+
+<output_dir>
+/home/swlee/collocation/output
+</output_dir>
+
+<log_file>
+/home/swlee/collocation/run/log.txt
+</log_file>
+
+<start_time>
+01/01/2010 0:00:00
+</start_time>
+
+<end_time>
+12/31/2010 23:59:59
+</end_time>
+
+<time_search_range>
+<!-- Within this time range, co-location searches for the nearest
+     neighbor in the source data (lat, lon) grid for a given (lat, lon)
+     spot in the target data grid. -->
+900
+<!-- The largest time span in A-Train is about 15mins from Aqua to Arua. -->
+</time_search_range>
+
+<footprint_size>
+<!-- footprint size of the data in km -->
+3
+</footprint_size>
+
+<space_search_factor>
+<!-- inflate footprint size by this fator in search -->
+1.5
+</space_search_factor>
+
+<invalid_data>
+<!-- when no nearest neighbor found within footprint, use this value -->
+-909090
+</invalid_data>
+
+<num_cores>
+<!-- number of cores you would like to use -->
+1
+</num_cores>
+
+<proc_size>
+<!-- number of target granules a process would handle -->
+10
+</proc_size>
+
+<cell_search_limit>
+<!-- When qry_range is large compared to the grid overlaid
+     on target points, only search in C by C cells around
+     each query point -->
+4
+</cell_search_limit>
+
+</configure>

@@ -1,0 +1,58 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'MIROC5 model output prepared for CMIP5 historical',
+   D_T0TIME      = '01-Jan-1850 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/miroc/miroc5/./hur_Amon_MIROC5_historical_r1i1p1_192001-192912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 25565.5000,
+   S_END         = 29184.5000,
+   S_DELTA       =    30.4118,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/miroc/miroc5/./hur_Amon_MIROC5_historical_r1i1p1_199001-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 51115.5000,
+   S_END         = 54734.5000,
+   S_DELTA       =    30.4118,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/miroc/miroc5/./hur_Amon_MIROC5_historical_r1i1p1_200001-200912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 54765.5000,
+   S_END         = 58384.5000,
+   S_DELTA       =    30.4118,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

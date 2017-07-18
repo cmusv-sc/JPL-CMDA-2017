@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/ncar/cam5/regridded/zos_Omon_CESM1-CAM5_historical_r1i1p1_regridded_199501-200512.nc

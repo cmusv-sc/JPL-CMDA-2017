@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/./ts_Amon_GISS-E2-R_historical_r1i1p1_199501-200512.nc

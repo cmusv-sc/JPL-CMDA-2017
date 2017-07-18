@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/ncar/cam5-1-fv2/./clt_Amon_CESM1-CAM5-1-FV2_historical_r1i1p1_185001-200512.nc

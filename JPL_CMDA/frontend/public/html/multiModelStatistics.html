@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+<!-- 
+// onload__
+// ready__
+-->
+
+<!-- storage__ -->
+<!-- packages__ -->
+<!-- body__ -->
+<!-- pick_var -->
+<!-- pick_model -->
+<!-- lon__ -->
+<!-- lat__ -->
+<!-- vertical__ -->
+<!-- time__ -->
+<!-- purpose__ -->
+<!-- action_button -->
+<!-- browserUrl_html -->
+<!-- image__ -->
+  
+<!-- 
+// vue__
+  // other_data
+  // watch__
+  // methods__
+    // test3__
+    // timeSELim__
+  // computed__
+    // other_computed
+
+// inputs__
+// mapping__
+-->
+
+<!-- storage__ -->
+<!--
+-->
+
+  <!-- for Bootstrap -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- packages__ -->
+<link rel="shortcut icon" type="image/x-icon" href="cmda1.ico">
+  <script src="js2/jquery.min.js"></script>
+  <link rel="stylesheet" href="js2/bootstrap.min.css">
+  <script src="js2/bootstrap.min.js"></script>
+  <script src='js2/vue.js'></script>
+  <script src="js2/lodash.min.js"></script>
+  <script src="js2/axios.js"></script>
+  <script src='js2/js.cookie-2.1.3.min.js'></script>
+
+  <!-- cmac related -->
+  <link rel="stylesheet" href="common.css">
+  <script src='js2/dataList2.js'></script>
+  <script src='js2/varList.js'></script>
+  <script src='js2/common-v5.js'></script>
+
+  <title>Multiple Model Statistics</title>
+
+  <script>
+
+// onload__
+window.onload = function() {
+processQS5();
+}  // onload = function()
+
+// ready__
+$(document).ready(function(){
+
+  $("#action1").click(function(event) {
+ajaxCall("multiModelStatistics");
+});
+
+});  // ready(function())
+
+  </script>
+
+</head>
+
+<!-- body__ -->
+<body>
+<div class="container-fluid">
+<div id='vueId'>
+<div class="row center1">
+<div class="col-sm-8 col-sm-offset-2 col-xs-12 color-head">
+<h3>Multiple Model Statistics</h3>
+Multiple Model Statistics
+</div> <!-- col-sm -->
+<div class="col-sm-offset-2">
+</div> <!-- col-sm -->
+</div> <!-- row center1 -->
+
+<!-- pick_var -->
+<div class="row">
+ <div class="col-sm-4 right1">
+ Pick a Variable:
+ </div>
+  <div class="col-sm-8 left1">
+   <select v-model="var1" v-on:change="selectModelAll">
+     <option v-for="(value, key) in varList" v-bind:value="key">
+       {{ value[0] }}
+     </option>
+   </select>
+   name: <input type="text" v-bind:value="var1" readonly v-bind:size="var1.length">
+   dim: <input type="text" v-bind:value="varList[var1][2]" readonly size=1>
+   units: <input type="text" v-bind:value="varList[var1][3]" readonly v-bind:size="varList[var1][3].length">
+   
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<!-- pick_model -->
+<div class="row">
+ <div class="col-sm-4 right1">
+  Select Models:
+ </div>
+ <div class="col-sm-8 left1">
+  <template v-for="ii in modelWanted2.length" >
+   <div class="row" v-bind:style="{backgroundColor: twoColor[(ii-1)%2]}">
+    <div class="col-sm-6 left1">
+     <label><input type="checkbox" v-model="model1" v-bind:value="modelWanted2[ii-1]" >{{modelWanted2[ii-1]}}</label>
+    </div> <!-- col -->
+    <div class="col-sm-6 left1">
+     {{timeDashV( dataList[modelWanted2[ii-1]][2][var1][0] )}} to {{timeDashV( dataList[modelWanted2[ii-1]][2][var1][1] )}}
+    </div> <!-- col -->
+   </div> <!-- row -->
+  </template>
+  <div class="row">
+   <div class="col-sm-2 left1">
+    <button class="btn btn-default" v-on:click="selectModelAll()">Select All</button>
+    <button class="btn btn-default" v-on:click="clearModelAll()">Clear All</button>
+   </div> <!-- col -->
+   <div class="col-sm-10 left1">
+    Number of selected:<input type="text" v-bind:value="model1.length" readonly size=3> 
+   </div> <!-- col -->
+  </div> <!-- row -->
+ </div> <!-- col -->
+</div> <!-- row -->
+
+<div class="color3">
+<div class="row center1 subtitle1" >
+Data Subsetting
+</div> <!-- row -->
+
+<!-- lon__ -->
+<div class="row">
+  <div class="col-sm-4 right1">
+    Longitude (deg):
+  </div>
+
+  <div class="col-sm-4 left1">
+    <input v-model="lonS" size=7>
+    <input v-model="lonE" size=7>
+    <input v-model="dLon" size=2>
+  </div>
+</div> <!-- row -->
+
+<!-- lat__ -->
+<div class="row">
+  <div class="col-sm-4 right1">
+    Latitude (deg):
+  </div>
+
+  <div class="col-sm-4 left1">
+    <input v-model="latS" size=7>
+    <input v-model="latE" size=7>
+    <input v-model="dLat" size=2>
+  </div>
+</div> <!-- row -->
+
+<!-- vertical__ -->
+<div class="row" v-show="is3d==1">
+  <div class="col-sm-4 right1">
+    {{isOcean ? 'Ocean Pressure (dbar):' : 'Atmospheric Pressure (hPa):' }}
+  </div>
+  <div class="col-sm-8 left1">
+    <input v-model="pres1" size=12>
+    example: 200,500,800
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+<!-- time__ -->
+<div class="row">
+  <div class="col-sm-4 right1">
+    Time (year-month):
+  </div>
+
+  <div class="col-sm-8 left1">
+    <input v-model="timeS" size=7>
+    <input v-model="timeE" size=7>
+    <button class="btn btn-default" v-bind:disabled="fullTimeBtnDisabled" v-on:click="timeFullRangeV()">Use Full Range</button> 
+    {{timeLimDisp}} 
+
+  </div>
+</div> <!-- row -->
+
+</div> <!-- color3 -->
+
+<!-- purpose__ -->
+<div class="color2">
+<div class="row">
+  <div class="col-sm-4 right1">
+    Analysis Purpose:
+  </div> <!-- col -->
+  <div class="col-sm-8 left1">
+    <textarea v-model="purpose" value="" spellcheck=false rows="2" cols="50"> </textarea>
+  </div> <!-- col -->
+</div> <!-- row -->
+</div> <!-- color2 -->
+
+<!-- action_button -->
+<div class="color4">
+<div class="row">
+  <div class="col-sm-6 center1">
+    <button id="action1" v-bind:disabled="action1Disabled" class="btn btn-primary" >Generate Data</button>
+  </div>
+  <div class="col-sm-6 center1">
+    <button id="downloadData" v-bind:disabled="downloadDataDisabled" class="btn btn-primary">Download Data</button>
+  </div>
+</div> <!-- row -->
+</div> <!-- color4 -->
+
+
+<!-- browserUrl_html -->
+<div class="row">
+  <div class="col-sm-12 center1">
+    <span class="subtitle1">Browser URL:</span>  
+    <button v-on:click="makeBrowserUrlV()" class="btn btn-default">Refresh and copy to clipboard</button>  
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 center1">
+    <textarea id="browserUrl" v-model="browserUrl" spellcheck=false rows=5></textarea>
+  </div>
+</div> <!-- row -->
+  			
+<!-- image__ -->
+<div class="row" id="Image0" center1>
+  <div class="col-sm-12 center1">
+    <div v-html="imageHtml" class="borderedText"></div>
+  </div>
+</div> <!-- row -->
+ 
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Data File URL:
+  </div>
+</div>
+<div class="row" >
+  <div class="col-sm-12 center1">
+    <textarea readonly cols="150" rows="2">{{data_url}}</textarea>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Service Response Text:
+  </div>
+</div>
+<div class="row" center1>
+  <div class="col-sm-12 center1" v-html="responseHtml" style="border: 1px;">
+  </div>
+</div> <!-- row -->
+
+
+</div> <!-- vueId-->
+</div> <!-- container -->
+
+<script>
+
+// vue__
+var vueApp = new Vue({
+  el: "#vueId",
+  data: {
+    // other_data
+    test1: 'This is a test',
+    varList: varList,
+    dataList: dataList,
+    timeSLim: '',
+    timeELim: '',
+    timeLimDisp: '',
+    fullTimeBtnDisabled: true,
+    browserUrl: '',
+    browserUrlFake: '',
+    twoColor: ['#E8E8E8', 'white'],
+    oneColor: 'red',
+    action1Disabled: false,
+    downloadDataDisabled: false,
+
+    responseHtml: '',
+    data_url: '',
+    imageHtml: '',
+
+    var1: 'cct',
+    model1: [],
+    pres1: '200,500,800',
+    timeS: '2000-01',
+    timeE: '2000-12',
+    lonS: '0',
+    lonE: '360',
+    dLon: '1.0',
+    latS: '-90',
+    latE: '90',
+    dLat: '1.0',
+    purpose: '',
+  },
+
+  // watch__
+  watch: {
+    model1: function() {
+      this.timeSELim();
+    },
+  },
+
+  // methods__
+  methods: {
+
+    // test3__
+    test3: function() {
+      test3a();
+    },
+
+
+    timeFullRangeV: function() {
+      timeFullRange();
+    },
+
+    timeDashV: function(t1){
+      return timeDash(t1);
+    },
+
+    clearModelAll: function() { 
+      this.model1 = [];
+    },
+    selectModelAll: function() {
+      this.model1 = this.modelWanted2.slice();
+    },
+
+    makeBrowserUrlV: function() {
+      makeBrowserUrl();
+    },
+
+    // timeSELim__
+    timeSELim: _.debounce(
+      function() { 
+        var nM = this.model1.length;
+        if (nM==0) {
+          this.timeSLim = -9;
+          this.timeELim = -10;
+
+        } else {
+          var var_string1, model_string1;
+          var timeS0 = new Array(nM);
+          var timeE0 = new Array(nM);
+          for (var ii=0; ii<nM; ii++) {
+            var_string1 = this.var1
+            model_string1 = this.model1[ii];
+
+            timeS0[ii] = Number(dataList[model_string1][2][var_string1][0]);
+            timeE0[ii] = Number(dataList[model_string1][2][var_string1][1]);
+          }
+          this.timeSLim = Math.max.apply(null, timeS0).toString();
+          this.timeELim = Math.min.apply(null, timeE0).toString();
+        }
+
+        if (this.timeSLim==-9) {
+          this.fullTimeBtnDisabled = true;
+          this.timeLimDisp = 'No Selected Model.';
+        } else if (this.timeSLim > this.timeELim) {
+          this.fullTimeBtnDisabled = true;
+          this.timeLimDisp = 'No overlaping period.';
+        } else {
+          this.fullTimeBtnDisabled = false;
+          this.timeLimDisp = this.timeDashV(this.timeSLim) + ' to ' + this.timeDashV(this.timeELim);
+        }
+      },
+      500
+    ),
+  },
+
+  // computed__
+  computed: {
+
+    // other_computed
+    is3d: function() {
+      return this.varList[this.var1][2]=='3'? 1:0;
+    },
+
+    isOcean: function() {
+      return this.varList[this.var1][1]=='ocean';
+    },
+
+    modelList: function () {
+      return Object.keys(this.dataList).filter(function (kk) {
+        return kk.indexOf('group')==-1
+      })
+    },
+
+    // not working
+    modelWanted: function () {
+      var that=this; // need this to work.
+      return this.modelList.filter(function (kk) {
+        return that.dataList[kk][1].indexOf(this.var1)>-1;
+      })
+    },
+    modelWanted2: function () {
+      var mm=[];
+      for (var ii=0; ii<this.modelList.length; ii++) {
+        var kk = this.modelList[ii];
+        if (this.dataList[kk][1].indexOf(this.var1)>-1) mm.push(kk);
+      }
+      return mm;
+    },
+  },
+});
+
+// inputs__
+// format: RestFulName: [htmlId, functionName, additionalParams]
+var inputs = {
+'var1': ['var1', 'urlDirect'],
+'model1': ['model1', 'urlMultiModel'],
+'lonS': ['lonS', 'urlDirect'],
+'lonE': ['lonE', 'urlDirect'],
+'dLon': ['dLon', 'urlDirect'],
+'latS': ['latS', 'urlDirect'],
+'latE': ['latE', 'urlDirect'],
+'dLat': ['dLat', 'urlDirect'],
+'pres1': ['pres1', 'urlPres'],
+'timeS': ['timeS', 'urlYearMonth'],
+'timeE': ['timeE', 'urlYearMonth'],
+'purpose': ['purpose', 'url2escape'],
+};
+
+// mapping__
+var mapping = {};
+var key99;
+var arg99;
+for (var k in inputs) {
+  key99 = k;
+  arg99 = inputs[k];
+  mapping[k] = eval('new ' + inputs[k][1] + '()');
+};
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure>
+
+<data_root_dir>
+/export/data1/data/mls/AIRS/airs/AIRX3STD/v6/
+</data_root_dir>
+
+<list_dir>
+/home/swlee/collocation/input
+</list_dir>
+
+<output_dir>
+/home/swlee/collocation/output
+</output_dir>
+
+<log_file>
+/home/swlee/collocation/
+</log_file>
+
+<start_time>
+5/01/2009 0:00:01
+<!-- 2/1/2007 0:00:01AM -->
+<!-- 2/1/2008 0:00:01AM -->
+<!-- 5/1/2007 0:00:01AM -->
+<!-- 1/15/2008 1:00:00AM-->
+</start_time>
+
+<end_time>
+5/01/2009 23:59:59
+<!-- 2/28/2007 11:59:59PM -->
+<!-- 2/29/2008 11:59:59PM -->
+<!-- 5/31/2007 11:59:59PM -->
+<!-- 1/15/2008 11:00:00PM-->
+</end_time>
+
+<time_diff>
+<!-- AIRS is on board Aqua, which is 30s to 2min ahead of CloudSat.
+     Here we set the time difference to be 3min. -->
+180
+</time_diff>
+
+<time_search_range>
+<!-- Within this time range, co-location searches for the nearest
+     neighbor in the source data (lat, lon) grid for a given (lat, lon)
+     spot in the target data grid. -->
+900
+<!-- The largest time span in A-Train is about 15mins from Aqua to Arua. -->
+</time_search_range>
+
+<footprint_size>
+<!-- footprint size of the data in km -->
+72
+</footprint_size>
+
+<space_search_factor>
+<!-- inflate footprint size by this fator in search -->
+1.5
+</space_search_factor>
+
+<invalid_data>
+<!-- when no nearest neighbor found within footprint, use this value -->
+-909090
+</invalid_data>
+
+<missing_value>
+<!-- when source data has no value at the location, use this value -->
+-9999
+</missing_value>
+
+<num_cores>
+<!-- number of cores you would like to use -->
+1
+</num_cores>
+
+<proc_size>
+<!-- number of target granules a process would handle -->
+4
+</proc_size>
+
+</configure>

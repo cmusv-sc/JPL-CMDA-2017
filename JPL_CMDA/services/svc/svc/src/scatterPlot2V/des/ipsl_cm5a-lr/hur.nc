@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/ipsl/cm5a-lr/./hur_Amon_IPSL-CM5A-LR_historical_r1i1p1_195001-200512.nc

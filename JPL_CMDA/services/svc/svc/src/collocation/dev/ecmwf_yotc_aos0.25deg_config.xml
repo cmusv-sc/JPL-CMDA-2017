@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configure>
+
+<data_root_dir>
+/mnt/nas-0-0/users/collocation/ecmwf/yotc-aos-0.25deg
+</data_root_dir>
+
+<list_dir>
+/home/seungwon/
+</list_dir>
+
+<output_dir>
+<!-- /mnt/nas-0-0/users/leipan/tmp/yotc_aos_0.25deg -->
+/data3/collocation/yotc_oper_an_sfc
+</output_dir>
+
+<log_file>
+/home/seungwon/err.log.txt
+</log_file>
+
+<start_time>
+12/31/2008 0:00:00
+</start_time>
+
+<end_time>
+12/31/2008 23:59:59
+</end_time>
+
+<time_diff>
+0
+</time_diff>
+
+<time_search_range>
+<!-- Within this time range, co-location searches for the nearest
+     neighbor in the source data (lat, lon) grid for a given (lat, lon)
+     spot in the target data grid. -->
+10850
+<!-- Make it slightly larger than the half of ecmwf time step to cover at least one time step -->
+</time_search_range>
+
+<footprint_size>
+<!-- footprint size of the data in km -->
+20
+</footprint_size>
+
+<space_search_factor>
+<!-- inflate footprint size by this fator in search -->
+1.5
+</space_search_factor>
+
+<invalid_data>
+<!-- when no nearest neighbor found within footprint, use this value -->
+-909090
+</invalid_data>
+
+<num_cores>
+<!-- number of cores you would like to use -->
+1
+</num_cores>
+
+<proc_size>
+<!-- number of target granules a process would handle -->
+14
+</proc_size>
+
+<cell_search_limit>
+<!-- When qry_range is large compared to the grid overlaid
+     on target points, only search in C by C cells around
+     each query point -->
+4
+</cell_search_limit>
+
+
+</configure>

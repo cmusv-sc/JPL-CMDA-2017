@@ -1,0 +1,58 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'CESM1-CAM5.1-FV2 model output prepared for CMIP5 historical',
+   D_T0TIME      = '01-Jan-1850 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ncar/cam5-1-fv2/./hus_Amon_CESM1-CAM5-1-FV2_historical_r1i1p1_185001-189912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =    15.5000,
+   S_END         = 18234.5000,
+   S_DELTA       =    30.4157,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ncar/cam5-1-fv2/./hus_Amon_CESM1-CAM5-1-FV2_historical_r1i1p1_190001-194912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 18265.5000,
+   S_END         = 36484.5000,
+   S_DELTA       =    30.4157,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ncar/cam5-1-fv2/./hus_Amon_CESM1-CAM5-1-FV2_historical_r1i1p1_195001-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 36515.5000,
+   S_END         = 56924.5000,
+   S_DELTA       =    30.4158,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

@@ -1,0 +1,54 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Soil temperature level 2	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Charnock	-
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Ice surface temperature layer 2	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Total cloud cover	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Soil temperature level 1	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Ice surface temperature layer 4	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Medium cloud cover	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Sea surface temperature	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Type of high vegetation	-
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Slope of sub-gridscale orography	-
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Temperature of snow layer	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Soil temperature level 4	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	10 metre V wind component	m s**-1
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Total column water	kg m**-2
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Standard deviation of filtered subgrid orography	m
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Ice surface temperature layer 3	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Albedo	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Type of low vegetation	-
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Surface roughness	m
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Standard deviation of orography	-
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	2 metre temperature	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	High vegetation cover	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Skin reservoir content	m of water
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Volumetric soil water layer 1	m**3 m**-3
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Snow albedo	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Snow depth	m of water equivalent
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	2 metre dewpoint temperature	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Soil temperature level 3	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Soil type	-
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Total column ozone	kg m**-2
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Mean sea level pressure	Pa
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	High cloud cover	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Low vegetation cover	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	10 metre U wind component	m s**-1
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	UV visible albedo for diffuse radiation	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Volumetric soil water layer 2	m**3 m**-3
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Land-sea mask	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Low cloud cover	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Snow density	kg m**-3
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Geopotential	m**2 s**-2
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Volumetric soil water layer 4	m**3 m**-3
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	UV visible albedo for direct radiation	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Total column water vapour	kg m**-2
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Angle of sub-gridscale orography	rad
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Near IR albedo for direct radiation	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Ice surface temperature layer 1	K
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Logarithm of surface roughness length for heat	-
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Near IR albedo for diffuse radiation	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Surface pressure	Pa
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Volumetric soil water layer 3	m**3 m**-3
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Sea-ice cover	(0 - 1)
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Anisotropy of sub-gridscale orography	-
+ECMWF	1.5 Degree YOTC Analysis, Operational Surface	Skin temperature	K

@@ -1,0 +1,130 @@
+#!/home/svc/install/bin/ana
+
+'''
+This script uses the info from step1 to form a js object used in the html files.
+
+execfile('/home/svc/new_github/CMDA/JPL_CMDA/services/svc/svc/src/updateData/updateData3') 
+
+'''
+
+if 1:
+  # Python
+  import os, sys, string, time, glob
+  import pickle
+  import re
+
+  # numpy
+  import numpy as np
+
+if 1:
+  import pickle
+  import collections 
+
+  # parameters
+  if 1: # run on cmac
+    jsDir = '/home/svc/new_github/CMDA/JPL_CMDA/frontend/public/html/js2'
+
+    dir0 = '/mnt/data_2016'
+    desDir = '%s/des'%dir0
+    outDir = jsDir
+
+  #os.chdir(dir0)
+
+  #dirs9 = ['regridded', '.' ]
+  dirs9 = ['regridded', 'break', '.' ]
+
+  # get data dict,  load varDict
+  fn9 = '%s/varDict.pickle'%desDir
+  dict9 = pickle.load( open(fn9) )
+  sources = dict9.keys()
+  sources.sort()
+  print 'sources[:5]: ',
+  print sources[:5]
+
+  # read varList.js to get an order list of var names
+  jsFile = '%s/varList.js'%jsDir
+  lines = open(jsFile).readlines()
+  varKey = []
+  for l in lines[2:-1]:
+    temp5 = [m.start() for m in re.finditer(r'"',l)]
+    varKey.append(l[1:temp5[1]])
+
+  #temp1 = readin.find('{')
+  #readin1 = readin[temp1:-2]
+  #varList = eval("collections.OrderedDict(" + readin1 + ")") 
+  #varKey = varList.keys()
+
+  print 'varKey: \n'
+  print varKey
+
+  # read dataList.js
+  jsFile = '%s/dataList.js'%jsDir
+  #jsFile = '%s/dataList.js_'%jsDir
+  lines = open(jsFile).readlines()
+  # loop lines
+
+  varAll0 = []
+  
+  # loop lines in dataList.js
+  for i in range(len(lines)):
+    l = lines[i]
+
+    # skip lines not for data source
+    if l[0]!='"': continue
+    if l[1:6]=='group': continue
+
+    # find the locations of the line to insert
+    temp1 = [m.start() for m in re.finditer(r'"',l)]
+    source = l[temp1[0]+1:temp1[1]].lower()
+    temp2 = [m.start() for m in re.finditer(r'\[',l)]
+    start1 = temp2[1]
+    temp3 = [m.start() for m in re.finditer(r'\]',l)]
+    end1 = temp3[-1] - 1
+
+    print 'doing %s'%source
+    temp1 = source.split('/')
+    source1 = temp1[0] + '_' + temp1[1]
+
+    # list of done vars
+    varDone = []
+
+    # a dict of start/end time and location for each variable of the source
+    table0 = {}
+
+    # loop subDirs
+    dirs90 = dict9[source].keys()
+    for dir9 in dirs9:
+      if dir9 not in dirs90:
+        continue
+
+      # loop varNames
+      vars9 = dict9[source][dir9].keys()
+      for var9 in vars9:
+        if var9 in varDone:
+          continue
+
+        print '%s: %d -> %d'%(var9, dict9[source][dir9][var9][0], dict9[source][dir9][var9][1])
+        table0[var9] = dict9[source][dir9][var9] + [dir9,]
+        varAll0.append(var9)
+
+        varDone.append(var9)
+
+    # order the variables
+    varAvail = table0.keys()
+    varString = '['
+    for k in varKey:
+      if k in varAvail:
+        varString += '"%s", '%k
+    varString += '], '
+    lines[i] = l[:start1] + varString + str(table0) + l[end1:]
+
+  jsFile = '%s/dataList__.js'%outDir
+  open(jsFile,'w').writelines(lines)
+ 
+  '''
+cp /home/bytang/dataList__.js /home/svc/cmac/trunk/web_portal/cmac/web/js2/dataList1.js
+
+cp /home/bytang/dataList__.js /home/svc/cmac/trunk/web_portal/cmac/web/js2/dataList2.js
+
+'''
+ 

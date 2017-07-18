@@ -1,0 +1,7 @@
+#!/bin/sh
+
+/home/svc/install/bin/epd ./pythonWrapper $*
+
+# ana not working 20170412
+#/home/svc/install/bin/ana ./pythonWrapper $*
+

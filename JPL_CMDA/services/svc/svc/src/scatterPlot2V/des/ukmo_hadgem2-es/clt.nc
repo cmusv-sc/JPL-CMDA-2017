@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-es/./clt_Amon_HadGEM2-ES_historical_r1i1p1_199501-200511.nc

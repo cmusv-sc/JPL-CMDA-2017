@@ -1,0 +1,128 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'Obs-AIRS model output prepared for obs4MIPs NASA-JPL observation',
+   D_T0TIME      = '01-Jan-2000 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_200209-200212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =   989.0000,
+   S_END         =  1080.5000,
+   S_DELTA       =    30.5000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_200301-200312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  1111.5000,
+   S_END         =  1445.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_200401-200412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  1476.5000,
+   S_END         =  1811.5000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_200501-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  1842.5000,
+   S_END         =  2176.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_200601-200612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  2207.5000,
+   S_END         =  2541.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_200701-200712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  2572.5000,
+   S_END         =  2906.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_200801-200812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  2937.5000,
+   S_END         =  3272.5000,
+   S_DELTA       =    30.4545,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_200901-200912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  3303.5000,
+   S_END         =  3637.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_201001-201012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  3668.5000,
+   S_END         =  4002.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/nasa/airs/break/ta_AIRS_L3_RetStd-v5_201101-201105.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  4033.5000,
+   S_END         =  4153.5000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

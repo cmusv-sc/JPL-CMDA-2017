@@ -1,0 +1,4216 @@
+#== def_convertPres
+#== twoDimSlice3D__
+#== correlationMap_
+#== scatterPlot_
+#== diffPlot2V__
+#== conditionalSampling_
+#== conditionalSampling2Var__
+#== randomForest__
+#== EOF__
+#== conditionalPdf__
+#== anomaly__
+#== map2d__
+#== twoDimMap__
+#== timeSeriesWF_
+#== timeSeries__
+
+import os, hashlib, shutil
+from datetime import datetime, timedelta
+import md5
+import urllib2
+import json
+#Added by Chris
+import requests, time, json
+
+from flask import jsonify, request, url_for, make_response
+from werkzeug import secure_filename
+
+from svc import app
+from svc.src.twoDimMap import call_twoDimMap
+from svc.src.twoDimSlice3D import call_twoDimSlice3D
+from svc.src.mapView import call_mapView
+from svc.src.timeSeries import call_timeSeries
+from svc.src.timeSeriesWorkFlow import call_timeSeriesWorkFlow
+from svc.src.timeSeries2D import call_timeSeries2D
+from svc.src.twoDimZonalMean import call_twoDimZonalMean
+from svc.src.threeDimZonalMean import call_threeDimZonalMean
+from svc.src.threeDimVerticalProfile import call_threeDimVerticalProfile
+from svc.src.scatterPlot2V import call_scatterPlot2V
+from svc.src.conditionalSampling import call_conditionalSampling
+from svc.src.conditionalSampling2Var import call_conditionalSampling2Var
+#from svc.src.collocation import call_collocation
+from svc.src.time_bounds import getTimeBounds
+from svc.src.regridAndDownload import call_regridAndDownload
+from svc.src.correlationMap import call_correlationMap
+from svc.src.randomForest import call_randomForest
+from svc.src.EOF import call_EOF
+from svc.src.conditionalPdf import call_service
+from svc.src.anomaly import call_service
+from svc.src.py import download_file_from_url
+
+from flask import current_app
+from functools import update_wrapper
+
+CMU_PROVENANCE_URL = 'http://einstein.sv.cmu.edu:9034/serviceExecutionLog/addServiceExecutionLog'
+
+HEADERS = {'Content-Type': 'application/json'}
+USE_CMU = True
+
+ 
+userIdDict = { 
+              "admin": 1,
+              "caquilinger": 2,
+              "jbrodie": 3,
+              "rbuchholz": 4,
+              "fcannon": 5,
+              "ochimborazo": 6,
+              "mclavner": 7,
+              "jgristey": 8,
+              "nkille": 9,
+              "mlinz": 10,
+              "emaroon": 11,
+              "gmarques": 12,
+              "cmartinezvi": 13,
+              "amerrifield": 14,
+              "jnanteza": 15,
+              "kneff": 16,
+              "fpolverari": 17,
+              "mroge": 18,
+              "ksauter": 19,
+              "htseng": 20,
+              "abeatriz": 21,
+              "hwei": 22,
+              "kwillmot": 23,
+              "dzermenodia": 24,
+              "kzhang": 25,
+              "lei": 26,
+              "czhai": 27,
+              "btang": 28,
+              "jzhang": 29,
+              "wwang": 30,
+              "xwei": 31,
+              "ifenty": 32,
+              "jteixeira": 33,
+              "ddrewry": 34,
+              "hsu": 35,
+              "kandreadis": 36,
+              "zxing": 37,
+              "tkubar": 38,
+              "jjiang": 39,
+              "qbao": 40,
+              "mqi": 41,
+              "rwang": 42
+              }
+
+
+def crossdomain(origin=None, methods=None, headers=None,
+                max_age=21600, attach_to_all=True,
+                automatic_options=True):
+    if methods is not None:
+        methods = ', '.join(sorted(x.upper() for x in methods))
+    if headers is not None and not isinstance(headers, basestring):
+        headers = ', '.join(x.upper() for x in headers)
+    if not isinstance(origin, basestring):
+        origin = ', '.join(origin)
+    if isinstance(max_age, timedelta):
+        max_age = max_age.total_seconds()
+
+    def get_methods():
+        if methods is not None:
+            return methods
+
+        options_resp = current_app.make_default_options_response()
+        return options_resp.headers['allow']
+
+    def decorator(f):
+        def wrapped_function(*args, **kwargs):
+            if automatic_options and request.method == 'OPTIONS':
+                resp = current_app.make_default_options_response()
+            else:
+                resp = make_response(f(*args, **kwargs))
+            if not attach_to_all and request.method != 'OPTIONS':
+                return resp
+
+            h = resp.headers
+
+            h['Access-Control-Allow-Origin'] = origin
+            h['Access-Control-Allow-Methods'] = get_methods()
+            h['Access-Control-Max-Age'] = str(max_age)
+            if headers is not None:
+                h['Access-Control-Allow-Headers'] = headers
+            return resp
+
+        f.provide_automatic_options = False
+        return update_wrapper(wrapped_function, f)
+    return decorator
+
+
+def get_host_port(cfg_file):
+    myvars = {}
+    myfile =  open(cfg_file)
+    for line in myfile:
+        name, var = line.partition("=")[::2]
+        name = name.strip()
+        var = var.strip('\n').strip()
+        if name is not '' and var is not '':
+            myvars[name] = var
+
+    ### print myvars
+
+    return myvars["HOSTNAME"], myvars["PORT"]
+
+#== def_convertPres
+def convertPres(var1, pres1):
+  if var1=='ot' or var1=='os':
+    fac = 10000
+  else:
+    fac = 100
+  return str(int(pres1)*fac)
+
+#== twoDimMap__
+# @app.route('/svc/twoDimMap', methods=["GET"])
+# @crossdomain(origin='*')
+# def displayTwoDimMap():
+#     """Run displayTwoDimMap"""
+#     executionStartTime = int(time.time())
+# 
+#     # status and message
+#     success = True
+#     message = "ok"
+#     ### url = ''
+#     plotUrl = ''
+#     dataUrl = ''
+# 
+#     # get model, var, start time, end time, lon1, lon2, lat1, lat2, months, scale
+# 
+# 
+#     model = request.args.get('model', '')
+#     var = request.args.get('var', '')
+#     startT = request.args.get('start_time', '')
+#     endT = request.args.get('end_time', '')
+#     lon1 = request.args.get('lon1', '')
+#     lon2 = request.args.get('lon2', '')
+#     lat1 = request.args.get('lat1', '')
+#     lat2 = request.args.get('lat2', '')
+#     months = request.args.get('months', '')
+#     scale = request.args.get('scale', '')
+#     purpose = request.args.get('purpose', '')
+#     print 'purpose: ', purpose
+#     #added by CMU
+#     parameters_json = {'model':model, 'var':var, 'startT':startT,
+#                        'endT':endT, 'lon1':lon1, 'lon2':lon2,
+#                        'lat1':lat1, 'lat2':lat2, 'months':months,
+#                        'scale':scale}
+#     #/added by CMU
+# 
+# 
+#     print 'model: ', model
+#     print 'var: ', var
+#     print 'startT: ', startT
+#     print 'endT: ', endT
+#     print 'lon1: ', lon1
+#     print 'lon2: ', lon2
+#     print 'lat1: ', lat1
+#     print 'lat2: ', lat2
+#     print 'months: ', months
+#     print 'scale: ', scale
+# 
+#     # get where the input file and output file are
+#     current_dir = os.getcwd()
+#     print 'current_dir: ', current_dir
+# 
+#     try:
+#       seed_str = model+var+startT+endT+lon1+lon2+lat1+lat2+months+scale
+#       tag = md5.new(seed_str).hexdigest()
+#       output_dir = current_dir + '/svc/static/twoDimMap/' + tag
+#       print 'output_dir: ', output_dir
+#       if not os.path.exists(output_dir):
+#         os.makedirs(output_dir)
+# 
+#       # chdir to where the app is
+#       os.chdir(current_dir+'/svc/src/twoDimMap')
+#       # instantiate the app. class
+#       c1 = call_twoDimMap.call_twoDimMap(model, var, startT, endT, lon1, lon2, lat1, lat2, months, output_dir, scale)
+#       # call the app. function
+#       (message, imgFileName, dataFileName) = c1.displayTwoDimMap()
+#       # chdir back
+#       os.chdir(current_dir)
+# 
+#       hostname, port = get_host_port("host.cfg")
+#       userId = '1'
+#       if hostname == 'EC2':
+#         req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+#         response = urllib2.urlopen(req)
+#         hostname = response.read()
+# 
+#         req2 = urllib2.Request(' http://169.254.169.254/latest/user-data')
+#         response2 = urllib2.urlopen(req2)
+#         userId = json.loads(response2.read())['username']
+# 
+#       if userIdDict.has_key(userId):
+#         userId = userIdDict[userId]
+#       else :
+#         userId = '1'
+#  
+#       print 'userId: ', userId
+#       print 'hostname: ', hostname
+#       print 'port: ', port
+# 
+#       base_url = 'http://' + hostname + ':8080/assets/html/twoDimMap.html?'
+#       print 'base_url: ', base_url
+# 
+#       plotUrl = 'http://' + hostname + ':' + port + '/static/twoDimMap/' + tag + '/' + imgFileName
+#       print 'plotUrl: ', plotUrl
+#       dataUrl = 'http://' + hostname + ':' + port + '/static/twoDimMap/' + tag + '/' + dataFileName
+#       print 'dataUrl: ', dataUrl
+# 
+#       print 'message: ', message
+#       if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+#         success = False
+#         ### url = ''
+#         plotUrl = ''
+#         dataUrl = ''
+# 
+#     except ValueError, e:
+#         # chdir to current_dir in case the dir is changed to where the app is in the try block
+#         os.chdir(current_dir)
+#         print 'change dir back to: ', current_dir
+# 
+#         success = False
+#         message = str(e)
+#     except Exception, e:
+#         # chdir to current_dir in case the dir is changed to where the app is in the try block
+#         os.chdir(current_dir)
+#         print 'change dir back to: ', current_dir
+# 
+#         success = False
+#         ### message = str("Error caught in displayTwoDimMap()")
+#         message = str(e)
+#     #TODO call Wei's url
+#     #added by CMU
+#     print 'Wei\'s URL called here'
+#     #userId = "1"
+#     serviceId = "1"
+#     executionEndTime = int(time.time())
+# 
+#     ### urlLink = 'model1=%s&var1=%s&lon1=%s&lon2=%s&lat1=%s&lat2=%s&startT=%s&endT=%s&months=%s&scale=%s&image=%s&data_url=%s' % (model,var,lon1,lon2,lat1,lat2,startT,endT,months,scale,plotUrl,dataUrl)
+#     urlLink = request.query_string
+#     urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+#     urlLink = base_url + urlLink
+#     print 'urlLink: ', urlLink
+# 
+#     """
+#     post_json_wei = {'plotUrl':plotUrl, 'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+#                      'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+#                      'parameters': parameters_json, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+#     """
+# 
+#     # new json dictionary defined by Qihao
+#     post_json_wei = {'source': 'JPL', 'urlLink':urlLink, 'userId': long(userId),
+#                      'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+# 
+#     post_json_wei = json.dumps(post_json_wei)
+# 
+#     ### post_json_addPicture = {'url':url}
+#     ### post_json_addPicture = json.dumps(post_json_addPicture)
+#     ### post_json_addOutputfile = {'url':dataUrl}
+#     ### post_json_addOutputfile = json.dumps(post_json_addOutputfile)
+# 
+#     ### print 'post_json_addPicture: ', post_json_addPicture
+#     ### print 'post_json_addOutputfile: ', post_json_addOutputfile
+# 
+#     if USE_CMU:
+#         try:
+#             print '======= call to CMU provenance service ======'
+#             print requests.post(BASE_POST_URL_WEI, data=post_json_wei, headers=HEADERS).text
+#             print '======= end of call to CMU provenance service ======'
+#             ### print requests.post(BASE_POST_URL_ADD_PICTURE, data=post_json_addPicture, headers=HEADERS).text
+#             ### print requests.post(BASE_POST_URL_ADD_OUTPUTFILE, data=post_json_addOutputfile, headers=HEADERS).text
+#         except:
+#             print 'Something went wrong with Wei\'s stuff'
+#     #/added by CMU  
+# 
+#     return jsonify({
+#         'success': success,
+#         'message': message,
+#         'url': plotUrl,
+#         'dataUrl': dataUrl
+#     })
+
+
+#== twoDimMap1__
+@app.route('/svc/twoDimMap', methods=["GET"])
+@crossdomain(origin='*')
+def displayTwoDimMap():
+    """Run displayTwoDimMap"""
+    executionStartTime = int(time.time())
+
+    # status and message
+    success = True
+    message = "ok"
+    ### url = ''
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model, var, start time, end time, lon1, lon2, lat1, lat2, months, scale
+
+
+    model = request.args.get('model1', '').lower()
+    var = request.args.get('var1', '')
+    startT = request.args.get('timeS', '')
+    endT = request.args.get('timeE', '')
+    lon1 = request.args.get('lonS', '')
+    lon2 = request.args.get('lonE', '')
+    lat1 = request.args.get('latS', '')
+    lat2 = request.args.get('latE', '')
+    months = request.args.get('months', '')
+    scale = request.args.get('scale1', '')
+    purpose = request.args.get('purpose', '')
+    frontend_url = request.args.get('fromPage', '')
+    print 'frontend_url: ', frontend_url
+    #added by CMU
+    parameters_json = {'model':model, 'var':var, 'startT':startT,
+                       'endT':endT, 'lon1':lon1, 'lon2':lon2,
+                       'lat1':lat1, 'lat2':lat2, 'months':months,
+                       'scale':scale}
+    #/added by CMU
+
+
+    print 'model: ', model
+    print 'var: ', var
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'months: ', months
+    print 'scale: ', scale
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model+var+startT+endT+lon1+lon2+lat1+lat2+months+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/twoDimMap/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/twoDimMap')
+      # instantiate the app. class
+      c1 = call_twoDimMap.call_twoDimMap(model, var, startT, endT, lon1, lon2, lat1, lat2, months, output_dir, scale)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.displayTwoDimMap()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = 'lei'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data')
+        response2 = urllib2.urlopen(req2)
+        userId = json.loads(response2.read())['username']
+
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else:
+        userId = 26
+ 
+      print 'userId: ', userId
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      backend_url = 'http://' + hostname + ':' + port + '/svc/twoDimMap'
+      print 'backend_url: ', backend_url
+      plotUrl = 'http://' + hostname + ':' + port + '/static/twoDimMap/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/twoDimMap/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayTwoDimMap()")
+        message = str(e)
+    #TODO call Wei's url
+    #added by CMU
+    print 'Wei\'s URL called here'
+    #userId = "1"
+    executionEndTime = int(time.time())
+
+    ### urlLink = 'model1=%s&var1=%s&lon1=%s&lon2=%s&lat1=%s&lat2=%s&startT=%s&endT=%s&months=%s&scale=%s&image=%s&data_url=%s' % (model,var,lon1,lon2,lat1,lat2,startT,endT,months,scale,plotUrl,dataUrl)
+    # XXXXX
+    urlLink = request.query_string
+    urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+    print 'urlLink: ', urlLink
+    urlLink = urlLink.replace('&fromPage='+frontend_url, '')
+    print 'urlLink: ', urlLink
+
+    # json dictionary for provenance service request
+    post_json = {'source': 'JPL', 'parameters':urlLink, 'frontend_url': frontend_url, 'backend_url': backend_url, 'userId': long(userId),
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+
+    post_json = json.dumps(post_json)
+
+    if USE_CMU:
+        try:
+            print '======= call to CMU provenance service ======'
+            print post_json
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+            print '======= end of call to CMU provenance service ======'
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+    #/added by CMU  
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+@app.route('/svc/twoDimMapPOST', methods=["POST"])
+@crossdomain(origin='*')
+def displayTwoDimMapPOST():
+    """Run displayTwoDimMap"""
+    executionStartTime = int(time.time())
+
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model, var, start time, end time, lon1, lon2, lat1, lat2, months, scale
+    jsonData = request.json
+
+    model = jsonData['model']
+    var = jsonData['var']    
+    startT = jsonData['start_time']
+    endT = jsonData['end_time']
+    lon1 = jsonData['lon1']
+    lon2 = jsonData['lon2']
+    lat1 = jsonData['lat1']
+    lat2 = jsonData['lat2']
+    months = jsonData['months']
+    scale = jsonData['scale']
+
+    #added by Chris
+    parameters_json = {'model':model, 'var':var, 'startT':startT,
+                       'endT':endT, 'lon1':lon1, 'lon2':lon2,
+                       'lat1':lat1, 'lat2':lat2, 'months':months,
+                       'scale':scale}
+    #/added by Chris
+
+
+    print 'model: ', model
+    print 'var: ', var
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'months: ', months
+    print 'scale: ', scale
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model+var+startT+endT+lon1+lon2+lat1+lat2+months+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/twoDimMap/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/twoDimMap')
+      # instantiate the app. class
+      c1 = call_twoDimMap.call_twoDimMap(model, var, startT, endT, lon1, lon2, lat1, lat2, months, output_dir, scale)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.displayTwoDimMap()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = '1'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+ 
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      ### url = 'http://cmacws.jpl.nasa.gov:8090/static/twoDimMap/' + tag + '/' + imgFileName
+      ### url = 'http://' + hostname + ':' + port + '/static/twoDimMap/' + tag + '/' + imgFileName
+      ### print 'url: ', url
+      plotUrl = 'http://' + hostname + ':' + port + '/static/twoDimMap/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/twoDimMap/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        ### url = ''
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayTwoDimMap()")
+        message = str(e)
+    #TODO call Wei's url
+    #added by Chris
+    print 'Wei\'s URL called here'
+    #userId = "1"
+    serviceId = "1"#"13"#"00"
+    #serviceExecutionLogId = "89"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+    executionEndTime = int(time.time())
+
+    ### urlLink = 'model1=%s&var1=%s&lon1=%s&lon2=%s&lat1=%s&lat2=%s&startT=%s&endT=%s&months=%s&scale=%s&image=%s&data_url=%s' % (model,var,lon1,lon2,lat1,lat2,startT,endT,months,scale,plotUrl,dataUrl)
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'plotUrl':plotUrl, 'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+    #/added by Chris
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+@app.route('/svc/mapView', methods=["GET"])
+@crossdomain(origin='*')
+def display_mapView():
+    """Run display_mapView"""
+    executionStartTime = int(time.time())
+
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    print "request.query_string: ", 
+    print request.query_string
+
+    # get model, var, start time, end time, lon1, lon2, lat1, lat2, scale
+
+    nVar = int(request.args.get('nVar'))
+
+    keywords = ['model', 'var', 'pres', 'lon1_', 'lon2_', 'lat1_', 'lat2_', 'start_time_', 'end_time_', 'month_']
+    sep_dict = {'model': ' ', 'var': ' ', 'pres':' ', 'lon1_':',', 'lon2_':' ', 'lat1_':',', 'lat2_': ' ', 'start_time_': ' ', 'end_time_' : ' ', 'month_' : ' '}
+    varInfoStr = ''
+    parameters_json = {}
+    for varI in range(1, nVar+1):
+      for kk in keywords:
+        thisKey = kk +str(varI)
+        if request.args.has_key(thisKey):
+          parameters_json[thisKey] = request.args.get(thisKey, '')
+        else:
+          genKey = kk;
+          if genKey[-1] == '_' :
+            genKey = genKey[0:(-1)]
+          parameters_json[thisKey] = request.args.get(genKey, '')
+        varInfoStr += parameters_json[thisKey] + sep_dict[kk]
+
+    scale = request.args.get('scale', '')
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = varInfoStr+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/mapView/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/mapView')
+      # instantiate the app. class
+      print varInfoStr
+      print output_dir
+      print scale
+      c1 = call_mapView.call_mapView(varInfoStr.strip(), output_dir, scale)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.display_mapView()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      plotUrl = 'http://' + hostname + ':' + port + '/static/mapView/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/mapView/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in display_mapView()")
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    userId = "1"
+    serviceId = "3"
+    #serviceExecutionLogId = "89"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+#    serviceConfigurationId = "Test .\'\"\\confId"
+#    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+
+    #New parameters added here.
+    #parameters_json['purpose'] = purpose
+    #parameters_json['dataUrl'] = dataUrl
+    #parameters_json['plotUrl'] = url
+    #Xing's
+#    post_json = {'userId':userId, 'serviceId':'1595', 'purpose':purpose,
+#                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+#                 'executionStartTime':str(executionStartTime), 'executionEndTime':str(executionEndTime),
+#                 'parameters': parameters_json,
+#                 'plotUrl': url, 'dataUrl': dataUrl}
+
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json_wei = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl}
+
+#    post_json = json.dumps(post_json)
+    post_json_wei = json.dumps(post_json_wei)
+    if USE_CMU:
+#        try:
+#            requests.post(BASE_POST_URL, data=post_json, headers=HEADERS).text
+#        except:
+#            pass
+        try:
+            print post_json_wei
+            print requests.post(BASE_POST_URL_WEI, data=post_json_wei, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+#== timeSeries__
+@app.route('/svc/timeSeries', methods=["GET"])
+@crossdomain(origin='*')
+def display_timeSeries():
+    """Run display_timeSeries"""
+    executionStartTime = int(time.time())
+
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    print "request.query_string: ", 
+    print request.query_string
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    # the first argument is for direct input data files from a work flow or user upload
+    parameters_json = {}
+    fileKey = 'inputDataFile'
+    parameters_json[fileKey] = request.args.get(fileKey, '')
+
+    nVar = int(request.args.get('nVar'))
+    varInfoStr = ''
+
+    # get model, var, start time, end time, lon1, lon2, lat1, lat2, scale
+    keywordMap = {
+'model':'model', 
+'var':'var', 
+'pres':'pres', 
+'lon1_':'vlonS',
+'lon2_':'vlonE',
+'lat1_':'vlatS',
+'lat2_':'vlatE',
+}
+    keywords = ['model', 'var', 'pres', 'lon1_', 'lon2_', 'lat1_', 'lat2_']
+    #keywords = keywordMap.keys()
+    sep_dict = {'model': ' ', 'var': ' ', 'pres':' ', 'lon1_':',', 'lon2_':' ', 'lat1_':',', 'lat2_': ' '}
+
+    # get information for each variables
+    for varI in range(1, nVar+1):
+      for kk in keywords:
+        thisKey = kk +str(varI)
+        thisKey2 = keywordMap[kk] +str(varI)
+#        parameters_json[thisKey] = request.args.get(thisKey2, '')
+        parameters_json[thisKey] = request.args.get(thisKey, '')
+        print thisKey, thisKey2, request.args.get(thisKey2, '')
+        if len(kk)==5:
+          if kk[:5]=='model':
+            parameters_json[thisKey] = parameters_json[thisKey].lower()
+
+        varInfoStr += parameters_json[thisKey] + sep_dict[kk]
+
+    varInfoStr += request.args.get('timeS', '') + ' '
+    varInfoStr += request.args.get('timeE', '')
+
+    scale = request.args.get('scale', '')
+    parameters_json['scale'] = scale;
+    print '== varInfoStr: ',
+    print varInfoStr
+
+    try:
+      seed_str = varInfoStr+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/timeSeries/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      if parameters_json[fileKey] != '' :
+        file_basename = os.path.basename(parameters_json[fileKey])
+        varInfoStr = output_dir + '/' + file_basename
+        download_file_from_url.download_file_from_url(parameters_json[fileKey], varInfoStr)
+        varInfoStr += ' '
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/timeSeries')
+      # instantiate the app. class
+      c1 = call_timeSeries.call_timeSeries(varInfoStr, output_dir, scale)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.display_timeSeries()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      ### url = 'http://cmacws.jpl.nasa.gov:8090/static/timeSeries/' + tag + '/' + imgFileName
+      ### url = 'http://' + hostname + ':' + port + '/static/timeSeries/' + tag + '/' + imgFileName
+      ### print 'url: ', url
+      plotUrl = 'http://' + hostname + ':' + port + '/static/timeSeries/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/timeSeries/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in display_timeSeries()")
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    userId = "1"
+    serviceId = "3"
+    #serviceExecutionLogId = "89"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+#    serviceConfigurationId = "Test .\'\"\\confId"
+#    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+
+    #New parameters added here.
+    #parameters_json['purpose'] = purpose
+    #parameters_json['dataUrl'] = dataUrl
+    #parameters_json['plotUrl'] = url
+    #Xing's
+#    post_json = {'userId':userId, 'serviceId':'1595', 'purpose':purpose,
+#                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+#                 'executionStartTime':str(executionStartTime), 'executionEndTime':str(executionEndTime),
+#                 'parameters': parameters_json,
+#                 'plotUrl': url, 'dataUrl': dataUrl}
+
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+#== timeSeriesWF_
+@app.route('/svc/timeSeriesWorkFlow', methods=["GET"])
+@crossdomain(origin='*')
+def display_timeSeriesWorkFlow():
+    """Run display_timeSeriesWorkFlow"""
+    executionStartTime = int(time.time())
+
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    print "request.query_string: ", 
+    print request.query_string
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    # the first argument is for direct input data files from a work flow or user upload
+    parameters_json = {}
+    fileKey = 'inputDataFile'
+    parameters_json[fileKey] = request.args.get(fileKey, '')
+    if parameters_json[fileKey] == '' :
+      varInfoStr = '/ '
+
+      nVar = int(request.args.get('nVar'))
+
+      # get model, var, start time, end time, lon1, lon2, lat1, lat2, scale
+      keywordMap = {
+'model':'model', 
+'var':'var', 
+'pres':'pres', 
+'lon1_':'lonS',
+'lon2_':'lonE',
+'lat1_':'latS',
+'lat2_':'latE',
+}
+      keywords = ['model', 'var', 'pres', 'lon1_', 'lon2_', 'lat1_', 'lat2_']
+      #keywords = keywordMap.keys()
+      sep_dict = {'model': ' ', 'var': ' ', 'pres':' ', 'lon1_':',', 'lon2_':' ', 'lat1_':',', 'lat2_': ' '}
+
+      # get information for each variables
+      for varI in range(1, nVar+1):
+        for kk in keywords:
+          thisKey = kk +str(varI)
+          thisKey2 = keywordMap[kk] +str(varI)
+          parameters_json[thisKey] = request.args.get(thisKey2, '')
+          if len(kk)==5:
+            if kk[:5]=='model':
+              parameters_json[thisKey] = parameters_json[thisKey].lower()
+
+          varInfoStr += parameters_json[thisKey] + sep_dict[kk]
+
+      varInfoStr += request.args.get('timeS', '') + ' '
+      varInfoStr += request.args.get('timeE', '')
+    else:
+      varInfoStr = parameters_json[fileKey]
+
+    scale = request.args.get('scale', '')
+    parameters_json['scale'] = scale;
+    print '== varInfoStr: ',
+    print varInfoStr
+
+    try:
+      seed_str = varInfoStr+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/timeSeriesWorkFlow/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      if parameters_json[fileKey] != '' :
+        file_basename = os.path.basename(parameters_json[fileKey])
+        varInfoStr = output_dir + '/' + file_basename
+        download_file_from_url.download_file_from_url(parameters_json[fileKey], varInfoStr)
+        varInfoStr += ' '
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/timeSeriesWorkFlow')
+      # instantiate the app. class
+      c1 = call_timeSeriesWorkFlow.call_timeSeriesWorkFlow(varInfoStr, output_dir, scale)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.display_timeSeriesWorkFlow()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      ### url = 'http://cmacws.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/' + tag + '/' + imgFileName
+      ### url = 'http://' + hostname + ':' + port + '/static/timeSeriesWorkFlow/' + tag + '/' + imgFileName
+      ### print 'url: ', url
+      plotUrl = 'http://' + hostname + ':' + port + '/static/timeSeriesWorkFlow/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/timeSeriesWorkFlow/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in display_timeSeriesWorkFlow()")
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    userId = "1"
+    serviceId = "3"
+    #serviceExecutionLogId = "89"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+#    serviceConfigurationId = "Test .\'\"\\confId"
+#    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+
+    #New parameters added here.
+    #parameters_json['purpose'] = purpose
+    #parameters_json['dataUrl'] = dataUrl
+    #parameters_json['plotUrl'] = url
+    #Xing's
+#    post_json = {'userId':userId, 'serviceId':'1595', 'purpose':purpose,
+#                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+#                 'executionStartTime':str(executionStartTime), 'executionEndTime':str(executionEndTime),
+#                 'parameters': parameters_json,
+#                 'plotUrl': url, 'dataUrl': dataUrl}
+
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+
+@app.route('/svc/timeSeries2D', methods=["GET"])
+@crossdomain(origin='*')
+def display_timeSeries2D():
+    """Run display_timeSeries2D"""
+    executionStartTime = int(time.time())
+
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model, var, start time, end time, lon1, lon2, lat1, lat2, scale
+
+    model = request.args.get('model', '')
+    var = request.args.get('var', '')
+    startT = request.args.get('start_time', '')
+    endT = request.args.get('end_time', '')
+    lon1 = request.args.get('lon1', '')
+    lon2 = request.args.get('lon2', '')
+    lat1 = request.args.get('lat1', '')
+    lat2 = request.args.get('lat2', '')
+    scale = request.args.get('scale', '')
+    purpose = request.args.get('purpose', '')  #"Test .\'\"\\purpose"
+
+    parameters_json = {'model':model, 'var':var, 'startT':startT,
+                       'endT':endT, 'lon1':lon1, 'lon2':lon2,
+                       'lat1':lat1, 'lat2':lat2, 'scale':scale}
+
+    print 'model: ', model
+    print 'var: ', var
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'scale: ', scale
+    print 'purpose: ', purpose
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model+var+startT+endT+lon1+lon2+lat1+lat2+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/timeSeries2D/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/timeSeries2D')
+      # instantiate the app. class
+      c1 = call_timeSeries2D.call_timeSeries2D(model, var, startT, endT, lon1, lon2, lat1, lat2, output_dir, scale)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.display_timeSeries2D()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = '1'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+ 
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      ### url = 'http://cmacws.jpl.nasa.gov:8090/static/timeSeries2D/' + tag + '/' + imgFileName
+      plotUrl = 'http://' + hostname + ':' + port + '/static/timeSeries2D/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/timeSeries2D/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        url = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in display_timeSeries2D()")
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    #userId = "1"
+    serviceId = "3"
+    #serviceExecutionLogId = "89"
+#    serviceConfigurationId = "Test .\'\"\\confId"
+#    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+
+    #New parameters added here.
+    #parameters_json['purpose'] = purpose
+    #parameters_json['dataUrl'] = dataUrl
+    #parameters_json['plotUrl'] = url
+    #Xing's
+#    post_json = {'userId':userId, 'serviceId':'1595', 'purpose':purpose,
+#                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+#                 'executionStartTime':str(executionStartTime), 'executionEndTime':str(executionEndTime),
+#                 'parameters': parameters_json,
+#                 'plotUrl': url, 'dataUrl': dataUrl}
+    ### urlLink = 'model1=%s&var1=%s&lon1=%s&lon2=%s&lat1=%s&lat2=%s&startT=%s&endT=%s&months=%s&scale=%s&image=%s&data_url=%s' % (model,var,lon1,lon2,lat1,lat2,startT,endT,months,scale,plotUrl,dataUrl)
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+#    post_json = json.dumps(post_json)
+    post_json = json.dumps(post_json)
+    print 'post_json: ', post_json
+
+    ### post_json_addPicture = {'url':url}
+    ### post_json_addPicture = json.dumps(post_json_addPicture)
+    ### post_json_addOutputfile = {'url':dataUrl}
+    ### post_json_addOutputfile = json.dumps(post_json_addOutputfile)
+    ### print 'post_json_addPicture: ', post_json_addPicture
+    ### print 'post_json_addOutputfile: ', post_json_addOutputfile
+
+    if USE_CMU:
+        try:
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+#== twoDimSlice3D__
+@app.route('/svc/twoDimSlice3D', methods=["GET"])
+# @app.route('/svc/twoDimSlice3D', methods=["POST"])
+@crossdomain(origin='*')
+def displayTwoDimSlice3D():
+
+    """Run displayTwoDimSlice3D"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+    
+    # get model, var, start time, end time, pressure_level, lon1, lon2, lat1, lat2, months, scale
+    model = request.args.get('model1', '').lower()
+    var = request.args.get('var1', '')
+    startT = request.args.get('timeS', '')
+    endT = request.args.get('timeE', '')
+    pr = request.args.get('pres1', '')
+    lon1 = request.args.get('lonS', '')
+    lon2 = request.args.get('lonE', '')
+    lat1 = request.args.get('latS', '')
+    lat2 = request.args.get('latE', '')
+    months = request.args.get('months', '')
+    scale = request.args.get('scale1', '')
+
+    pr = convertPres(var, pr)
+    frontend_url = request.args.get('fromPage', '')
+    print 'frontend_url: ', frontend_url
+
+    '''
+    jsonData = request.json
+
+    model = jsonData['model']
+    var = jsonData['var']    
+    startT = jsonData['start_time']
+    endT = jsonData['end_time']
+    pr = jsonData['pr']
+    lon1 = jsonData['lon1']
+    lon2 = jsonData['lon2']
+    lat1 = jsonData['lat1']
+    lat2 = jsonData['lat2']
+    months = jsonData['months']
+    scale = jsonData['scale']
+    '''
+    parameters_json = {'model':model, 'var':var, 'startT':startT,
+                       'endT':endT, 'pr':pr, 'lon1':lon1, 'lon2':lon2,
+                       'lat1':lat1, 'lat2':lat2, 'months':months,
+                       'scale':scale}
+
+    print 'model: ', model
+    print 'var: ', var
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'pr: ', pr
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'months: ', months
+    print 'scale: ', scale
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model+var+startT+endT+pr+lon1+lon2+lat1+lat2+months+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/twoDimSlice3D/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/twoDimSlice3D')
+      # instantiate the app. class
+      c1 = call_twoDimSlice3D.call_twoDimSlice3D(model, var, startT, endT, pr, lon1, lon2, lat1, lat2, months, output_dir, scale)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.displayTwoDimSlice3D()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = 'lei'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+      
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = 26
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      backend_url = 'http://' + hostname + ':' + port + '/svc/twoDimSlice3D'
+      print 'backend_url: ', backend_url
+      plotUrl = 'http://' + hostname + ':' + port + '/static/twoDimSlice3D/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/twoDimSlice3D/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayTwoDimSlice3D()")
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+    executionEndTime = int(time.time())
+
+    ### urlLink = 'model1=%s&var1=%s&lon1=%s&lon2=%s&lat1=%s&lat2=%s&startT=%s&endT=%s&months=%s&scale=%s&image=%s&data_url=%s' % (model,var,lon1,lon2,lat1,lat2,startT,endT,months,scale,plotUrl,dataUrl)
+    # XXXXX
+    urlLink = request.query_string
+    urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+    print 'urlLink: ', urlLink
+    urlLink = urlLink.replace('&fromPage='+frontend_url, '')
+    print 'urlLink: ', urlLink
+
+    # json dictionary for provenance service request
+    post_json = {'source': 'JPL', 'parameters':urlLink, 'frontend_url': frontend_url, 'backend_url': backend_url, 'userId': long(userId),
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+
+@app.route('/svc/twoDimZonalMean', methods=["GET"])
+@crossdomain(origin='*')
+def displayTwoDimZonalMean():
+    """Run displayTwoDimZonalMean"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model, var, start time, end time, lat1, lat2, months, scale
+
+    model = request.args.get('model', '')
+    var = request.args.get('var', '')
+    startT = request.args.get('start_time', '')
+    endT = request.args.get('end_time', '')
+    lat1 = request.args.get('lat1', '')
+    lat2 = request.args.get('lat2', '')
+    months = request.args.get('months', '')
+    scale = request.args.get('scale', '')
+    ### query_string = request.args.get('query_string', '')
+    query_string = request.query_string
+
+    parameters_json_wei = {'model':model, 'var':var, 'startT':startT,
+                       'endT':endT,
+                       'lat1':lat1, 'lat2':lat2, 'months':months,
+                       'scale':scale}
+
+    parameters_json = {'data source':model, 'variable name':var, 'start year-month':startT,
+                       'end year-month':endT,
+                       'start lat (deg)':lat1, 'end lat (deg)':lat2, 'select months':months,
+                       'variable scale':scale}
+
+    print 'model: ', model
+    print 'var: ', var
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'months: ', months
+    print 'scale: ', scale
+    print 'query_string: ', query_string
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model+var+startT+endT+lat1+lat2+months+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/twoDimZonalMean/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/twoDimZonalMean')
+      # instantiate the app. class
+      c1 = call_twoDimZonalMean.call_twoDimZonalMean(model, var, startT, endT, lat1, lat2, months, output_dir, scale)
+      # call the app. function
+      ### print 'before the call to c1.displayTwoDimZonalMean() ...'
+      (message, imgFileName, dataFileName) = c1.displayTwoDimZonalMean()
+      ### print 'after the call to c1.displayTwoDimZonalMean()'
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = '1'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+      
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+ 
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      plotUrl = 'http://' + hostname + ':' + port + '/static/twoDimZonalMean/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/twoDimZonalMean/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayTwoDimZonalMean()")
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    #userId = "1"
+    serviceId = "2"#"01"
+    #serviceExecutionLogId = "89"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+#    serviceConfigurationId = "Test .\'\"\\confId"
+#    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+
+    #parameters_json['purpose'] = purpose
+    #parameters_json['dataUrl'] = dataUrl
+    #parameters_json['plotUrl'] = url
+    #Xing's
+#    post_json = {'userId':userId, 'serviceId':'13', 'purpose':purpose,
+#                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+#                 'executionStartTime':str(executionStartTime), 'executionEndTime':str(executionEndTime),
+#                 'parameters': parameters_json,
+#                 'url': url, 'dataUrl': dataUrl}
+
+    ### urlLink = 'model1=%s&var1=%s&lon1=%s&lon2=%s&lat1=%s&lat2=%s&startT=%s&endT=%s&months=%s&scale=%s&image=%s&data_url=%s' % (model,var,lon1,lon2,lat1,lat2,startT,endT,months,scale,plotUrl,dataUrl)
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+
+#    post_json = json.dumps(post_json)
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+
+@app.route('/svc/threeDimZonalMean', methods=["GET"])
+@crossdomain(origin='*')
+def displayThreeDimZonalMean():
+    """Run displayThreeDimZonalMean"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model, var, start time, end time, lat1, lat2, pres1, pres2, months, scale
+
+    model = request.args.get('model', '')
+    var = request.args.get('var', '')
+    startT = request.args.get('start_time', '')
+    endT = request.args.get('end_time', '')
+    lat1 = request.args.get('lat1', '')
+    lat2 = request.args.get('lat2', '')
+    pres1 = request.args.get('pres1', '')
+    pres2 = request.args.get('pres2', '')
+    months = request.args.get('months', '')
+    scale = request.args.get('scale', '')
+
+    parameters_json = {'model':model, 'var':var, 'startT':startT,
+                       'endT':endT, 
+                       'lat1':lat1, 'lat2':lat2, 'pres1':pres1, 'pres2':pres2,
+                       'months':months, 'scale':scale}
+
+    print 'model: ', model
+    print 'var: ', var
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'pres1: ', pres1
+    print 'pres2: ', pres2
+    print 'months: ', months
+    print 'scale: ', scale
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model+var+startT+endT+lat1+lat2+pres1+pres2+months+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/threeDimZonalMean/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/threeDimZonalMean')
+      # instantiate the app. class
+      c1 = call_threeDimZonalMean.call_threeDimZonalMean(model, var, startT, endT, lat1, lat2, pres1, pres2, months, output_dir, scale)
+      # call the app. function
+      ### (message, imgFileName) = c1.displayThreeDimZonalMean()
+      (message, imgFileName, dataFileName) = c1.displayThreeDimZonalMean()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = '1'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+      
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      plotUrl = 'http://' + hostname + ':' + port + '/static/threeDimZonalMean/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/threeDimZonalMean/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayThreeDimZonalMean()")
+        message = str(e)
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    #userId = "1"
+    serviceId = "5"
+    #serviceExecutionLogId = "89"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+#    serviceConfigurationId = "Test .\'\"\\confId"
+#    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+    #New parameters added here.
+    #parameters_json['purpose'] = purpose
+    #parameters_json['dataUrl'] = dataUrl
+    #parameters_json['plotUrl'] = url
+    #Xing's
+#    post_json = {'userId':userId, 'serviceId':'1597', 'purpose':purpose,
+#                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+#                 'executionStartTime':str(executionStartTime), 'executionEndTime':str(executionEndTime),
+#                 'parameters': parameters_json,
+#                 'plotUrl': url, 'dataUrl': dataUrl}
+
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+
+#    post_json = json.dumps(post_json)
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+
+@app.route('/svc/threeDimVerticalProfile', methods=["GET"])
+@crossdomain(origin='*')
+def displayThreeDimVerticalProfile():
+    """Run displayThreeDimVerticalProfile"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model, var, start time, end time, lon1, lon2, lat1, lat2, months, scale
+
+    model = request.args.get('model', '')
+    var = request.args.get('var', '')
+    startT = request.args.get('start_time', '')
+    endT = request.args.get('end_time', '')
+    lon1 = request.args.get('lon1', '')
+    lon2 = request.args.get('lon2', '')
+    lat1 = request.args.get('lat1', '')
+    lat2 = request.args.get('lat2', '')
+    months = request.args.get('months', '')
+    scale = request.args.get('scale', '')
+    parameters_json = {'model':model, 'var':var, 'startT':startT,
+                       'endT':endT, 'lon1':lon1, 'lon2':lon2,
+                       'lat1':lat1, 'lat2':lat2, 'months':months,
+                       'scale':scale}
+
+    print 'model: ', model
+    print 'var: ', var
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'months: ', months
+    print 'scale: ', scale
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model+var+startT+endT+lat1+lat2+lon1+lon2+months+scale
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/threeDimVerticalProfile/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/threeDimVerticalProfile')
+      # instantiate the app. class
+      c1 = call_threeDimVerticalProfile.call_threeDimVerticalProfile(model, var, startT, endT, lon1, lon2, lat1, lat2, months, output_dir, scale)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.displayThreeDimVerticalProfile()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = '1'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+      
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+ 
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      plotUrl = 'http://' + hostname + ':' + port + '/static/threeDimVerticalProfile/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/threeDimVerticalProfile/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayThreeDimVerticalProfile()")
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    #userId = "1"
+    serviceId = "6"
+    #serviceExecutionLogId = "89"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+#    serviceConfigurationId = "Test .\'\"\\confId"
+#    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+    #New parameters added here.
+    #parameters_json['purpose'] = purpose
+    #parameters_json['dataUrl'] = dataUrl
+    #parameters_json['plotUrl'] = url
+    #Xing's
+#    post_json = {'userId':userId, 'serviceId':'18', 'purpose':purpose,
+#                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+#                 'executionStartTime':str(executionStartTime), 'executionEndTime':str(executionEndTime),
+#                 'parameters': parameters_json,
+#                 'plotUrl': url, 'dataUrl': dataUrl}
+
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+
+#    post_json = json.dumps(post_json)
+    post_json = json.dumps(post_json)
+
+    if USE_CMU:
+        try:
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+    
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+#== scatterPlot_
+@app.route('/svc/scatterPlot2V', methods=["GET"])
+@crossdomain(origin='*')
+def displayScatterPlot2V():
+    """Run displayScatterPlot2V"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model1, var1, pres1, model2, var2, pres2, start time, end time, lon1, lon2, lat1, lat2, nSample
+
+    model1 = request.args.get('model1', '').lower()
+    var1 = request.args.get('var1', '')
+    pres1 = request.args.get('pres1', '')
+    model2 = request.args.get('model2', '').lower()
+    var2 = request.args.get('var2', '')
+    pres2 = request.args.get('pres2', '')
+    startT = request.args.get('timeS', '')
+    endT = request.args.get('timeE', '')
+    lon1 = request.args.get('lonS', '')
+    lon2 = request.args.get('lonE', '')
+    lat1 = request.args.get('latS', '')
+    lat2 = request.args.get('latE', '')
+    nSample = request.args.get('nSample', '')
+    frontend_url = request.args.get('fromPage', '')
+    print 'frontend_url: ', frontend_url
+
+    parameters_json = {'model1':model1, 'var1':var1, 'pres1':pres1,
+                       'model2':model2, 'var2':var2, 'pres2':pres2,
+                       'startT':startT,
+                       'endT':endT, 'lon1':lon1, 'lon2':lon2,
+                       'lat1':lat1, 'lat2':lat2, 'nSample':nSample}
+
+    print 'model1: ', model1
+    print 'var1: ', var1
+    print 'pres1: ', pres1
+    print 'model2: ', model2
+    print 'var2: ', var2
+    print 'pres2: ', pres2
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'nSample: ', nSample
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model1+var1+pres1+model2+var2+pres2+startT+endT+lat1+lat2+lon1+lon2+nSample
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/scatterPlot2V/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/scatterPlot2V')
+      # instantiate the app. class
+      c1 = call_scatterPlot2V.call_scatterPlot2V(model1, var1, pres1, model2, var2, pres2, startT, endT, lon1, lon2, lat1, lat2, nSample, output_dir, 0)
+      # call the app. function (0 means the image created is scatter plot)
+      ### (message, imgFileName) = c1.displayScatterPlot2V(0)
+      (message, imgFileName, dataFileName) = c1.display()
+      # chdir back
+      os.chdir(current_dir)
+
+      ind1 = message.find('No Data')
+      if ind1>0:
+        message1 = message[ind1:(ind1+200)]
+        message1a = message1.split('\n')
+        print message1a[0]
+        print message1a[1]
+     
+      hostname, port = get_host_port("host.cfg")
+      userId = 'lei'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+      
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+      print 'imgFileName: ', imgFileName
+
+      backend_url = 'http://' + hostname + ':' + port + '/svc/scatterPlot2V'
+      print 'backend_url: ', backend_url
+      plotUrl = 'http://' + hostname + ':' + port + '/static/scatterPlot2V/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/scatterPlot2V/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 or message.find('No Data') >= 0:
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayScatterPlot2V()")
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+    executionEndTime = int(time.time())
+
+    # YYYYY
+    urlLink = request.query_string
+    urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+    print 'urlLink: ', urlLink
+    urlLink = urlLink.replace('&fromPage='+frontend_url, '')
+    print 'urlLink: ', urlLink
+
+    # json dictionary for provenance service request
+    post_json = {'source': 'JPL', 'parameters':urlLink, 'frontend_url': frontend_url, 'backend_url': backend_url, 'userId': long(userId),
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+
+#== diffPlot2V__
+@app.route('/svc/diffPlot2V', methods=["GET"])
+@crossdomain(origin='*')
+def displayDiffPlot2V():
+    """Run displayDiffPlot2V"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    '''
+    nVar = 2
+    for i in range( nVar ):
+      m1 = request.args.get('model'+str(i+1), '')
+      exec('model%d = m1'%(i+1))
+
+      m1 = request.args.get('var'+str(i+1), '')
+      exec('var%d = m1'%(i+1))
+
+      m1 = request.args.get('pres'+str(i+1), '')
+      exec('pres%d = m1'%(i+1))
+
+
+    startT = request.args.get('startT', '')
+    endT = request.args.get('endT', '')
+    lonS = request.args.get('lonS', '')
+    lonE = request.args.get('lonE', '')
+    latS = request.args.get('latS', '')
+    latE = request.args.get('latE', '')
+'''
+
+    model1 = request.args.get('model1', '').lower()
+    var1 = request.args.get('var1', '')
+    pres1 = request.args.get('pres1', '')
+    model2 = request.args.get('model2', '').lower()
+    var2 = request.args.get('var2', '')
+    pres2 = request.args.get('pres2', '')
+    startT = request.args.get('timeS', '')
+    endT = request.args.get('timeE', '')
+    lon1 = request.args.get('lonS', '')
+    lon2 = request.args.get('lonE', '')
+    lat1 = request.args.get('latS', '')
+    lat2 = request.args.get('latE', '')
+    # YYYYY
+    frontend_url = request.args.get('fromPage', '')
+    print 'frontend_url: ', frontend_url
+
+    parameters_json = {'model1':model1, 'var1':var1, 'pres1':pres1,
+                       'model2':model2, 'var2':var2, 'pres2':pres2,
+                       'startT':startT,
+                       'endT':endT, 'lon1':lon1, 'lon2':lon2,
+                       'lat1':lat1, 'lat2':lat2}
+
+    print 'model1: ', model1
+    print 'var1: ', var1
+    print 'pres1: ', pres1
+    print 'model2: ', model2
+    print 'var2: ', var2
+    print 'pres2: ', pres2
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model1+var1+pres1+model2+var2+pres2+startT+endT+lat1+lat2+lon1+lon2
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/diffPlot2V/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/scatterPlot2V')
+      # instantiate the app. class
+      c1 = call_scatterPlot2V.call_scatterPlot2V(model1, var1, pres1, model2, var2, pres2, startT, endT, lon1, lon2, lat1, lat2, 0, output_dir, 1)
+      # call the app. function (1 means the image created is difference plot)
+      (message, imgFileName, dataFileName) = c1.display()
+      print 'imgFileName: ', imgFileName
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = 'lei'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+      
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = 'lei'
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      backend_url = 'http://' + hostname + ':' + port + '/svc/diffPlot2V'
+      print 'backend_url: ', backend_url
+      plotUrl = 'http://' + hostname + ':' + port + '/static/diffPlot2V/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/diffPlot2V/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayDiffPlot2V()")
+        message = str(e)
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+    executionEndTime = int(time.time())
+
+    urlLink = request.query_string
+    urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+    print 'urlLink: ', urlLink
+    urlLink = urlLink.replace('&fromPage='+frontend_url, '')
+    print 'urlLink: ', urlLink
+
+    # json dictionary for provenance service request
+    post_json = {'source': 'JPL', 'parameters':urlLink, 'frontend_url': frontend_url, 'backend_url': backend_url, 'userId': long(userId),
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+#== conditionalSampling_
+@app.route('/svc/conditionalSampling', methods=["GET"])
+#@app.route('/svc/conditionalSampling', methods=["POST"])
+@crossdomain(origin='*')
+def displayConditionalSamp():
+    """Run displayConditionalSamp"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model1, var1, start time, end time, lon1, lon2, lat1, lat2, pres1, pres2, months, model2, var2, bin_min, bin_max, bin_n, env_var_plev, displayOpt
+    model1 = request.args.get('model1', '')
+    var1 = request.args.get('var1', '')
+    startT = request.args.get('startT', '')
+    endT = request.args.get('endT', '')
+    lon1 = request.args.get('lonS', '')
+    lon2 = request.args.get('lonE', '')
+    lat1 = request.args.get('latS', '')
+    lat2 = request.args.get('latE', '')
+    pres1 = request.args.get('pres1', '')
+    pres2 = request.args.get('pres1a', '')
+    months = request.args.get('months', '')
+    model2 = request.args.get('model2', '')
+    var2 = request.args.get('var2', '')
+    bin_min = request.args.get('binMin2', '')
+    bin_max = request.args.get('binMax2', '')
+    bin_n = request.args.get('binN2', '')
+    env_var_plev = request.args.get('pres2', '')
+    displayOpt = request.args.get('scale3', '')
+
+    pres1 = convertPres(var1, pres1)
+    pres2 = convertPres(var1, pres2)
+    env_var_plev = convertPres(var2, env_var_plev)
+
+    # old edition
+    '''
+    model1 = request.args.get('model1', '')
+    var1 = request.args.get('var1', '')
+    startT = request.args.get('start_time', '')
+    endT = request.args.get('end_time', '')
+    lon1 = request.args.get('lon1', '')
+    lon2 = request.args.get('lon2', '')
+    lat1 = request.args.get('lat1', '')
+    lat2 = request.args.get('lat2', '')
+    pres1 = request.args.get('pres1', '')
+    pres2 = request.args.get('pres2', '')
+    months = request.args.get('months', '')
+    model2 = request.args.get('model2', '')
+    var2 = request.args.get('var2', '')
+    bin_min = request.args.get('bin_min', '')
+    bin_max = request.args.get('bin_max', '')
+    bin_n = request.args.get('bin_n', '')
+    env_var_plev = request.args.get('env_var_plev', '')
+    displayOpt = request.args.get('displayOpt', '')
+'''
+    parameters_json = {'model1':model1, 'var1':var1, 'pres1':pres1,
+                       'model2':model2, 'var2':var2, 'pres2':pres2,
+                       'startT':startT,
+                       'endT':endT, 'lon1':lon1, 'lon2':lon2,
+                       'lat1':lat1, 'lat2':lat2, 'months':months,
+                       'bin_min':bin_min, 'bin_max':bin_max,
+                       'bin_n':bin_n, 'env_var_plev':env_var_plev,
+                       'displayOpt':displayOpt}
+
+    print 'model1: ', model1
+    print 'var1: ', var1
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'pres1: ', pres1
+    print 'pres2: ', pres2
+    print 'months: ', months
+    print 'model2: ', model2
+    print 'var2: ', var2
+    print 'bin_min: ', bin_min
+    print 'bin_max: ', bin_max
+    print 'bin_n: ', bin_n
+    print 'env_var_plev: ', env_var_plev
+    print 'displayOpt: ', displayOpt
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model1+var1+startT+endT+lat1+lat2+lon1+lon2+pres1+pres2+months+model2+var2+bin_min+bin_max+bin_n+env_var_plev+displayOpt
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/conditionalSampling/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/conditionalSampling')
+      # instantiate the app. class
+
+      # c1 = call_conditionalSampling.call_conditionalSampling('giss_e2-r', 'clw', '200101', '200212', '0', '360', '-30', '30', '20000', '90000', '5,6,7,8', 'giss_e2-r', 'tos', '294','305','20', '',  './', '6')
+
+      c1 = call_conditionalSampling.call_conditionalSampling(model1, var1, startT, endT, lon1, lon2, lat1, lat2, pres1, pres2, months, model2, var2, bin_min, bin_max, bin_n, env_var_plev, output_dir, displayOpt)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.displayConditionalSampling()
+      print 'imgFileName: ', imgFileName
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = '1'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+      
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      plotUrl = 'http://' + hostname + ':' + port + '/static/conditionalSampling/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/conditionalSampling/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    #userId = "1"
+    serviceId = "9"
+    #serviceExecutionLogId = "89"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+#    serviceConfigurationId = "Test .\'\"\\confId"
+#    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+    #New parameters added here.
+    #parameters_json['purpose'] = purpose
+    #parameters_json['dataUrl'] = dataUrl
+    #parameters_json['plotUrl'] = url
+    #Xing's
+#    post_json = {'userId':userId, 'serviceId':'21', 'purpose':purpose,
+#                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+#                 'executionStartTime':str(executionStartTime), 'executionEndTime':str(executionEndTime),
+#                 'parameters': parameters_json,
+#                 'plotUrl': url, 'dataUrl': dataUrl}
+
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+#== conditionalSampling2Var__
+@app.route('/svc/conditionalSampling2Var', methods=["GET"])
+@crossdomain(origin='*')
+def displayConditionalSamp2Var():
+    """Run displayConditionalSamp2Var"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model1, var1, start time, end time, lon1, lon2, lat1, lat2, pres1, pres2, months, model2, var2, bin_min, bin_max, bin_n, env_var_plev, displayOpt
+    model1 = request.args.get('model1', '')
+    var1 = request.args.get('var1', '')
+    model2 = request.args.get('model2', '')
+    var2 = request.args.get('var2', '')
+    model3 = request.args.get('model3', '')
+    var3 = request.args.get('var3', '')
+    startT = request.args.get('startT', '')
+    endT = request.args.get('endT', '')
+    lon1 = request.args.get('lonS', '')
+    lon2 = request.args.get('lonE', '')
+    lat1 = request.args.get('latS', '')
+    lat2 = request.args.get('latE', '')
+    pres1 = request.args.get('pres1', '')
+    pres2 = request.args.get('pres1a', '')
+    months = request.args.get('months', '')
+    bin_min1 = request.args.get('binMin2', '')
+    bin_max1 = request.args.get('binMax2', '')
+    bin_n1 = request.args.get('binN2', '')
+    bin_min2 = request.args.get('binMin3', '')
+    bin_max2 = request.args.get('binMax3', '')
+    bin_n2 = request.args.get('binN3', '')
+    env_var_plev1 = request.args.get('pres2', '')
+    env_var_plev2 = request.args.get('pres3', '')
+    displayOpt = request.args.get('scale3', '')
+
+    pres1 = convertPres(var1, pres1)
+    pres2 = convertPres(var1, pres2)
+    env_var_plev1 = convertPres(var2, env_var_plev1)
+    env_var_plev2 = convertPres(var3, env_var_plev2)
+
+
+    '''
+
+    jsonData = request.json   
+
+    model1 = jsonData['model1']
+    var1 = jsonData['var1']
+    startT = jsonData['start_time']
+    endT = jsonData['end_time']
+    lon1 = jsonData['lon1']
+    lon2 = jsonData['lon2']
+    lat1 = jsonData['lat1']
+    lat2 = jsonData['lat2']
+    pres1 = jsonData['pres1']
+    pres2 = jsonData['pres2']
+    months = jsonData['months']
+    model2 = jsonData['model2']
+    var2 = jsonData['var2']
+    bin_min = jsonData['bin_min']
+    bin_max = jsonData['bin_max']
+    bin_n = jsonData['bin_n']
+    env_var_plev = jsonData['env_var_plev']
+    displayOpt = jsonData['displayOpt']
+
+    '''
+    parameters_json = {'model1':model1, 'var1':var1, 'pres1':pres1, 'pres2':pres2,
+                       'model2':model2, 'var2':var2, 
+                       'model3':model3, 'var3':var3, 
+                       'startT':startT,
+                       'endT':endT, 'lon1':lon1, 'lon2':lon2,
+                       'lat1':lat1, 'lat2':lat2, 'months':months,
+                       'bin_min1':bin_min1, 'bin_max1':bin_max1,
+                       'bin_n1':bin_n1, 'env_var_plev1':env_var_plev1,
+                       'bin_min2':bin_min2, 'bin_max2':bin_max2,
+                       'bin_n2':bin_n2, 'env_var_plev2':env_var_plev2,
+                       'displayOpt':displayOpt}
+
+    print 'model1: ', model1
+    print 'var1: ', var1
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'pres1: ', pres1
+    print 'pres2: ', pres2
+    print 'months: ', months
+    print 'model2: ', model2
+    print 'var2: ', var2
+    print 'bin_min1: ', bin_min1
+    print 'bin_max1: ', bin_max1
+    print 'bin_n1: ', bin_n1
+    print 'env_var_plev1: ', env_var_plev1
+    print 'bin_min2: ', bin_min2
+    print 'bin_max2: ', bin_max2
+    print 'bin_n2: ', bin_n2
+    print 'env_var_plev2: ', env_var_plev2
+    print 'displayOpt: ', displayOpt
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model1+var1+startT+endT+lat1+lat2+lon1+lon2+pres1+pres2+months+model2+var2+model3+var3+bin_min1+bin_max1+bin_n1+env_var_plev1+bin_min2+bin_max2+bin_n2+env_var_plev2+displayOpt
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/conditionalSampling2Var/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/conditionalSampling2Var')
+      # instantiate the app. class
+
+      # c1 = call_conditionalSampling.call_conditionalSampling('giss_e2-r', 'clw', '200101', '200212', '0', '360', '-30', '30', '20000', '90000', '5,6,7,8', 'giss_e2-r', 'tos', '294','305','20', '',  './', '6')
+
+      c1 = call_conditionalSampling2Var.call_conditionalSampling2Var(model1, var1, startT, endT, lon1, lon2, lat1, lat2, pres1, pres2, months, 
+        model2, var2, bin_min1, bin_max1, bin_n1, env_var_plev1, 
+        model3, var3, bin_min2, bin_max2, bin_n2, env_var_plev2, 
+        output_dir, displayOpt)
+
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.displayConditionalSampling2Var()
+      print 'imgFileName: ', imgFileName
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = '1'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+ 
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      plotUrl = 'http://' + hostname + ':' + port + '/static/conditionalSampling2Var/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/conditionalSampling2Var/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    #userId = "1"
+    serviceId = "10"
+    #serviceExecutionLogId = "89"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+#    serviceConfigurationId = "Test .\'\"\\confId"
+#    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+    #New parameters added here.
+    #parameters_json['purpose'] = purpose
+    #parameters_json['dataUrl'] = dataUrl
+    #parameters_json['plotUrl'] = url
+    #Xing's
+#    post_json = {'userId':userId, 'serviceId':'21', 'purpose':purpose,
+#                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+#                 'executionStartTime':str(executionStartTime), 'executionEndTime':str(executionEndTime),
+#                 'parameters': parameters_json,
+#                 'plotUrl': url, 'dataUrl': dataUrl}
+
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+
+
+@app.route('/svc/co-locate', methods=["GET"])
+@crossdomain(origin='*')
+def displayColocation():
+    """Run displayColocation"""
+    executionStartTime = int(time.time())     
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+     
+    # get source, target, start_time, end_time
+     
+    source = request.args.get('source', '')
+    target = request.args.get('target', '')
+    startT = request.args.get('start_time', '')
+    endT = request.args.get('end_time', '')
+
+    parameters_json = {'source':source, 'target':target,
+                       'startT':startT, 'endT':endT}
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = source+target+startT+endT
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/co-location/' #### + tag
+      print 'output_dir: ', output_dir
+
+      ### if not os.path.exists(output_dir):
+        ### os.makedirs(output_dir)
+       
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/collocation')
+      # instantiate the app. class
+     
+      c1 = call_collocation.call_collocation(source, target, startT, endT, output_dir)
+
+      # call the app. function
+      (message, imgFileName) = c1.display()
+      print 'imgFileName: ', imgFileName
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      imgFileName = 'collocation_plot.png'
+      plotUrl = 'http://' + hostname + ':' + port + '/static/co-location/' + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      ### print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    userId = "Test .\'\"\\userId"
+    serviceId = "displayColocation"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+    serviceConfigurationId = "Test .\'\"\\confId"
+    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+    post_json = {'userId':userId, 'serviceId':serviceId, 'purpose':purpose,
+                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+                 'executionStartTime':executionStartTime, 'executionEndTime':executionEndTime,
+                 'parameters': parameters_json}
+    #requests.post(BASE_URL, data=post_json)
+#    print BASE_URL.format(userId, serviceId, purpose,
+#                          serviceConfigurationId, datasetLogId,
+#                          executionStartTime, executionEndTime,
+#                          json.dumps(post_json))
+    req_url = BASE_URL.format(userId, serviceId, purpose,
+                          serviceConfigurationId, datasetLogId,
+                          executionStartTime, executionEndTime)
+    print req_url
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    }) 
+   
+
+
+@app.route('/svc/two_time_bounds', methods=["GET"])
+@crossdomain(origin='*')
+def displayTwoTimeBounds():
+    """Run displayTwoTimeBounds"""
+    executionStartTime = int(time.time())     
+    # status and message
+    success = True
+    message = "ok"
+   
+    # get data source and variable name
+    serviceType = request.args.get('serviceType', '')
+    source1 = request.args.get('source1', '')
+    var1 = request.args.get('var1', '')
+    source2 = request.args.get('source2', '')
+    var2 = request.args.get('var2', '')
+    parameters_json = {'serviceType':serviceType, 'source1':source1,
+                       'var1':var1, 'source2':source2, 'var2':var2}
+
+    print 'source1: ', source1
+    print 'var:1 ', var1
+    print 'source2: ', source2
+    print 'var2: ', var2
+
+    retDateList1 = getTimeBounds.getTimeBounds(serviceType, source1, var1)
+    print 'retDateList1: ', retDateList1
+
+    if retDateList1[0] is not 0:
+      lower1 = int(str(retDateList1[0]))
+    else:
+      lower1 = 0
+
+    if retDateList1[1] is not 0:
+      upper1 = int(str(retDateList1[1]))
+    else:
+      upper1 = 0
+
+    retDateList2 = getTimeBounds.getTimeBounds(serviceType, source2, var2)
+    print 'retDateList2: ', retDateList2
+
+    if retDateList2[0] is not 0:
+      lower2 = int(str(retDateList2[0]))
+    else:
+      lower2 = 0
+
+    if retDateList2[1] is not 0:
+      upper2 = int(str(retDateList2[1]))
+    else:
+      upper2 = 0
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    userId = "Test .\'\"\\userId"
+    serviceId = "displayTwoTimeBounds"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+    serviceConfigurationId = "Test .\'\"\\confId"
+    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'time_bounds1': [lower1, upper1],
+        'time_bounds2': [lower2, upper2]
+    }) 
+
+
+
+@app.route('/svc/time_bounds', methods=["GET"])
+@crossdomain(origin='*')
+def displayTimeBounds():
+    """Run displayTimeBounds"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+   
+    # get data source and variable name
+    serviceType = request.args.get('serviceType', '')
+    source = request.args.get('source', '')
+    var = request.args.get('var', '')
+
+    parameters_json = {'serviceType':serviceType, 'source':source, 'var':var}
+
+    print 'source: ', source
+    print 'var: ', var
+
+    retDateList = getTimeBounds.getTimeBounds(serviceType, source, var)
+    print 'retDateList: ', retDateList
+
+    if retDateList[0] is not 0:
+      lower = int(str(retDateList[0]))
+    else:
+      lower = 0
+
+    if retDateList[1] is not 0:
+      upper = int(str(retDateList[1]))
+    else:
+      upper = 0
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    userId = "Test .\'\"\\userId"
+    serviceId = "displayTimeBounds"
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+    serviceConfigurationId = "Test .\'\"\\confId"
+    datasetLogId = "Test .\'\"\\logId"
+    executionEndTime = int(time.time())
+    post_json = {'userId':userId, 'serviceId':serviceId, 'purpose':purpose,
+                 'serviceConfigurationId':serviceConfigurationId, 'datasetLogId':datasetLogId,
+                 'executionStartTime':executionStartTime, 'executionEndTime':executionEndTime,
+                 'parameters': parameters_json}
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'time_bounds': [lower, upper]
+    }) 
+
+
+@app.route('/svc/regridAndDownload', methods=["GET"])
+@crossdomain(origin='*')
+def regridAndDownload():
+    """Run regridAndDownload"""
+    executionStartTime = int(time.time())  
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model, var, start time, end time, lon1, lon2, dlon, lat1, lat2, dlat, plev
+
+    model = request.args.get('model', '')
+    var = request.args.get('var', '')
+    startT = request.args.get('start_time', '')
+    endT = request.args.get('end_time', '')
+    lon1 = request.args.get('lon1', '')
+    lon2 = request.args.get('lon2', '')
+    dlon = request.args.get('dlon', '')
+    lat1 = request.args.get('lat1', '')
+    lat2 = request.args.get('lat2', '')
+    dlat = request.args.get('dlat', '')
+    plev = request.args.get('plev', '')
+
+    #added by CMU
+    parameters_json = {'model':model, 'var':var, 'startT':startT,
+                       'endT':endT, 'lon1':lon1, 'lon2':lon2, 'dlon':dlon,
+                       'lat1':lat1, 'lat2':lat2, 'dlat':dlat,
+                       'plev':plev}
+    #/added by CMU
+
+    print 'model: ', model
+    print 'var: ', var
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'dlon: ', dlon
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'dlat: ', dlat
+    print 'plev: ', plev
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model+var+startT+endT+lon1+lon2+dlon+lat1+lat2+dlat+plev
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/regridAndDownload/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/regridAndDownload')
+      # instantiate the app. class
+      c1 = call_regridAndDownload.call_regridAndDownload(model, var, startT, endT, lon1, lon2, dlon, lat1, lat2, dlat, plev, output_dir)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.regridAndDownload()
+      print 'message:', message
+      print 'imgFileName:', imgFileName
+      print 'dataFileName:', dataFileName
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      userId = '1'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+ 
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      ### url = 'http://cmacws.jpl.nasa.gov:8090/static/twoDimMap/' + tag + '/' + imgFileName
+      plotUrl = 'http://' + hostname + ':' + port + '/static/regridAndDownload/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/regridAndDownload/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in regridAndDownload()")
+        message = str(e)
+
+
+    print 'Wei\'s URL called here'
+    #userId = "1";
+    serviceId = "12";
+    purpose = request.args.get('purpose')
+    executionEndTime = int(time.time())
+
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+ 
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': parameters_json, 'plotUrl': plotUrl, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+ 
+    post_json = json.dumps(post_json)
+    
+    if USE_CMU:
+        try:
+            print post_json
+            print requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+            
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+ 
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+
+@app.route('/svc/regridAndDownloadPOST', methods=["POST"])
+@crossdomain(origin='*')
+def regridAndDownloadPOST():
+    """Run regridAndDownloadPOST"""
+
+    # status and message
+    success = True
+    message = "ok"
+    url = ''
+    dataUrl = ''
+
+    # get model, var, start time, end time, lon1, lon2, dlon, lat1, lat2, dlat, plev
+
+    '''
+    model = request.args.get('model', '')
+    var = request.args.get('var', '')
+    startT = request.args.get('start_time', '')
+    endT = request.args.get('end_time', '')
+    lon1 = request.args.get('lon1', '')
+    lon2 = request.args.get('lon2', '')
+    dlon = request.args.get('dlon', '')
+    lat1 = request.args.get('lat1', '')
+    lat2 = request.args.get('lat2', '')
+    dlat = request.args.get('dlat', '')
+    plev = request.args.get('plev', '')
+    '''
+
+    jsonData = request.json
+
+    model = jsonData['model']
+    var = jsonData['var']
+    startT = jsonData['start_time']
+    endT = jsonData['end_time']
+    lon1 = jsonData['lon1']
+    lon2 = jsonData['lon2']
+    dlon = jsonData['dlon']
+    lat1 = jsonData['lat1']
+    lat2 = jsonData['lat2']
+    dlat = jsonData['dlat']
+    plev = jsonData['plev']
+
+    print 'model: ', model
+    print 'var: ', var
+    print 'startT: ', startT
+    print 'endT: ', endT
+    print 'lon1: ', lon1
+    print 'lon2: ', lon2
+    print 'dlon: ', dlon
+    print 'lat1: ', lat1
+    print 'lat2: ', lat2
+    print 'dlat: ', dlat
+    print 'plev: ', plev
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = model+var+startT+endT+lon1+lon2+dlon+lat1+lat2+dlat+plev
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/regridAndDownload/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/regridAndDownload')
+      # instantiate the app. class
+      c1 = call_regridAndDownload.call_regridAndDownload(model, var, startT, endT, lon1, lon2, dlon, lat1, lat2, dlat, plev, output_dir)
+      # call the app. function
+      (message, imgFileName, dataFileName) = c1.regridAndDownload()
+      # chdir back
+      os.chdir(current_dir)
+
+      hostname, port = get_host_port("host.cfg")
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      ### url = 'http://cmacws.jpl.nasa.gov:8090/static/twoDimMap/' + tag + '/' + imgFileName
+      url = 'http://' + hostname + ':' + port + '/static/regridAndDownload/' + tag + '/' + imgFileName
+      print 'url: ', url
+      dataUrl = 'http://' + hostname + ':' + port + '/static/regridAndDownload/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 :
+        success = False
+        url = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in regridAndDownload()")
+        message = str(e)
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': url,
+        'dataUrl': dataUrl
+    })
+
+#== correlationMap_
+@app.route('/svc/correlationMap', methods=["GET"])
+@crossdomain(origin='*')
+def displayCorrelationMap():
+    """Run displayCorrelationMap"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model1, var1, pres1, model2, var2, pres2, start time, end time, lon1, lon2, lat1, lat2
+
+    center = []
+    model = []
+    var = []
+    pres = []
+
+    nVar = 2
+    for i in range( nVar):
+      m1 = request.args.get('model'+str(i+1), '').lower()
+      temp1 = m1.split('_')
+      center.append(temp1[0])
+      model.append(temp1[1])
+      var.append(request.args.get('var'+str(i+1), ''))
+      pres.append(request.args.get('pres'+str(i+1), ''))
+
+    laggedTime = request.args.get('laggedTime', '')
+    startT = request.args.get('timeS', '')
+    endT = request.args.get('timeE', '')
+    lonS = request.args.get('lonS', '')
+    lonE = request.args.get('lonE', '')
+    latS = request.args.get('latS', '')
+    latE = request.args.get('latE', '')
+    # KKKKK
+    frontend_url = request.args.get('fromPage', '')
+    print 'frontend_url: ', frontend_url
+
+    json1 = {
+       'center':center, 
+       'model':model, 
+       'varName':var, 
+       'pres':pres,
+       'yearS':startT[:4],
+       'yearE':endT[:4],
+       'monthS':startT[4:], 
+       'monthE':endT[4:], 
+       'lon1S':lonS, 
+       'lon1E':lonE,
+       'lat1S':latS, 
+       'lat1E':latE, 
+       'laggedTime':laggedTime, 
+    }
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = str(time.time())
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/correlationMap/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+      json1['outDir'] = output_dir
+
+      import pickle
+      pFile = '%s/p.pickle'%output_dir
+      fid = open(pFile,'w')
+      pickle.dump(json1, fid)
+      fid.close()
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/correlationMap')
+      # instantiate the app. class
+      c1 = call_correlationMap.call_correlationMap(pFile)
+      # call the app. function (0 means the image created is scatter plot)
+      ### (message, imgFileName) = c1.displayScatterPlot2V(0)
+      (message, imgFileName, dataFileName) = c1.display()
+      # chdir back
+      os.chdir(current_dir)
+
+      ind1 = message.find('No Data')
+      if ind1>0:
+        message1 = message[ind1:(ind1+200)]
+        message1a = message1.split('\n')
+        print message1a[0]
+        print message1a[1]
+     
+      hostname, port = get_host_port("host.cfg")
+      userId = 'lei'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+ 
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = 'lei'
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+      print 'imgFileName: ', imgFileName
+
+      backend_url = 'http://' + hostname + ':' + port + '/svc/correlationMap'
+      print 'backend_url: ', backend_url
+      plotUrl = 'http://' + hostname + ':' + port + '/static/correlationMap/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/correlationMap/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 or message.find('No Data') >= 0:
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayScatterPlot2V()")
+        message = str(e)
+
+    #TODO call Wei's url
+    print 'Wei\'s URL called here'
+    purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+    executionEndTime = int(time.time())
+
+    urlLink = request.query_string
+    urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+    print 'urlLink: ', urlLink
+    urlLink = urlLink.replace('&fromPage='+frontend_url, '')
+    print 'urlLink: ', urlLink
+
+    # json dictionary for provenance service request
+    post_json = {'source': 'JPL', 'parameters':urlLink, 'frontend_url': frontend_url, 'backend_url': backend_url, 'userId': long(userId),
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print '===================================================================='
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+# randomForest__
+@app.route('/svc/randomForest', methods=["GET"])
+@crossdomain(origin='*')
+def displayRandomForest():
+    """Run displayRandomForest"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model1, var1, pres1, model2, var2, pres2, start time, end time, lon1, lon2, lat1, lat2, nSample
+
+    center = []
+    model = []
+    var = []
+    pres = []
+
+    nVarP = 1
+
+    nVar = int(request.args.get('nVar', ''))
+    for i in range( nVar+nVarP ):
+      m1 = request.args.get('model'+str(i+1), '').lower()
+      temp1 = m1.split('_')
+      center.append(temp1[0])
+      model.append(temp1[1])
+      var.append(request.args.get('var'+str(i+1), ''))
+      pres.append(request.args.get('pres'+str(i+1), ''))
+
+    startT = request.args.get('timeS', '')
+    endT = request.args.get('timeE', '')
+    lonS = request.args.get('lonS', '')
+    lonE = request.args.get('lonE', '')
+    latS = request.args.get('latS', '')
+    latE = request.args.get('latE', '')
+    # LLLLL
+    frontend_url = request.args.get('fromPage', '')
+    print 'frontend_url: ', frontend_url
+
+    json1 = {
+       'nVar':nVar, 
+       'center':center, 
+       'model':model, 
+       'varName':var, 
+       'pres':pres,
+       'yearS':startT[:4],
+       'yearE':endT[:4],
+       'monthS':startT[4:], 
+       'monthE':endT[4:], 
+       'lon1S':lonS, 
+       'lon1E':lonE,
+       'lat1S':latS, 
+       'lat1E':latE, 
+    }
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = str(time.time())
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/randomForest/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+      json1['outDir'] = output_dir
+
+      import pickle
+      pFile = '%s/p.pickle'%output_dir
+      fid = open(pFile,'w')
+      pickle.dump(json1, fid)
+      fid.close()
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/randomForest')
+      # instantiate the app. class
+      c1 = call_randomForest.call_randomForest(pFile)
+      # call the app. function (0 means the image created is scatter plot)
+      ### (message, imgFileName) = c1.displayScatterPlot2V(0)
+      (message, imgFileName, dataFileName) = c1.display()
+      # chdir back
+      os.chdir(current_dir)
+
+      ind1 = message.find('No Data')
+      if ind1>0:
+        message1 = message[ind1:(ind1+200)]
+        message1a = message1.split('\n')
+        print message1a[0]
+        print message1a[1]
+     
+      hostname, port = get_host_port("host.cfg")
+      userId = 'lei'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+        req2 = urllib2.Request(' http://169.254.169.254/latest/user-data') 
+        response2 = urllib2.urlopen(req2) 
+        userId = json.loads(response2.read())['username'] 
+ 
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = 'lei'
+
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+
+      backend_url = 'http://' + hostname + ':' + port + '/svc/randomForest'
+      print 'backend_url: ', backend_url
+      print 'imgFileName: ', imgFileName
+      plotUrl = 'http://' + hostname + ':' + port + '/static/randomForest/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/randomForest/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 or message.find('No Data') >= 0:
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayScatterPlot2V()")
+        message = str(e)
+
+    executionEndTime = int(time.time())
+
+    urlLink = request.query_string
+    urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+    print 'urlLink: ', urlLink
+    urlLink = urlLink.replace('&fromPage='+frontend_url, '')
+    print 'urlLink: ', urlLink
+
+    # json dictionary for provenance service request
+    post_json = {'source': 'JPL', 'parameters':urlLink, 'frontend_url': frontend_url, 'backend_url': backend_url, 'userId': long(userId),
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+# EOF__
+@app.route('/svc/EOF', methods=["GET"])
+@crossdomain(origin='*')
+def displayEOF():
+    """Run displayEOF"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model1, var1, pres1, model2, var2, pres2, start time, end time, lon1, lon2, lat1, lat2, nSample
+
+    center = []
+    model = []
+    var = []
+    pres = []
+
+    nVar = 1
+    for i in range( nVar ):
+      m1 = request.args.get('model'+str(i+1), '').lower()
+      temp1 = m1.split('_')
+      center.append(temp1[0])
+      model.append(temp1[1])
+      var.append(request.args.get('var'+str(i+1), ''))
+      pres.append(request.args.get('pres'+str(i+1), ''))
+
+    startT = request.args.get('timeS', '')
+    endT = request.args.get('timeE', '')
+    lonS = request.args.get('lonS', '')
+    lonE = request.args.get('lonE', '')
+    latS = request.args.get('latS', '')
+    latE = request.args.get('latE', '')
+    anomaly = request.args.get('anomaly', '')
+    # JJJJ
+    frontend_url = request.args.get('fromPage', '')
+    print 'frontend_url: ', frontend_url
+
+    json1 = {
+       'center':center, 
+       'model':model, 
+       'varName':var, 
+       'pres':pres,
+       'yearS':startT[:4],
+       'yearE':endT[:4],
+       'monthS':startT[4:], 
+       'monthE':endT[4:], 
+       'lon1S':lonS, 
+       'lon1E':lonE,
+       'lat1S':latS, 
+       'lat1E':latE, 
+       'anomaly':anomaly, 
+    }
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = str(time.time())
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/EOF/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+      json1['outDir'] = output_dir
+
+      import pickle
+      pFile = '%s/p.pickle'%output_dir
+      fid = open(pFile,'w')
+      pickle.dump(json1, fid)
+      fid.close()
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/EOF')
+      # instantiate the app. class
+      c1 = call_EOF.call_EOF(pFile)
+      # call the app. function (0 means the image created is scatter plot)
+      ### (message, imgFileName) = c1.displayScatterPlot2V(0)
+      (message, imgFileName, dataFileName) = c1.display()
+      # chdir back
+      os.chdir(current_dir)
+
+      ind1 = message.find('No Data')
+      if ind1>0:
+        message1 = message[ind1:(ind1+200)]
+        message1a = message1.split('\n')
+        print message1a[0]
+        print message1a[1]
+     
+      hostname, port = get_host_port("host.cfg")
+      userId = 'lei'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = 'lei'
+
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+
+      backend_url = 'http://' + hostname + ':' + port + '/svc/EOF'
+      print 'backend_url: ', backend_url
+      print 'imgFileName: ', imgFileName
+      plotUrl = 'http://' + hostname + ':' + port + '/static/EOF/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/EOF/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 or message.find('No Data') >= 0:
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayScatterPlot2V()")
+        message = str(e)
+
+    executionEndTime = int(time.time())
+
+    urlLink = request.query_string
+    urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+    print 'urlLink: ', urlLink
+    urlLink = urlLink.replace('&fromPage='+frontend_url, '')
+    print 'urlLink: ', urlLink
+
+    # json dictionary for provenance service request
+    post_json = {'source': 'JPL', 'parameters':urlLink, 'frontend_url': frontend_url, 'backend_url': backend_url, 'userId': long(userId),
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+# conditionalPdf__
+@app.route('/svc/conditionalPdf', methods=["GET"])
+@crossdomain(origin='*')
+def displayConditionalPdf():
+    """run displayConditionalPdf """
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    center = []
+    model = []
+    var = []
+    pres = []
+
+    nVar = 2
+    for i in range( nVar ):
+      m1 = request.args.get('model'+str(i+1), '').lower()
+      temp1 = m1.split('_')
+      center.append(temp1[0])
+      model.append(temp1[1])
+      var.append(request.args.get('var'+str(i+1), ''))
+      pres.append(request.args.get('pres'+str(i+1), ''))
+
+    startT = request.args.get('timeS', '')
+    endT = request.args.get('timeE', '')
+    lonS = request.args.get('lonS', '')
+    lonE = request.args.get('lonE', '')
+    latS = request.args.get('latS', '')
+    latE = request.args.get('latE', '')
+    anomaly = request.args.get('anomaly', '')
+    nBinX = request.args.get('nBinX', '')
+    nBinY = request.args.get('nBinY', '')
+    # BBBB
+    frontend_url = request.args.get('fromPage', '')
+    print 'frontend_url: ', frontend_url
+
+    json1 = {
+       'nVar':nVar, 
+       'center':center, 
+       'model':model, 
+       'varName':var, 
+       'pres':pres,
+       'yearS':startT[:4],
+       'yearE':endT[:4],
+       'monthS':startT[4:], 
+       'monthE':endT[4:], 
+       'lon1S':lonS, 
+       'lon1E':lonE,
+       'lat1S':latS, 
+       'lat1E':latE, 
+       'anomaly':anomaly, 
+       'nBinX':nBinX, 
+       'nBinY':nBinY, 
+    }
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = str(time.time())
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/conditionalPdf/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+      json1['outDir'] = output_dir
+
+      import pickle
+      pFile = '%s/p.pickle'%output_dir
+      fid = open(pFile,'w')
+      pickle.dump(json1, fid)
+      fid.close()
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/conditionalPdf')
+      # instantiate the app. class
+      c1 = call_service.call_service(pFile)
+      # call the app. function (0 means the image created is scatter plot)
+      ### (message, imgFileName) = c1.displayScatterPlot2V(0)
+      (message, imgFileName, dataFileName) = c1.display()
+      # chdir back
+      os.chdir(current_dir)
+
+      ind1 = message.find('No Data')
+      if ind1>0:
+        message1 = message[ind1:(ind1+200)]
+        message1a = message1.split('\n')
+        print message1a[0]
+        print message1a[1]
+     
+      hostname, port = get_host_port("host.cfg")
+      userId = 'lei'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = 'lei'
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+
+      backend_url = 'http://' + hostname + ':' + port + '/svc/conditionalPdf'
+      print 'backend_url: ', backend_url
+      print 'imgFileName: ', imgFileName
+      plotUrl = 'http://' + hostname + ':' + port + '/static/conditionalPdf/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/conditionalPdf/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 or message.find('No Data') >= 0:
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayScatterPlot2V()")
+        message = str(e)
+
+    executionEndTime = int(time.time())
+
+    urlLink = request.query_string
+    urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+    print 'urlLink: ', urlLink
+    urlLink = urlLink.replace('&fromPage='+frontend_url, '')
+    print 'urlLink: ', urlLink
+
+    # json dictionary for provenance service request
+    post_json = {'source': 'JPL', 'parameters':urlLink, 'frontend_url': frontend_url, 'backend_url': backend_url, 'userId': long(userId),
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+#== anomaly__
+@app.route('/svc/anomaly', methods=["GET"])
+@crossdomain(origin='*')
+def displayAnomaly():
+    """Run displayAnomaly"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model1, var1, pres1, model2, var2, pres2, start time, end time, lon1, lon2, lat1, lat2, nSample
+
+    center = []
+    model = []
+    var = []
+    pres = []
+
+    print "request.query_string: ", 
+    print request.query_string
+    nVar = 2
+    for i in range( nVar ):
+      m1 = request.args.get('model'+str(i+1), '').lower()
+      temp1 = m1.split('_')
+      center.append(temp1[0])
+      model.append(temp1[1])
+      var.append(request.args.get('var'+str(i+1), ''))
+      pres.append(request.args.get('pres'+str(i+1), ''))
+
+    startT = request.args.get('timeS', '')
+    endT = request.args.get('timeE', '')
+    lonS = request.args.get('lonS', '')
+    lonE = request.args.get('lonE', '')
+    latS = request.args.get('latS', '')
+    latE = request.args.get('latE', '')
+    startT2 = request.args.get('timeS2', '')
+    endT2 = request.args.get('timeE2', '')
+    removeSeason = request.args.get('removeSeason', '')
+    useVar2 = request.args.get('useVar2', '')
+    useTime2 = request.args.get('useTime2', '')
+    # AAAAA
+    frontend_url = request.args.get('fromPage', '')
+    print 'frontend_url: ', frontend_url
+    print 'startT2, endT2: ', startT2, endT2
+
+    json1 = {
+       'center':center, 
+       'model':model, 
+       'varName':var, 
+       'pres':pres,
+       'yearS':startT[:4],
+       'yearE':endT[:4],
+       'monthS':startT[4:], 
+       'monthE':endT[4:], 
+       'lon1S':lonS, 
+       'lon1E':lonE,
+       'lat1S':latS, 
+       'lat1E':latE, 
+       'removeSeason':removeSeason, 
+       'useVar2':useVar2, 
+       'useTime2':useTime2, 
+       'yearS2':startT2[:4],
+       'yearE2':endT2[:4],
+       'monthS2':startT2[4:], 
+       'monthE2':endT2[4:], 
+       'queryString':request.query_string,
+    }
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      seed_str = str(time.time())
+      tag = md5.new(seed_str).hexdigest()
+      output_dir = current_dir + '/svc/static/anomaly/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+      json1['outDir'] = output_dir
+
+      import pickle
+      pFile = '%s/p.pickle'%output_dir
+      fid = open(pFile,'w')
+      pickle.dump(json1, fid)
+      fid.close()
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/anomaly')
+      # instantiate the app. class
+      c1 = call_service.call_service(pFile)
+      # call the app. function (0 means the image created is scatter plot)
+      ### (message, imgFileName) = c1.displayScatterPlot2V(0)
+      (message, imgFileName, dataFileName) = c1.display()
+      # chdir back
+      os.chdir(current_dir)
+
+      ind1 = message.find('No Data')
+      if ind1>0:
+        message1 = message[ind1:(ind1+200)]
+        message1a = message1.split('\n')
+        print message1a[0]
+        print message1a[1]
+     
+      hostname, port = get_host_port("host.cfg")
+      userId = 'lei'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = 'lei'
+
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+
+      print 'imgFileName: ', imgFileName
+
+      backend_url = 'http://' + hostname + ':' + port + '/svc/anomaly'
+      print 'backend_url: ', backend_url
+      plotUrl = 'http://' + hostname + ':' + port + '/static/anomaly/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/anomaly/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 or message.find('No Data') >= 0:
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayScatterPlot2V()")
+        message = str(e)
+
+    executionEndTime = int(time.time())
+
+    urlLink = request.query_string
+    urlLink = urlLink.strip() + '&image=%s&data_url=%s' % (plotUrl, dataUrl)
+    print 'urlLink: ', urlLink
+    urlLink = urlLink.replace('&fromPage='+frontend_url, '')
+    print 'urlLink: ', urlLink
+
+    # json dictionary for provenance service request
+    post_json = {'source': 'JPL', 'parameters':urlLink, 'frontend_url': frontend_url, 'backend_url': backend_url, 'userId': long(userId),
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+#== map__
+#== map2d__
+@app.route('/svc/map2d', methods=["GET"])
+@crossdomain(origin='*')
+def displayMap2d():
+    """Run displayMap2d"""
+    executionStartTime = int(time.time())
+    # status and message
+    success = True
+    message = "ok"
+    plotUrl = ''
+    dataUrl = ''
+
+    # get model1, var1, pres1, model2, var2, pres2, start time, end time, lon1, lon2, lat1, lat2, nSample
+
+    center = []
+    model = []
+    var = []
+    pres = []
+
+    print "request.query_string: ", 
+    print request.query_string
+    nVar = 1
+    for i in range( nVar ):
+      m1 = request.args.get('model'+str(i+1), '')
+      temp1 = m1.split('_')
+      center.append(temp1[0])
+      model.append(temp1[1])
+      var.append(request.args.get('var'+str(i+1), ''))
+      pres.append(request.args.get('pres'+str(i+1), ''))
+
+    startT = request.args.get('startT', '')
+    endT = request.args.get('endT', '')
+    lonS = request.args.get('lonS', '')
+    lonE = request.args.get('lonE', '')
+    latS = request.args.get('latS', '')
+    latE = request.args.get('latE', '')
+    useVmin1 = request.args.get('useVmin1', '')
+    vmin1 = request.args.get('vmin1', '')
+    vmax1 = request.args.get('vmax1', '')
+    data_url1 = request.args.get('data_url', '')
+
+    json1 = {
+       'center':center, 
+       'model':model, 
+       'varName':var, 
+       'pres':pres,
+       'yearS':startT[:4],
+       'yearE':endT[:4],
+       'monthS':startT[4:], 
+       'monthE':endT[4:], 
+       'lon1S':lonS, 
+       'lon1E':lonE,
+       'lat1S':latS, 
+       'lat1E':latE, 
+       'useVmin1':useVmin1, 
+       'vmin1':vmin1, 
+       'vmax1':vmax1, 
+       'data_url':data_url1, 
+       'queryString':request.query_string,
+    }
+
+    tag = None
+    if len(data_url1)>10:
+      if data_url1[-1]=='c':
+        fn1 = os.path.dirname(data_url1)
+        tag = os.path.basename(fn1)
+
+    # get where the input file and output file are
+    current_dir = os.getcwd()
+    print 'current_dir: ', current_dir
+
+    try:
+      if tag is None:
+        seed_str = str(time.time())
+        tag = md5.new(seed_str).hexdigest()
+
+      output_dir = current_dir + '/svc/static/map2d/' + tag
+      print 'output_dir: ', output_dir
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+      json1['outDir'] = output_dir
+
+      import pickle
+      pFile = '%s/p.pickle'%output_dir
+      fid = open(pFile,'w')
+      pickle.dump(json1, fid)
+      fid.close()
+
+      # chdir to where the app is
+      os.chdir(current_dir+'/svc/src/map2d')
+      # instantiate the app. class
+      c1 = call_service.call_service(pFile)
+      # call the app. function (0 means the image created is scatter plot)
+      ### (message, imgFileName) = c1.displayScatterPlot2V(0)
+      (message, imgFileName, dataFileName) = c1.display()
+      # chdir back
+      os.chdir(current_dir)
+
+      ind1 = message.find('No Data')
+      if ind1>0:
+        message1 = message[ind1:(ind1+200)]
+        message1a = message1.split('\n')
+        print message1a[0]
+        print message1a[1]
+     
+      hostname, port = get_host_port("host.cfg")
+      userId = '1'
+      if hostname == 'EC2':
+        req = urllib2.Request('http://169.254.169.254/latest/meta-data/public-ipv4')
+        response = urllib2.urlopen(req)
+        hostname = response.read()
+
+      if userIdDict.has_key(userId):
+        userId = userIdDict[userId]
+      else :
+        userId = '1'
+
+      print 'userId: ', userId
+
+      print 'hostname: ', hostname
+      print 'port: ', port
+
+      serviceId = "17";
+      purpose = request.args.get('purpose')#"Test .\'\"\\purpose"
+
+      print 'imgFileName: ', imgFileName
+      plotUrl = 'http://' + hostname + ':' + port + '/static/map2d/' + tag + '/' + imgFileName
+      print 'plotUrl: ', plotUrl
+      dataUrl = 'http://' + hostname + ':' + port + '/static/map2d/' + tag + '/' + dataFileName
+      print 'dataUrl: ', dataUrl
+
+      print 'message: ', message
+      if len(message) == 0 or message.find('Error') >= 0 or message.find('error:') >= 0 or message.find('No Data') >= 0:
+        success = False
+        plotUrl = ''
+        dataUrl = ''
+
+    except ValueError, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        message = str(e)
+    except Exception, e:
+        # chdir to current_dir in case the dir is changed to where the app is in the try block
+        os.chdir(current_dir)
+        print 'change dir back to: ', current_dir
+
+        success = False
+        ### message = str("Error caught in displayScatterPlot2V()")
+        message = str(e)
+
+    executionEndTime = int(time.time())
+
+    urlLink = request.query_string
+    print 'urlLink: ', urlLink
+
+    post_json = {'dataUrl': dataUrl, 'urlLink':urlLink, 'userId': long(userId), 'serviceId':long(serviceId), 'purpose':purpose,
+                     'executionStartTime':long(executionStartTime)*1000, 'executionEndTime':long(executionEndTime)*1000,
+                     'parameters': json1, 'plotUrl': plotUrl, 'datasetStudyStartTime': startT, 'datasetStudyEndTime': endT}
+
+    post_json = json.dumps(post_json)
+    if USE_CMU:
+        try:
+            print post_json
+            requests.post(CMU_PROVENANCE_URL, data=post_json, headers=HEADERS).text
+        except:
+            print 'Something went wrong with Wei\'s stuff'
+
+    return jsonify({
+        'success': success,
+        'message': message,
+        'url': plotUrl,
+        'dataUrl': dataUrl
+    })
+
+
+
+

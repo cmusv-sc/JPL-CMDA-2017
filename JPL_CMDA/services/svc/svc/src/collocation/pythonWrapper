@@ -1,0 +1,272 @@
+#!/home/svc/install/epd/bin/python
+'''
+execfile('/home/bytang/projects/cmac/trunk/services/svc/svc/src/collocation/pythonWrapper')
+
+kk sp
+cd collocation
+rsync -ave 'ssh -p 8022' \
+pythonWrapper \
+wrapper \
+call_collocation.py \
+$cmac4:/home/bytang/projects/cmac/trunk/services/svc/svc/src/collocation
+
+aa=pythonWrapper
+cd /home/svc/cmac/trunk/services/svc/svc/src/collocation
+#mv $aa temp1
+rsync -av /home/bytang/projects/cmac/trunk/services/svc/svc/src/collocation/$aa .
+
+
+import sys
+sys.path.append('/home/bytang/projects/cmac/trunk/services/svc/svc/src/collocation')
+import call_collocation 
+cl = call_collocation.call_collocation(
+'mls-h2o',
+'cloudsat',
+'2008-05-01T00:00:00',
+'2008-05-01T01:00:00',
+'/home/svc/cmac/trunk/services/twoDimMap/twoDimMap/static/')
+cl.display()
+
+'airs',
+
+'''
+HOME='/home/svc'
+
+cr = {
+#                              1  2   3  4
+    # zzzz
+'import_':              1,   # 0  1   1  0
+# parameters_
+# def_change_labels:     # not working
+# class_SUBSET_REGION():
+'init_class':           1,   # 1  1
+'command_arg':          1,   # 1  1
+'set_xml_time':         1,   # 1  1
+'coll__':               1,   # 1  1
+'plot__':               0,   # 1  1
+'':        0,   # 1  1
+'':        0,   # 1  1
+'':        0,   # 1  1
+'':        0,   # 1  1
+'':        0,   # 1  1
+}
+
+#if cr['set_xml_time']       == 1:
+#if cr['']       == 1:
+#if cr['']       == 1:
+#if cr['']       == 1:
+#if cr['']       == 1:
+#if cr['']       == 1:
+
+# 1 -- 
+# 
+
+if cr['import_']       == 1:
+  import os, sys,  time
+  import tempfile
+  #import math
+  import glob
+  #import pickle
+
+  import numpy as np      
+  from netCDF4 import Dataset
+  import netCDF4 as nC4
+  #import NC_btang_v4 as NC1
+
+  import matplotlib 
+  matplotlib.use('Agg')  
+  import matplotlib.pylab as Mat
+  Mat.ioff()
+  #from mpl_toolkits.basemap import NetCDFFile
+  from mpl_toolkits.basemap import Basemap
+
+t00 = time.time()
+
+# parameters_
+# zzzz
+#collDir = '/home/bytang/projects/collocation'   # for running in my own space
+collDir = '/home/svc/cmac/trunk/services/svc/svc/src/collocation'  # for deployment
+
+collCodeDir = '/home/bytang/projects/collocation'
+sys.path.append('%s/dev'%collCodeDir)
+
+'''
+xmlFile = {
+'cloudsat':'mls_h2o_config_.xml'
+'cloudsat':'mls_h2o_config_.xml'
+'''
+
+num2month = {
+1: 'JAN',
+2: 'FEB',
+3: 'MAR',
+4: 'APR',
+5: 'MAY',
+6: 'JUN',
+7: 'JUL',
+8: 'AUG',
+9: 'SEP',
+10: 'OCT',
+11: 'NOV',
+12: 'DEC',
+}
+
+
+# class_SUBSET_REGION():
+class SUBSET_REGION():
+  #== def___init__
+  def __init__(self):
+    #self.dataDir = '/home/zhai/cmip5' 
+    #self.dataDir = '/home/bytang/cmip5' # my des dir
+    ### self.dataDir = '/export/data1/data/cmip5' 
+    self.dataDir = '/mnt/hgfs/cmacws/data1/data/cmip5'
+
+    ### self.desDir = '/home/bytang/projects/cmac/des/original'
+    # zzzz
+    #self.desDir = '/home/bytang/projects/cmac/tmp/des'  # for Benyang's testing
+    self.desDir = '/home/svc/cmac/des/original'
+
+    self.sourceData = 'mls-h2o'
+    self.targetData = 'cloudsat'
+
+    self.timeS = '2008-05-01T00:00:00'
+    self.timeE = '2008-05-01T01:00:00'
+
+    self.outDir = '/home/svc/cmac/trunk/services/twoDimMap/twoDimMap/static/'
+
+
+#   self.verbose = 0
+ 
+  #== def_derived
+  def derived(self):
+    pass
+
+   
+if cr['init_class']       == 1:
+  a = SUBSET_REGION()
+
+if cr['command_arg']       == 1:
+
+  # sourceData targetData dateS timeS  DateE timeE 
+
+  if len(sys.argv)>1:
+    argv = sys.argv
+
+    print 'len(argv) = ',
+    print len(argv)
+    print 'argv: '
+    for i in argv:
+      pass
+      #print i
+
+    ii = 1
+    a.sourceData = argv[ii]
+
+    ii = 2
+    a.targetData = argv[ii]
+
+    ii = 3
+    a.timeS = argv[ii]
+
+    ii = 4
+    a.timeE = argv[ii]
+
+    ii = 5
+    a.outDir = argv[ii]
+    print 'a.outDir: ',
+    print a.outDir
+
+  # use data.cfg to set the data root dir.
+  try:
+    temp1 = open('../../../data.cfg').read() 
+    if temp1[-1]=='\n':
+      temp1 = temp1[:-1]
+    if temp1[-1]=='/':
+      temp1 = temp1[:-1]
+    if os.path.isdir(temp1):
+      a.dataDir = temp1 + '/cmip5' # should change to this when data.cfg is without 'cmip5'
+      #a.dataDir = temp1
+        
+  except:
+    #dfadfdf
+    pass
+  '''
+/home/bytang/projects/cmac/trunk/services/svc/data.cfg
+/home/bytang/projects/cmac/trunk/services/svc/svc/src/scatterPlot2V
+'''
+
+if cr['set_xml_time']       == 1:
+  # get detail time
+  #  0123456789012345678
+  # '2001-01-01T10:01:00'
+  a.yearS = int(a.timeS[:4])
+  a.monthS = int(a.timeS[5:7])
+  a.dayS = int(a.timeS[8:10])
+
+  a.hourS = int(a.timeS[11:13])
+  a.minuteS = int(a.timeS[14:16])
+  a.secondS = int(a.timeS[17:19])
+
+  a.yearE = int(a.timeE[:4])
+  a.monthE = int(a.timeE[5:7])
+  a.dayE = int(a.timeE[8:10])
+
+  a.hourE = int(a.timeE[11:13])
+  a.minuteE = int(a.timeE[14:16])
+  a.secondE = int(a.timeE[17:19])
+
+  # time str 
+  timeSStr = '%02d/%02d/%04d %02d:%02d:%02d'%( 
+     a.monthS,
+     a.dayS,
+     a.yearS,
+     a.hourS,
+     a.minuteS,
+     a.secondS,
+)
+  timeEStr = '%02d/%02d/%04d %02d:%02d:%02d'%( 
+     a.monthE,
+     a.dayE,
+     a.yearE,
+     a.hourE,
+     a.minuteE,
+     a.secondE,
+)
+
+  # replace source
+  fn = '%s/input/%s_config__.xml'%(collDir, a.sourceData)
+  lines = open(fn).read()
+
+  lines = lines.replace('__timeS__', timeSStr)
+  lines = lines.replace('__timeE__', timeEStr)
+
+  fn = '%s/input/%s_config_.xml'%(collDir, a.sourceData)
+  fid = open(fn, 'w')
+  fid.write(lines)
+  fid.close()
+
+  # replace target
+  fn = '%s/input/%s_config__.xml'%(collDir, a.targetData)
+  lines = open(fn).read()
+
+  lines = lines.replace('__timeS__', timeSStr)
+  lines = lines.replace('__timeE__', timeEStr)
+
+  fn = '%s/input/%s_config_.xml'%(collDir, a.targetData)
+  fid = open(fn, 'w')
+  fid.write(lines)
+  fid.close()
+
+if cr['coll__']       == 1:
+  
+  import pdriver1
+
+  #config_file, tgt_config_file
+  config_file = '%s/input/%s_config_.xml'%(collDir, a.sourceData)
+  tgt_config_file = '%s/input/%s_config_.xml'%(collDir, a.targetData)
+
+  pdriver1.coll(config_file, tgt_config_file)
+
+if cr['plot__']       == 1:
+  pass
+

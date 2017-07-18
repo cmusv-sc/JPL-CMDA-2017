@@ -1,0 +1,62 @@
+#!/usr/bin/octave -q
+addpath([pwd()  '/../util/']);
+
+pkg load netcdf;
+
+arg_list = argv();
+printf ("%s:\n", program_name());
+
+narg = length(arg_list);
+for ii = 1:narg
+  printf("%s\n", arg_list{ii})
+end
+
+if narg < 9
+  error('Insufficient argument, need a model and a variable name!'); 
+elseif mod(narg-4, 5)
+  error('Missing or extra argument!');
+end
+
+nVars = (narg - 4)/5;
+
+dataInfo = [];
+for ii = 1:nVars
+  dataInfo(ii).sourceName = lower(arg_list{(ii-1)*5+1});
+  dataInfo(ii).varName = arg_list{(ii-1)*5+2};
+  dataInfo(ii).plev = str2num(arg_list{(ii-1)*5+3});
+  dataInfo(ii).lonRange = str2num(arg_list{(ii-1)*5+4});
+  dataInfo(ii).latRange = str2num(arg_list{(ii-1)*5+5});
+end
+
+startTimeStr = arg_list{5*nVars + 1};
+startTime = struct('year', str2num(startTimeStr(1:4)), 'month', str2num(startTimeStr(5:6)));
+
+stopTimeStr = arg_list{5*nVars + 2};
+stopTime = struct('year', str2num(stopTimeStr(1:4)), 'month', str2num(stopTimeStr(5:6)));
+
+output_dir = arg_list{5*nVars+3};
+displayOpt = str2num(arg_list{5*nVars + 4});
+
+figFile = [];
+for ii = 1:nVars
+  dataInfo(ii).dataFile = getDataFilePaths(dataInfo(ii).sourceName, dataInfo(ii).varName, startTime, stopTime);
+%  lonStr = ['lon' num2str(dataInfo(ii).lonRange(1)) '-' num2str(dataInfo(ii).lonRange(2)) 'deg'];
+%  latStr = ['lat' num2str(dataInfo(ii).latRange(1)) '-' num2str(dataInfo(ii).latRange(2)) 'deg'];
+  if ii == 1
+%    figFile = [dataInfo(ii).sourceName '_' dataInfo(ii).varName '_' lonStr '_' latStr];
+    figFile = [dataInfo(ii).sourceName '_' dataInfo(ii).varName];
+  else
+%    figFile = [figFile ':' dataInfo(ii).sourceName '_' dataInfo(ii).varName '_' lonStr '_' latStr];
+    figFile = [figFile '-v' num2str(ii)];
+  end
+end
+dataFile = [figFile '_' date2Str(startTime) '-' date2Str(stopTime) '.nc'];
+figFile = [figFile '_' date2Str(startTime) '-' date2Str(stopTime) '.jpeg'];
+
+figFilePath = [output_dir '/' figFile];
+dataFilePath = [output_dir '/' dataFile];
+printf("figFile: %s\n", figFile)
+printf("figFilePath: %s\n", figFilePath)
+printf("dataFile: %s\n", dataFile)
+printf("dataFilePath: %s\n", dataFilePath)
+displayTimeSeries(dataInfo, startTime, stopTime, figFilePath, dataFilePath, displayOpt);

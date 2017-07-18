@@ -1,0 +1,7 @@
+#./octaveWrapper ukmo_hadgem2-a clt 199001 199512 '0 100' '0 20' /tmp/ 7
+#./octaveWrapper ncc_noresm ts 199001 199612 '0 100' '0 20' /tmp/
+#./octaveWrapper ncc_noresm ts 199001 199612 '0 100' '0 20' /tmp/ 3
+#./octaveWrapper nasa_modis lst_night -999999 '0 100' '0 20' 200901 200912 /tmp/ 0
+#./octaveWrapper ncc_noresm ts -999999 '120 140' '-20 20' ncc_noresm ta 70000 '240 260' '-20 20' 199001 200312 /tmp/ 0
+#./octaveWrapper ncc_noresm ta 50000 '120 140' '-20 20' ncc_noresm ta 70000 '240 260' '-20 20' 199001 200312 /tmp/ 0
+./octaveWrapper gfdl_esm2g pr -999999 '0 360' '-90 90' gfdl_esm2g pr -999999 '0 360' '-90 90' gfdl_esm2g pr -999999 '0 360' '-90 90' gfdl_esm2g pr -999999 '0 360' '-90 90' 200401 200412 /tmp/ 0

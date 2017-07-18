@@ -1,0 +1,73 @@
+#!/usr/bin/octave -q
+addpath([pwd()  '/../util/']);
+
+pkg load netcdf;
+
+arg_list = argv();
+printf ("%s:\n", program_name());
+
+narg = length(arg_list);
+
+if narg < 2
+  error('Insufficient argument, need a model and a variable name!'); 
+end
+sourceName = lower(arg_list{1});
+varName = arg_list{2};
+
+startTime = struct('year', 1980, 'month', 1);
+stopTime = struct('year', 2004, 'month', 12);
+
+if narg > 2
+  startTimeStr = arg_list{3};
+  startTime = struct('year', str2num(startTimeStr(1:4)), 'month', str2num(startTimeStr(5:6)));
+end
+
+if narg > 3
+  stopTimeStr = arg_list{4};
+  stopTime = struct('year', str2num(stopTimeStr(1:4)), 'month', str2num(stopTimeStr(5:6)));
+end
+
+lonRange = [0, 360];
+
+if narg > 4
+  lonRange = str2num(arg_list{5});
+end
+
+latRange = 90*[-1,1];
+
+if narg > 5
+  latRange = str2num(arg_list{6});
+end
+
+if narg > 6
+  output_dir = arg_list{7};
+end
+
+printf("%s", arg_list{1})
+printf("%s", arg_list{2})
+printf("%s", arg_list{3})
+printf("%s", arg_list{4})
+printf("%s", arg_list{5})
+printf("%s", arg_list{6})
+printf("%s", arg_list{7})
+if narg > 7
+  displayOpt = str2num(arg_list{8});
+  printf("%s", arg_list{8})
+else
+  displayOpt = 0;
+end
+
+dataFileFullPath = getDataFilePaths(sourceName, varName, startTime, stopTime);
+
+lonStr = ['lon' num2str(lonRange(1)) '_' num2str(lonRange(2)) 'deg'];
+latStr = ['lat' num2str(latRange(1)) '_' num2str(latRange(2)) 'deg'];
+
+figFile = [sourceName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_' lonStr '_' latStr  '.jpeg'];
+dataFile = [sourceName '_' varName '_' date2Str(startTime) '_' date2Str(stopTime) '_' lonStr '_' latStr  '.nc'];
+figFilePath = [output_dir '/' figFile];
+dataFilePath = [output_dir '/' dataFile];
+printf("figFile: %s\n", figFile)
+printf("figFilePath: %s\n", figFilePath)
+printf("dataFile: %s\n", dataFile)
+printf("dataFilePath: %s\n", dataFilePath)
+displayTimeSeriesTwoDim(dataFileFullPath, figFilePath, varName, startTime, stopTime, lonRange, latRange, dataFilePath, displayOpt);

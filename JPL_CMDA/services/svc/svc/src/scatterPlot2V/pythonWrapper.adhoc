@@ -1,0 +1,980 @@
+#!/home/btang/install/epd/bin/python
+'''
+execfile('/home/bytang/projects/cmac/trunk/services/svc/svc/src/scatterPlot2V/pythonWrapper')
+
+'''
+HOME='/home/bytang'
+
+cr = {
+#                              1  2   3  4
+'import_':              1,   # 0  1   1  0
+# parameters_
+# def_change_labels:
+# class_SUBSET_REGION():
+  # def_getFileName
+  # def_getUnits(self):
+  # def_checkTime
+  # def_subsetting():
+  # def_loadFile
+  # def_scatterPlot
+  # def_diffPlot
+  # def_diffPlot2
+  # def_diffPlot3
+  # def_diffPlot4   # this is one used
+  # def_saveData(self):
+'init_class':           1,   # 1  1
+'command_arg':          1,   # 1  1
+'plot__':               1,   # 1  1
+'':        0,   # 1  1
+'':        0,   # 1  1
+}
+
+#if cr['']       == 1:
+#if cr['']       == 1:
+
+# 1 -- 
+# 
+
+if cr['import_']       == 1:
+  import os, sys,  time
+  import tempfile
+  #import math
+  import glob
+  #import pickle
+
+  import numpy as np      
+  from netCDF4 import Dataset
+  import netCDF4 as nC4
+
+  import matplotlib                                                              
+  matplotlib.use('Agg')  
+  import matplotlib.pylab as Mat
+  Mat.ioff()
+  #from mpl_toolkits.basemap import NetCDFFile
+  from mpl_toolkits.basemap import Basemap
+
+t00 = time.time()
+
+# parameters_
+num2month = {
+1: 'JAN',
+2: 'FEB',
+3: 'MAR',
+4: 'APR',
+5: 'MAY',
+6: 'JUN',
+7: 'JUL',
+8: 'AUG',
+9: 'SEP',
+10: 'OCT',
+11: 'NOV',
+12: 'DEC',
+}
+
+modelCenter = [
+'cccma',
+'csiro',
+'gfdl',
+'giss',
+'ipsl',
+'miroc',
+'ncar',
+'ncc',
+'ukmo',
+]
+
+obsCenter = [
+'nasa',
+'noaa',
+'argo',
+]
+
+oceanVar = [
+'ot',
+'os',
+]
+
+var3d = [
+'ta',
+'hus',
+'clw',
+'cli',
+'ot',
+'os',
+]
+
+# def_change_labels(ax):
+def change_labels(ax):
+  x1 = Mat.getp(ax, 'xticklabels')
+  #x1 = Mat.getp(ax.xaxis, 'ticklabels') # not working
+  x1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    print t1
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'W'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'E'
+    x1New.append(t2)
+  #
+  x1 = Mat.getp(ax, 'yticklabels')
+
+  y1New = []
+  for i in range(len(x1)):
+    t1 = Mat.getp(x1[i], 'text')
+    if not t1: 
+      t2 = ''
+    elif t1[0]==u'\u2212':
+      t2 = str(t1[1:]) + 'S'
+    elif t1[0]==u'0':
+      t2 = str(t1)
+    else:
+      t2 = str(t1) + 'N'
+    y1New.append(t2)
+  Mat.setp(ax, xticklabels=x1New, yticklabels=y1New)
+  return x1New, y1New
+
+
+# class_SUBSET_REGION():
+class SUBSET_REGION():
+  #== def___init__
+  def __init__(self):
+    self.ferretCmd = '/home/bytang/install/bin/ferret' 
+    self.ferretMem = 100
+    self.isDiffPlot = 0
+
+    #self.dataDir = '/home/zhai/cmip5' 
+    #self.dataDir = '/home/bytang/cmip5' # my des dir
+    self.dataDir = '/export/data1/data/cmip5' 
+    self.inFile = '' 
+    self.inFile2 = '' 
+#   self.inFileBU = '' 
+#   self.netcdfFile = '' 
+#   self.netcdfDirRemote = '' 
+#   self.pngFile = '' 
+#   self.pdfFile = '' 
+#   self.lockFile = '' 
+#
+#   self.isCoastline = 1 
+#   self.regionName = '' 
+#   self.dataName = '' 
+#   self.dateStr = '' 
+#
+#   self.regionTitle = 'same' 
+#   self.dataTitle = 'same' 
+#   self.dateTitle = 'same' 
+#
+#   self.offset = 0.0 
+#
+    self.lon1S = -180.0
+    self.lon1E = 180.0
+#   self.dLon = 1.0
+#
+    self.lat1S = -80.0
+    self.lat1E = 80.0
+#   self.dLat = 1.0
+#
+    self.center1 = 'ukmo'
+    self.center2 = 'ukmo'
+    self.model1  = 'hadgem2-a'
+    self.model2  = 'hadgem2-a'
+
+    self.varName1='ts'
+    self.varName2='clt'
+    self.nDim = 3
+
+    self.dayS = 15
+    self.dayE = 15
+
+    self.outDir = '.'
+  
+    # the resolution of subsampling
+#   self.dLon1 = None
+#   self.dLat1 = None
+#
+#   self.maxFigureSize=8.0  # will not work for other size
+#   self.vmin = None
+#   self.vmax = None
+#   self.landMask = None
+#   self.cmap1 = Mat.get_cmap('gist_rainbow_r')
+#   self.boxes=None
+#   self.offset=0.0
+#   self.lonName='LON'
+#   self.latName='LAT'
+#   self.jplLogo='/hosts/ourocean2/data9/btang/blending_02/JPL-logo.png'
+    #self.nasaInsignia = '/hosts/ourocean2/data9/btang/blending_02/NASA-logo.png'
+#   self.nasaInsignia = ''
+#   self.nPixel=800  # only used to calc dLon1/dLat1 if they are not given.
+#
+#   self.dataDaysFile = '' 
+#   self.iceFile = '' 
+#   self.landFile = '' 
+#   self.resolutionMask = 0
+#
+#   self.ferretMem = 500
+#   self.tmpDir = '/tmp'
+ 
+#   self.isChangeName = 1
+#   self.interp = ''
+#   self.dpi = None
+ 
+#   self.grayLand   = (0.40, 0.40, 0.40)
+ 
+#   self.grayNoData = (1.00, 1.00, 1.00)
+#   self.grayIce    = (0.85, 0.85, 1.00)
+#
+#   #self.grayIce    = (1.00, 1.00, 1.00)
+#   #self.grayNoData = (0.85, 0.85, 0.85)
+ 
+#   self.titleFontSize = None
+#   self.axisFontSize = None
+ 
+#   self.markedPoints = None
+ 
+#   self.verbose = 0
+ 
+  #== def_derived
+  def derived(self):
+    pass
+
+  # def_getFileName(self, center, model, varName):
+  def getFileName(self, center, model, varName):
+    # the original is just for model
+    if center in modelCenter:
+      dir0 = '%s/%s/%s/original'%(self.dataDir, center, model)
+    else:
+      dir0 = '%s/%s/%s'%(self.dataDir, center, model)
+
+    files1 = glob.glob('%s/%s_*.nc'%(dir0, varName))
+    files2 = glob.glob('%s/%s_.des'%(dir0, varName))
+    if 1:
+      print 'files1, files2:'
+      print center, model, varName
+      print files1
+      print files1
+
+    if len(files2)>1:
+      print 'more than 1 des files:'
+      for f in files2:
+        print f
+      return None
+
+    if len(files1)>1 and len(files2)==1:
+      return files2[0], files1[0]
+
+    if len(files1)>1 and len(files2)==0:
+      desFn = '%s/%s_.des'%(dir0, varName)
+      temp1 = 'mkdes --f90 --des %s %s/%s_*.nc'%(desFn, dir0, varName)
+      print temp1
+      os.system(temp1)
+      files2a = glob.glob('%s/%s_.des'%(dir0, varName))
+      return files2a[0], files1[0]
+      
+    if len(files1)==1:
+      return files1[0], files1[0]
+ 
+    return None
+
+  # def_getUnits(self):
+  def getUnits(self):
+    nc1 = Dataset(self.inFile1Nc, 'r')
+    data = nc1.variables[self.varName1]
+    self.units1 = data.units
+    nc1.close()
+
+    nc1 = Dataset(self.inFile2Nc, 'r')
+    data = nc1.variables[self.varName2]
+    self.units2 = data.units
+    nc1.close()
+
+  # def_checkTime
+  def checkTime(self, ncFile, varName):
+    # open file
+    nc1 = Dataset(ncFile, 'r')
+
+    # read time
+    data = nc1.variables[varName]
+    dims = data.dimensions
+    timeName = dims[0]
+    time1 = nc1.variables[timeName]
+
+    tS = nC4.num2date(time1[0], time1.units)
+    tE = nC4.num2date(time1[-1], time1.units)
+
+    tNumS = nC4.date2num(datetime.datetime(self.yearS, self.monthS, self.dayS, 0,0,0), time1.units)
+    tNumE = nC4.date2num(datetime.datetime(self.yearE, self.monthE, self.dayE, 0,0,0), time1.units)
+
+    if tNumS<time1[0]:
+      self.yearS = tS.year
+      self.monthS = tS.month
+      self.dayS = tS.day
+      print 'start time changed to: %d-%2d-%2d'%(self.yearS, self.monthS, self.dayS)
+
+
+    if tNumE>time1[-1]:
+      self.yearE = tE.year
+      self.monthE = tE.month
+      self.dayE = tE.day
+      print '  end time changed to: %d-%2d-%2d'%(self.yearE, self.monthE, self.dayE)
+
+    nc1.close()
+
+  # def_subsetting():
+  def subsetting(self, ncFile1, varName1, ncFile2=None, varName2='DATA1', varNameOut='DATA1', interp='', dim=4, lev=-1):
+
+    try:
+      temp1 = os.path.isfile(ncFile1)
+    except:
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      tempFile = None
+      return tempFile
+    
+    if not os.path.isfile(ncFile1):
+      print 'Subsetting failed; file not there: %s'%(ncFile1)
+      tempFile = None
+      return tempFile
+      
+    tempFile = tempfile.mkstemp(suffix='.nc', dir=self.outDir)
+
+    tmpFileJnl = tempfile.mkstemp(suffix='.jnl', dir=self.outDir)
+    #print varName, tempFile, tmpFileJnl
+
+    dimStr = ''
+    if dim==3:
+      dimStr = ', t="15-%s-%d":"15-%s-%d"@ave'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE)
+    elif dim==4:
+      if lev<0:
+        dimStr = ', k=1, t="15-%s-%d":"15-%s-%d"@ave'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE)
+      else:
+        dimStr = ', z=%g, t="15-%s-%d":"15-%s-%d"@ave'\
+%(lev, num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE)
+
+      if 0:
+        dimStr = ', k=1, t="15-%s-%d":"15-%s-%d"@ave'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE)
+
+  # 
+    if ncFile2 is None:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  !show data
+
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, x=%f:%f, y=%f:%f %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  # 4
+  varNameOut,
+  varName1,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  #interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    else:
+      script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  SET mode desperate:100000
+
+  ! 3
+  use "%s"
+  use "%s"
+  !show data
+
+  
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@nrst, l=1]
+  ! This is too slow:
+  !define var/bad=-9999.0/title="aa" data1 =SST[d=1, g=newG@ave, l=1]
+  ! Default is linear interpolation. As fast as nrst: 
+  ! 4
+  define var/bad=-9999.0/title="aa" %s =%s[d=1, g=DATA1[d=2, l=1]%s %s]
+  ! 5
+  save/clobber/file="%s" %s
+  '''%(
+  self.ferretMem, 
+  # 3
+  ncFile1, 
+  ncFile2, 
+  # 4
+  varNameOut,
+  varName1,
+  interp,
+  dimStr,
+  # 5
+  tempFile[1],
+  varNameOut)
+
+    open(tmpFileJnl[1], 'w').write(script1)
+
+    temp1 = '%s -gif -script %s' %(self.ferretCmd, tmpFileJnl[1])
+
+    try:
+      os.system(temp1)
+    except:
+      tempFile = None
+
+    #os.remove(tmpFileJnl)
+
+    return tempFile[1]
+
+  # def_loadFile
+  def loadFile(self, ncFile, varName='DATA1'):
+    nc1 = Dataset(ncFile, 'r')
+    data = nc1.variables[varName][:]
+    nc1.close()
+
+    if len(data.shape)==3:
+      data = data[0, :,:]
+    return data
+ 
+  # def_scatterPlot
+  def scatterPlot(self, data1, data2):
+    a1 = data1
+    a2 = data2
+    #print 'a1.shape: ',
+    #print a1.shape
+
+    #print 'a2.shape: ',
+    #print a2.shape
+
+    #if len(a1.shape)==3:
+    #  a1 = a1[0, :,:]
+    #if len(a2.shape)==3:
+    #  a2 = a2[0, :,:]
+
+    if a1.shape[-1] != a2.shape[-1]:
+      min1 = min(a1.shape[-1], a2.shape[-1]) 
+      a1 = a1[:, :min1] 
+      a2 = a2[:, :min1] 
+
+    if a1.shape[0] != a2.shape[0]:
+      min1 = min(a1.shape[0], a2.shape[0]) 
+      a1 = a1[:min1,:] 
+      a2 = a2[:min1,:] 
+
+    #mask2 = np.ma.logical_not a1.mask | a2.mask
+    temp1 = np.ma.arange(5)
+    valid = None
+    if type(a1) == type(temp1):
+      if a1.mask is not None:
+        valid1 = ~( a1.mask )
+        valid = valid1
+    if type(a2) == type(temp1):
+      if a2.mask is not None:
+        valid2 = ~( a2.mask )
+        if valid is not None:
+          valid = valid & valid2
+        else:
+          valid = valid2
+
+
+    if valid is not None:
+      aa1 = a1[valid]
+      aa2 = a2[valid]
+    else:
+      aa1 = a1
+      aa2 = a2
+
+    if len(aa1) > 500:
+      mm = 500
+      ind2 = np.random.permutation(len(aa1))[:mm]
+      aaa1 = aa1[ind2]
+      aaa2 = aa2[ind2]
+    else:
+      aaa1 = aa1
+      aaa2 = aa2
+
+    if a.varName1==a.varName2:
+      min2 = min1 = min(float(aaa1.min()), float(aaa2.min()))
+      max2 = max1 = max(float(aaa1.max()), float(aaa2.max()))
+    else:
+      min1 = float(aaa1.min())
+      min2 = float(aaa2.min())
+      max1 = float(aaa1.max())
+      max2 = float(aaa2.max())
+
+
+    Mat.clf()
+    Mat.scatter(aaa1, aaa2)
+    Mat.ylim(min2,max2)
+    Mat.xlim(min1,max1)
+    if a.varName1==a.varName2:
+      Mat.hold('on')
+      Mat.plot([min1, max1], [min1, max1], 'r-')
+      Mat.hold('off')
+
+    Mat.xlabel('%s_%s:%s (%s)'%(a.center1, a.model1, a.varName1, a.units1))
+    Mat.ylabel('%s_%s:%s (%s)'%(a.center2, a.model2, a.varName2, a.units2))
+
+    # corr
+    corr1 = np.corrcoef(aaa1,aaa2) 
+    Mat.title('corr coef = %.2f'%(corr1[0,1]))
+
+    figFile = '%s/scatter.png'%self.outDir
+    Mat.savefig(figFile, dpi=100)
+
+    print 'figFile: %s'%figFile
+
+  # def_diffPlot4
+  def diffPlot4(self, tempFile1, tempFile2):
+    # load data
+    nc1 = Dataset(tempFile1, 'r')
+    data1a = nc1.variables['DATA1']
+    dims1 = data1a.dimensions
+    data1 = data1a[:]
+    if len(data1.shape)==3:
+      data1 = data1[0]
+
+    lon1 = nc1.variables[dims1[-1]][:]
+    lat1 = nc1.variables[dims1[-2]][:]
+    nc1.close()
+
+    nc2 = Dataset(tempFile2, 'r')
+    data2a = nc2.variables['DATA2']
+    dims2 = data2a.dimensions
+    data2 = data2a[:]
+    if len(data2.shape)==3:
+      data2 = data2[0]
+
+    lon2 = nc2.variables[dims2[-1]][:]
+    lat2 = nc2.variables[dims2[-2]][:]
+    nc2.close()
+
+    # min/max
+    if self.varName1==self.varName2:
+      min1 = min2 = min(data1.min(), data2.min())
+      max1 = max2 = max(data1.max(), data2.max())
+    else:
+      min1 = data1.min()
+      max1 = data1.max()
+      min2 = data2.min()
+      max2 = data2.max()
+
+    # plot 1
+    fig1 = Mat.figure(figsize=(10,16))
+    Mat.clf()
+
+    Mat.subplot(3,1,1)
+    fig1.tight_layout()
+    m1 = Basemap(self.lon1S, self.lat1S, self.lon1E, self.lat1E, resolution='c', suppress_ticks=False)
+    temp1 = m1.pcolor(lon1, lat1, data1, vmin=min1, vmax=max1)
+    temp1 = m1.drawcoastlines()
+    #change_labels(Mat.gca())
+    Mat.colorbar()
+    Mat.title('%s_%s:%s (%s)'%(a.center1, a.model1, a.varName1, a.units1))
+
+    # plot 2
+    Mat.subplot(3,1,2)
+    m2 = Basemap(self.lon1S, self.lat1S, self.lon1E, self.lat1E, resolution='c', suppress_ticks=False)
+    temp1 = m2.pcolor(lon2, lat2, data2, vmin=min2, vmax=max2)
+    temp1 = m2.drawcoastlines()
+    #change_labels(Mat.gca())
+    Mat.colorbar()
+    Mat.title('%s_%s:%s (%s)'%(a.center2, a.model2, a.varName2, a.units2))
+
+    # plot diff
+    if self.varName1==self.varName2:
+      Mat.subplot(3,1,3)
+      m2 = Basemap(self.lon1S, self.lat1S, self.lon1E, self.lat1E, resolution='c', suppress_ticks=False)
+      temp1 = m2.pcolor(lon2, lat2, data2-data1 )
+      temp1 = m2.drawcoastlines()
+      #change_labels(Mat.gca())
+      Mat.colorbar()
+      Mat.title('the difference: (%s_%s:%s) - (%s_%s:%s)'\
+        %(a.center2, a.model2, a.varName2, a.center1, a.model1, a.varName1))
+
+    Mat.subplots_adjust(hspace=0.15)
+    figFile = '%s/diffPlot.png'%self.outDir
+    Mat.savefig(figFile, dpi=100)
+
+    print 'figFile: %s'%figFile
+
+  # def_diffPlot3
+  def diffPlot3(self, tempFile1, tempFile2):
+
+    script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  cancel mode logo
+
+  ! 3
+  use "%s"
+  use "%s"
+  !show data
+
+  ! 3a
+  set view ul
+  shade data1[d=1]
+  go land
+
+  ! 3b
+  set view ur
+  shade data2[d=2]
+  go land
+
+  ! 5
+  set view ll
+  shade data2[d=2] - data1[d=1]
+  go land
+
+  ! 6
+  frame/file="%s/diffPlot.gif"
+
+  exit
+  '''%(
+  self.ferretMem, 
+  # 3
+  tempFile1, 
+  tempFile2, 
+  # 6
+  self.outDir,
+  )
+
+    tmpFileJnl = tempfile.mkstemp(suffix='.jnl', dir=self.outDir)
+    open(tmpFileJnl[1], 'w').write(script1)
+
+    temp1 = '%s -gif -script %s' %(self.ferretCmd, tmpFileJnl[1])
+
+    try:
+      os.system(temp1)
+    except:
+      tempFile = None
+
+  # def_diffPlot
+  def diffPlot(self):
+    import pyferret as PF
+    pf = PF.FERRET('gif')
+    pf.load(self.inFile1, id=1) 
+    pf.load(self.inFile2, id=2) 
+
+    pf.clf()
+    pf.axes = PF.AXES('ferret')
+    a1 = PF.AXES()
+    a1.box=0
+    a1.vGrid=0
+    a1.continent = 1
+    a1.land = 0
+    pf.axes = a1
+
+    pf.subplot(3,1,1)
+    #pf.shade('%s_d1[x=%f:%f, y=%f:%f, t="15-%s-%d":"15-%s-%d"@ave]'%(
+    pf.cmd('let data1 = %s_d1[x=%f:%f, y=%f:%f, t="15-%s-%d":"15-%s-%d"@ave]'%(
+  self.varName1,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE,))
+
+    pf.shade('data1')
+    
+    pf.subplot(3,1,2)
+    pf.shade('%s_d2[x=%f:%f, y=%f:%f, t="15-%s-%d":"15-%s-%d"@ave]'%(
+  self.varName2,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE,))
+
+    if self.varName1==self.varName2:
+      pf.subplot(3,1,3)
+      pf.shade('%s_d2[gxy=data1, t="15-%s-%d":"15-%s-%d"@ave] - data1'%(
+        self.varName2,
+        num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE,))
+
+    fn = '%s/diffPlot.gif'%self.outDir
+    print 'diffFigFile: %s'%fn
+    pf.endGif(fn)
+    pf.exit()
+
+
+  # def_diffPlot2
+  def diffPlot2(self):
+    dimStr = ', k=1, t="15-%s-%d":"15-%s-%d"@ave'\
+%(num2month[self.monthS], self.yearS, num2month[self.monthE], self.yearE)
+
+    script1 = '''
+  SET MEMORY/SIZE=%d  
+  show memory
+  cancel mode logo
+
+  ! 3
+  use "%s"
+  use "%s"
+  !show data
+
+  ! 3a
+  set view ul
+  shade %s[d=1, x=%f:%f,  y=%f:%f %s]
+  go land
+
+  ! 3b
+  set view ur
+  shade %s[d=2, x=%f:%f,  y=%f:%f %s]
+  go land
+
+  ! 4
+  define var/bad=-9999.0/title="aa" data1 =%s[d=1, x=%f:%f,  y=%f:%f %s]
+
+  ! 4a
+  define var/bad=-9999.0/title="aa" data2 =%s[d=1, x=%f:%f,  y=%f:%f %s]
+
+  ! 5
+  set view ll
+  shade data2[gxy=data1] - data1
+  go land
+
+  ! 6
+  frame/file="%s/diffPlot.gif"
+
+  exit
+  '''%(
+  self.ferretMem, 
+  # 3
+  self.inFile1, 
+  self.inFile2, 
+  # 3a
+  self.varName1,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  dimStr,
+  # 3b
+  self.varName2,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  dimStr,
+  # 4
+  self.varName1,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  dimStr,
+  # 4a
+  self.varName2,
+  self.lon1S,
+  self.lon1E,
+  self.lat1S,
+  self.lat1E,
+  dimStr,
+  # 5
+  # 6
+  self.outDir,
+  )
+
+    tmpFileJnl = tempfile.mkstemp(suffix='.jnl', dir=self.outDir)
+    open(tmpFileJnl[1], 'w').write(script1)
+
+    temp1 = '%s -gif -script %s' %(self.ferretCmd, tmpFileJnl[1])
+
+    try:
+      os.system(temp1)
+    except:
+      tempFile = None
+
+  # def_saveData(self):
+  def saveData(self, data1,data2):
+    fn = '%s/data_compare.nc'%self.outDir
+
+    # load data
+    nc1 = Dataset(tempFile1, 'r')
+    data1a = nc1.variables['DATA1']
+    dims1 = data1a.dimensions
+    data1 = data1a[:]
+    lon1 = nc1.variables[dims1[-1]][:]
+    lat1 = nc1.variables[dims1[-2]][:]
+    nc1.close()
+
+    nc2 = Dataset(tempFile2, 'r')
+    data2a = nc2.variables['DATA2']
+    dims2 = data2a.dimensions
+    data2 = data2a[:]
+    lon2 = nc2.variables[dims2[-1]][:]
+    lat2 = nc2.variables[dims2[-2]][:]
+    nc2.close()
+
+    if type(data1)==type(np.ma.arange(1)):
+      data1a = data1.filled(-9999.0)
+    else: 
+      data1a = data1
+
+    if type(data2)==type(np.ma.arange(1)):
+      data2a = data2.filled(-9999.0)
+    else: 
+      data2a = data2
+
+    NC1.save2nc(data1a, ncfile=fn, name='data1', 
+       newfile=1,
+       format='NETCDF3_CLASSIC',
+       missing_value=-9999.0,
+       axisorder='yx', axislib=NC1.axislib0, axisarray=[lat1, lon1])
+
+    nc1 = dataSet(fn, 'r+')
+    d2 = nc1.createVariable('data2', 'float32', ('lat', 'lon'))
+    d2[:,:] = data2
+    nc1.close()
+
+    print 'dataFile: %s'%dataFile
+    
+if cr['init_class']       == 1:
+  a = SUBSET_REGION()
+
+if cr['command_arg']       == 1:
+
+  #     inputs = \
+  #              self.model1 + ' ' + self.var1 + ' ' + self.start_time1 + ' ' + self.end_time1 + ' ' + \
+  #              self.lon1a + ',' + self.lon1b + ' ' + self.lat1a + ',' + self.lat1b + ' ' + \
+  #              self.model2 + ' ' + self.var2 + ' ' + self.start_time2 + ' ' + self.end_time2 + ' ' + \
+  #              self.lon2a + ',' + self.lon2b + ' ' + self.lat2a + ',' + self.lat2b + ' ' + \
+  #              self.output_dir
+
+  if len(sys.argv)>1:
+    argv = sys.argv
+
+    print 'argv: '
+    for i in argv:
+      print i
+
+
+    # arg 1
+    ii = 1
+    temp1 = argv[ii].split('_')
+    a.center1 = temp1[0]
+    a.model1 = temp1[1]
+
+    # arg 2
+    ii += 1
+    a.varName1 = argv[ii]
+
+    # arg 3
+    if 0:
+      ii += 1
+      a.pres1 = float(argv[ii])
+      if a.pres1>0 and (a.varName1 not in oceanVar):
+        a.pres1 *= 100.0
+
+    if 1:
+      if a.varName1 not in var3d:
+        a.pres1 = -1
+      elif a.varName1 not in oceanVar:
+        a.pres1 = 30000
+      else:
+        a.pres1 = 300
+
+    # arg 4
+    ii += 1
+    temp1 = argv[ii].split('_')
+    a.center2 = temp1[0]
+    a.model2 = temp1[1]
+
+    # arg 5
+    ii += 1
+    a.varName2 = argv[ii]
+
+    # arg 6
+    if 0:
+      ii += 1
+      a.pres2 = float(argv[ii])
+      if a.pres2>0 and (a.varName2 not in oceanVar):
+        a.pres2 *= 100.0
+
+    if 1:
+      if a.varName2 not in var3d:
+        a.pres2 = -1
+      elif a.varName2 not in oceanVar:
+        a.pres2 = 30000
+      else:
+        a.pres2 = 300
+
+
+    # arg 7
+    ii += 1
+    a.yearS = int(argv[ii][:4])
+    a.monthS = int(argv[ii][4:])
+
+    # arg 8
+    ii += 1
+    a.yearE = int(argv[ii][:4])
+    a.monthE = int(argv[ii][4:])
+
+    # arg 9
+    ii += 1
+    temp1 = argv[ii].split(',')
+    a.lon1S = float(temp1[0])
+    a.lon1E = float(temp1[1])
+
+    # arg 10
+    ii += 1
+    temp1 = argv[ii].split(',')
+    a.lat1S = float(temp1[0])
+    a.lat1E = float(temp1[1])
+
+    # arg 11
+    ii += 1
+    a.outDir = argv[ii]
+    print 'a.outDir: ',
+    print a.outDir
+
+    if len(argv)>10:
+      # arg 12
+      ii += 1
+      a.isDiffPlot = int(argv[ii])
+
+
+if cr['plot__']       == 1:
+  # get file names
+  a.inFile1, a.inFile1Nc = a.getFileName(a.center1, a.model1, a.varName1) 
+  a.inFile2, a.inFile2Nc = a.getFileName(a.center2, a.model2, a.varName2) 
+
+  a.getUnits()
+
+  # subset
+  tempFile1 = a.subsetting(a.inFile1, a.varName1, dim=4, lev=a.pres1)
+  tempFile2 = a.subsetting(a.inFile2, a.varName2, ncFile2=tempFile1, varNameOut='DATA2', dim=4, lev=a.pres2)
+  print 'tempFiles:'
+  print tempFile1
+  print tempFile2
+  # zzzz
+  #a.saveFile(data1,data2)
+
+  # plot scatter
+  if a.isDiffPlot:
+    a.diffPlot4(tempFile1, tempFile2)
+
+  else:
+    # load variables
+    data1 = a.loadFile(tempFile1)
+    data2 = a.loadFile(tempFile2, varName='DATA2')
+
+    a.scatterPlot(data1,data2)
+

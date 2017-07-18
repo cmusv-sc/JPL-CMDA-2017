@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/csiro/mk3.6/./wap_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_199001-200512.nc

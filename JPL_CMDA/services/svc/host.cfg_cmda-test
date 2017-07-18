@@ -1,0 +1,8 @@
+# hostname
+### HOSTNAME = cmacws2.jpl.nasa.gov
+HOSTNAME = cmda-test.jpl.nasa.gov
+### HOSTNAME = EC2
+
+# port number
+PORT = 8090
+### PORT = 8088

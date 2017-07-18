@@ -1,0 +1,48 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'HadGEM2-A model output prepared for CMIP5 AMIP',
+   D_T0TIME      = '01-Sep-1978 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/./hur_Amon_HadGEM2-A_amip_r1i1p1_197809-200811.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =    15.0000,
+   S_END         = 10875.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/./hur_Amon_HadGEM2-A_amip_r1i1p1_200812-200812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 10905.0000,
+   S_END         = 10905.0000,
+   S_DELTA       =     1.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

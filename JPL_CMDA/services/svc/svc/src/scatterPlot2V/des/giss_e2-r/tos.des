@@ -1,0 +1,138 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'GISS-E2-R model output prepared for CMIP5 historical',
+   D_T0TIME      = '01-Jan-1976 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_199501-199512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  6950.5000,
+   S_END         =  7284.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_199601-199612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  7315.5000,
+   S_END         =  7649.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_199701-199712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  7680.5000,
+   S_END         =  8014.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_199801-199812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  8045.5000,
+   S_END         =  8379.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_199901-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  8410.5000,
+   S_END         =  8744.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_200001-200012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  8775.5000,
+   S_END         =  9109.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_200101-200112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9147.5000,
+   S_END         =  9481.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_200201-200212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9512.5000,
+   S_END         =  9846.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_200301-200312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9877.5000,
+   S_END         = 10211.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_200401-200412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 10242.5000,
+   S_END         = 10576.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/giss/e2-r/break/tos_Omon_GISS-E2-R_historical_r1i1p1_200501-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 10607.5000,
+   S_END         = 10941.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

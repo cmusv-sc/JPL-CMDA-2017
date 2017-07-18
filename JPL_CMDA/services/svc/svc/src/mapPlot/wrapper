@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#/home/svc/install/bin/epd ./pythonWrapper $*
+/home/svc/install/bin/pythonfe7 ./pythonWrapper $*
+

@@ -1,0 +1,16 @@
+****** success match rate (%):  100.0 for target granule  16872
+****** success match rate (%):  100.0 for target granule  16873
+****** success match rate (%):  100.0 for target granule  16874
+****** success match rate (%):  100.0 for target granule  16875
+****** success match rate (%):  100.0 for target granule  16876
+****** success match rate (%):  100.0 for target granule  16877
+****** success match rate (%):  100.0 for target granule  16878
+****** success match rate (%):  100.0 for target granule  16879
+****** success match rate (%):  100.0 for target granule  16880
+****** success match rate (%):  100.0 for target granule  16881
+****** success match rate (%):  100.0 for target granule  16882
+****** success match rate (%):  100.0 for target granule  16883
+****** success match rate (%):  100.0 for target granule  16884
+****** success match rate (%):  100.0 for target granule  16885
+****** success match rate (%):  100.0 for target granule  16886
+****** success match rate (%):  100.0 for target granule  16887

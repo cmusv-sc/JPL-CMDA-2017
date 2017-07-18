@@ -1,0 +1,1041 @@
+id, agency, model, variable short name, variable long name, starting time, ending time, dimension, unit
+1, gfdl, esm2g, cl, Cloud Area Fraction, 197601, 200512, 3, % 
+2, gfdl, esm2g, tos, Sea Surface Temperature, 199601, 200512, 2, K 
+3, gfdl, esm2g, clw, Cloud Liquid Water Content, 199101, 200512, 3, 1 
+4, gfdl, esm2g, zos, Sea Surface Height, 199601, 200512, 2, m 
+5, gfdl, esm2g, cli, Cloud Ice Water Content, 199101, 200512, 3, 1 
+6, gfdl, esm2g, rlut, TOA Outgoing Longwave Radiation, 199501, 200512, 2, W m-2 
+7, gfdl, esm2g, cli, Cloud Ice Water Content, 199501, 200512, 3, 1 
+8, gfdl, esm2g, rlus, Surface Upwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+9, gfdl, esm2g, rlds, Surface Downwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+10, gfdl, esm2g, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+11, gfdl, esm2g, zos, Sea Surface Height, 199501, 200512, 2, m 
+12, gfdl, esm2g, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+13, gfdl, esm2g, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+14, gfdl, esm2g, clw, Cloud Liquid Water Content, 199501, 200512, 3, 1 
+15, gfdl, esm2g, lai, Leaf Area Index, 199501, 200512, 2, 1 
+16, gfdl, esm2g, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 198101, 200512, 2, 1 
+17, gfdl, esm2g, uas, Eastward Near-Surface Wind, 199101, 200512, 2, m s-1 
+18, gfdl, esm2g, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199601, 200512, 2, W m-2 
+19, gfdl, esm2g, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199101, 200512, 2, W m-2 
+20, gfdl, esm2g, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199601, 200512, 2, W m-2 
+21, gfdl, esm2g, pr, Precipitation Flux, 199601, 200512, 2, kg m-2 s-1 
+22, gfdl, esm2g, rlut, TOA Outgoing Longwave Radiation, 199601, 200512, 2, W m-2 
+23, gfdl, esm2g, rlus, Surface Upwelling Longwave Radiation, 199601, 200512, 2, W m-2 
+24, gfdl, esm2g, rlds, Surface Downwelling Longwave Radiation, 199601, 200512, 2, W m-2 
+25, gfdl, esm2g, ts, Surface Temperature, 199601, 200512, 2, K 
+26, gfdl, esm2g, zos, Sea Surface Height, 199601, 200512, 2, m 
+27, gfdl, esm2g, clt, Total Cloud Fraction, 199601, 200512, 2, % 
+28, gfdl, esm2g, vas, Northward Near-Surface Wind, 199101, 200512, 2, m s-1 
+29, gfdl, esm2g, wap, Vertical Wind Velocity in Pressure, 198601, 200512, 3, Pa s-1 
+30, gfdl, esm2g, lai, Leaf Area Index, 199601, 200512, 2, 1 
+31, gfdl, esm2g, rsdt, TOA Incident Shortwave Radiation, 199101, 200512, 2, W m-2 
+32, gfdl, esm2g, hur, Relative Humidity, 198601, 200512, 3, % 
+33, gfdl, esm2g, hus, Specific Humidity, 199101, 200512, 3, 1 
+34, gfdl, esm2g, cct, Cloud Top Pressure, 197101, 200512, 2, Pa 
+35, gfdl, esm2g, sfcWind, Near-Surface Wind Speed, 199101, 200512, 2, m s-1 
+36, gfdl, esm2g, tos, Sea Surface Temperature, 199601, 200512, 2, K 
+37, gfdl, esm2g, ta, Air Temperature, 199101, 200512, 3, K 
+38, gfdl, esm2g, rsut, TOA Outgoing Shortwave Radiation, 199101, 200512, 2, W m-2 
+39, giss, e2-h, clw, Cloud Liquid Water Content, 195101, 200512, 3, 1 
+40, giss, e2-h, cli, Cloud Ice Water Content, 195101, 200512, 3, 1 
+41, giss, e2-h, cl, Cloud Area Fraction, 195101, 200512, 3, % 
+42, giss, e2-h, rlut, TOA Outgoing Longwave Radiation, 199501, 200512, 2, W m-2 
+43, giss, e2-h, clw, Cloud Liquid Water Content, 199501, 200512, 3, 1 
+44, giss, e2-h, cli, Cloud Ice Water Content, 199501, 200512, 3, 1 
+45, giss, e2-h, rlus, Surface Upwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+46, giss, e2-h, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+47, giss, e2-h, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+48, giss, e2-h, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+49, giss, e2-h, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+50, giss, e2-h, sfcWind, Near-Surface Wind Speed, 199501, 200512, 2, m s-1 
+51, giss, e2-h, rsdt, TOA Incident Shortwave Radiation, 199501, 200512, 2, W m-2 
+52, giss, e2-h, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+53, giss, e2-h, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+54, giss, e2-h, rsds, Surface Downwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+55, giss, e2-h, hus, Specific Humidity, 199501, 200512, 3, 1 
+56, giss, e2-h, vas, Northward Near-Surface Wind, 199501, 200512, 2, m s-1 
+57, giss, e2-h, rsus, Surface Upwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+58, giss, e2-h, ta, Air Temperature, 199501, 200512, 3, K 
+59, giss, e2-h, uas, Eastward Near-Surface Wind, 199501, 200512, 2, m s-1 
+60, giss, e2-h, rsut, TOA Outgoing Shortwave Radiation, 199501, 200512, 2, W m-2 
+61, giss, e2-h, rlds, Surface Downwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+62, giss, e2-h, hur, Relative Humidity, 195101, 200512, 3, % 
+63, giss, e2-h, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+64, giss, e2-h, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+65, giss, e2-h, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+66, giss, e2-h, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+67, giss, e2-h, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+68, giss, e2-h, pr, Precipitation Flux, 199501, 200512, 2, kg m-2 s-1 
+69, giss, e2-h, rlut, TOA Outgoing Longwave Radiation, 199501, 200512, 2, W m-2 
+70, giss, e2-h, rlus, Surface Upwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+71, giss, e2-h, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+72, giss, e2-h, ts, Surface Temperature, 199501, 200512, 2, K 
+73, giss, e2-h, clt, Total Cloud Fraction, 199501, 200512, 2, % 
+74, giss, e2-h, vas, Northward Near-Surface Wind, 199501, 200512, 2, m s-1 
+75, giss, e2-h, uas, Eastward Near-Surface Wind, 199501, 200512, 2, m s-1 
+76, giss, e2-h, wap, Vertical Wind Velocity in Pressure, 195101, 200512, 3, Pa s-1 
+77, giss, e2-h, rsdt, TOA Incident Shortwave Radiation, 199501, 200512, 2, W m-2 
+78, giss, e2-h, rsds, Surface Downwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+79, giss, e2-h, cct, Cloud Top Pressure, 195101, 200512, 2, Pa 
+80, giss, e2-h, prw, Water Vapor Path, 199501, 200512, 2, kg m-2 
+81, giss, e2-h, sfcWind, Near-Surface Wind Speed, 199501, 200512, 2, m s-1 
+82, giss, e2-h, rlds, Surface Downwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+83, giss, e2-h, rsus, Surface Upwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+84, giss, e2-h, rsut, TOA Outgoing Shortwave Radiation, 199501, 200512, 2, W m-2 
+85, giss, e2-r, clw, Cloud Liquid Water Content, 199501, 200512, 3, 1 
+86, giss, e2-r, cli, Cloud Ice Water Content, 200101, 200512, 3, 1 
+87, giss, e2-r, cl, Cloud Area Fraction, 195101, 200512, 3, % 
+88, giss, e2-r, rlut, TOA Outgoing Longwave Radiation, 199501, 200512, 2, W m-2 
+89, giss, e2-r, clw, Cloud Liquid Water Content, 199501, 200512, 3, 1 
+90, giss, e2-r, cli, Cloud Ice Water Content, 199501, 200512, 3, 1 
+91, giss, e2-r, rlus, Surface Upwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+92, giss, e2-r, rsdt, TOA Incident Shortwave Radiation, 199501, 200512, 2, W m-2 
+93, giss, e2-r, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+94, giss, e2-r, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+95, giss, e2-r, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+96, giss, e2-r, sfcWind, Near-Surface Wind Speed, 199501, 200512, 2, m s-1 
+97, giss, e2-r, vas, Northward Near-Surface Wind, 199501, 200512, 2, m s-1 
+98, giss, e2-r, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+99, giss, e2-r, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+100, giss, e2-r, zos, Sea Surface Height, 199501, 200512, 2, m 
+101, giss, e2-r, rsds, Surface Downwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+102, giss, e2-r, hus, Specific Humidity, 199501, 200512, 3, 1 
+103, giss, e2-r, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+104, giss, e2-r, rsus, Surface Upwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+105, giss, e2-r, uas, Eastward Near-Surface Wind, 199501, 200512, 2, m s-1 
+106, giss, e2-r, rsut, TOA Outgoing Shortwave Radiation, 199501, 200512, 2, W m-2 
+107, giss, e2-r, ta, Air Temperature, 199501, 200512, 3, K 
+108, giss, e2-r, pr, Precipitation Flux, 199501, 200512, 2, kg m-2 s-1 
+109, giss, e2-r, rlut, TOA Outgoing Longwave Radiation, 199501, 200012, 2, W m-2 
+110, giss, e2-r, rsds, Surface Downwelling Shortwave Radiation, 199501, 200012, 2, W m-2 
+111, giss, e2-r, rlus, Surface Upwelling Longwave Radiation, 199501, 200012, 2, W m-2 
+112, giss, e2-r, rsdt, TOA Incident Shortwave Radiation, 199501, 200012, 2, W m-2 
+113, giss, e2-r, cct, Cloud Top Pressure, 197601, 200512, 2, Pa 
+114, giss, e2-r, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200012, 2, W m-2 
+115, giss, e2-r, ts, Surface Temperature, 199501, 200512, 2, K 
+116, giss, e2-r, sfcWind, Near-Surface Wind Speed, 199501, 200512, 2, m s-1 
+117, giss, e2-r, vas, Northward Near-Surface Wind, 199501, 200512, 2, m s-1 
+118, giss, e2-r, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200012, 2, W m-2 
+119, giss, e2-r, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200012, 2, W m-2 
+120, giss, e2-r, hur, Relative Humidity, 195101, 200512, 3, % 
+121, giss, e2-r, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200012, 2, W m-2 
+122, giss, e2-r, clt, Total Cloud Fraction, 199501, 200512, 2, % 
+123, giss, e2-r, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200012, 2, W m-2 
+124, giss, e2-r, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+125, giss, e2-r, rsus, Surface Upwelling Shortwave Radiation, 199501, 200012, 2, W m-2 
+126, giss, e2-r, uas, Eastward Near-Surface Wind, 199501, 200512, 2, m s-1 
+127, giss, e2-r, rsut, TOA Outgoing Shortwave Radiation, 199501, 200012, 2, W m-2 
+128, giss, e2-r, wap, Vertical Wind Velocity in Pressure, 195101, 200512, 3, Pa s-1 
+129, ncar, cam5, cl, Cloud Area Fraction, 197501, 200512, 3, % 
+130, ncar, cam5, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+131, ncar, cam5, clw, Cloud Liquid Water Content, 197501, 200512, 3, 1 
+132, ncar, cam5, zos, Sea Surface Height, 199501, 200512, 2, m 
+133, ncar, cam5, cli, Cloud Ice Water Content, 197501, 200512, 3, 1 
+134, ncar, cam5, rlut, TOA Outgoing Longwave Radiation, 199501, 200512, 2, W m-2 
+135, ncar, cam5, cli, Cloud Ice Water Content, 199501, 200512, 3, 1 
+136, ncar, cam5, rlus, Surface Upwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+137, ncar, cam5, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+138, ncar, cam5, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+139, ncar, cam5, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+140, ncar, cam5, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+141, ncar, cam5, sfcWind, Near-Surface Wind Speed, 199501, 200512, 2, m s-1 
+142, ncar, cam5, rsdt, TOA Incident Shortwave Radiation, 199501, 200512, 2, W m-2 
+143, ncar, cam5, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+144, ncar, cam5, zos, Sea Surface Height, 199501, 200512, 2, m 
+145, ncar, cam5, rsds, Surface Downwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+146, ncar, cam5, hus, Specific Humidity, 199501, 200512, 3, 1 
+147, ncar, cam5, rsus, Surface Upwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+148, ncar, cam5, clw, Cloud Liquid Water Content, 199501, 200512, 3, 1 
+149, ncar, cam5, ta, Air Temperature, 199501, 200512, 3, K 
+150, ncar, cam5, rsut, TOA Outgoing Shortwave Radiation, 199501, 200512, 2, W m-2 
+151, ncar, cam5, lai, Leaf Area Index, 199501, 200512, 2, 1 
+152, ncar, cam5, va, Northward Wind, 195001, 200512, 3, m s-1 
+153, ncar, cam5, hur, Relative Humidity, 195001, 200512, 3, % 
+154, ncar, cam5, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+155, ncar, cam5, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+156, ncar, cam5, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+157, ncar, cam5, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+158, ncar, cam5, pr, Precipitation Flux, 199501, 200512, 2, kg m-2 s-1 
+159, ncar, cam5, rlut, TOA Outgoing Longwave Radiation, 199501, 200512, 2, W m-2 
+160, ncar, cam5, rlus, Surface Upwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+161, ncar, cam5, rlds, Surface Downwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+162, ncar, cam5, ts, Surface Temperature, 199501, 200512, 2, K 
+163, ncar, cam5, zos, Sea Surface Height, 199501, 200512, 2, m 
+164, ncar, cam5, clt, Total Cloud Fraction, 199501, 200512, 2, % 
+165, ncar, cam5, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 185001, 200512, 2, 1 
+166, ncar, cam5, lai, Leaf Area Index, 199501, 200512, 2, 1 
+167, ncar, cam5, rsdt, TOA Incident Shortwave Radiation, 199501, 200512, 2, W m-2 
+168, ncar, cam5, rsds, Surface Downwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+169, ncar, cam5, sfcWind, Near-Surface Wind Speed, 199501, 200512, 2, m s-1 
+170, ncar, cam5, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+171, ncar, cam5, rsus, Surface Upwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+172, ncar, cam5, wap, Vertical Wind Velocity in Pressure, 195001, 200512, 3, Pa s-1 
+173, ncar, cam5, ua, Eastward Wind, 195001, 200512, 3, m s-1 
+174, ncar, cam5, rsut, TOA Outgoing Shortwave Radiation, 199501, 200512, 2, W m-2 
+175, ncc, noresm, cl, Cloud Area Fraction, 195001, 200512, 3, % 
+176, ncc, noresm, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+177, ncc, noresm, clw, Cloud Liquid Water Content, 195001, 200512, 3, 1 
+178, ncc, noresm, zos, Sea Surface Height, 199501, 200512, 2, m 
+179, ncc, noresm, cli, Cloud Ice Water Content, 195001, 200512, 3, 1 
+180, ncc, noresm, rlut, TOA Outgoing Longwave Radiation, 199501, 200512, 2, W m-2 
+181, ncc, noresm, clw, Cloud Liquid Water Content, 199501, 200512, 3, 1 
+182, ncc, noresm, lai, Leaf Area Index, 199501, 200512, 2, 1 
+183, ncc, noresm, rlus, Surface Upwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+184, ncc, noresm, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+185, ncc, noresm, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+186, ncc, noresm, uas, Eastward Near-Surface Wind, 199501, 200512, 2, m s-1 
+187, ncc, noresm, hus, Specific Humidity, 199501, 200512, 3, 1 
+188, ncc, noresm, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+189, ncc, noresm, vas, Northward Near-Surface Wind, 199501, 200512, 2, m s-1 
+190, ncc, noresm, rsdt, TOA Incident Shortwave Radiation, 199501, 200512, 2, W m-2 
+191, ncc, noresm, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+192, ncc, noresm, zos, Sea Surface Height, 199501, 200512, 2, m 
+193, ncc, noresm, rsds, Surface Downwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+194, ncc, noresm, rlds, Surface Downwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+195, ncc, noresm, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+196, ncc, noresm, cli, Cloud Ice Water Content, 199501, 200512, 3, 1 
+197, ncc, noresm, rsus, Surface Upwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+198, ncc, noresm, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+199, ncc, noresm, rsut, TOA Outgoing Shortwave Radiation, 199501, 200512, 2, W m-2 
+200, ncc, noresm, ta, Air Temperature, 199501, 200512, 3, K 
+201, ncc, noresm, hur, Relative Humidity, 195001, 200512, 3, % 
+202, ncc, noresm, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+203, ncc, noresm, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+204, ncc, noresm, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+205, ncc, noresm, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200512, 2, W m-2 
+206, ncc, noresm, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200512, 2, W m-2 
+207, ncc, noresm, pr, Precipitation Flux, 199501, 200512, 2, kg m-2 s-1 
+208, ncc, noresm, rlut, TOA Outgoing Longwave Radiation, 199501, 200512, 2, W m-2 
+209, ncc, noresm, cli, Cloud Ice Water Content, 199501, 200512, 3, 1 
+210, ncc, noresm, rlus, Surface Upwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+211, ncc, noresm, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+212, ncc, noresm, ts, Surface Temperature, 199501, 200512, 2, K 
+213, ncc, noresm, clt, Total Cloud Fraction, 199501, 200512, 2, % 
+214, ncc, noresm, vas, Northward Near-Surface Wind, 199501, 200512, 2, m s-1 
+215, ncc, noresm, uas, Eastward Near-Surface Wind, 199501, 200512, 2, m s-1 
+216, ncc, noresm, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 185001, 200512, 2, 1 
+217, ncc, noresm, lai, Leaf Area Index, 199501, 200512, 2, 1 
+218, ncc, noresm, rsdt, TOA Incident Shortwave Radiation, 199501, 200512, 2, W m-2 
+219, ncc, noresm, ta, Air Temperature, 199501, 200512, 3, K 
+220, ncc, noresm, rsds, Surface Downwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+221, ncc, noresm, hus, Specific Humidity, 199501, 200512, 3, 1 
+222, ncc, noresm, cct, Cloud Top Pressure, 185001, 200512, 2, Pa 
+223, ncc, noresm, rlds, Surface Downwelling Longwave Radiation, 199501, 200512, 2, W m-2 
+224, ncc, noresm, rsus, Surface Upwelling Shortwave Radiation, 199501, 200512, 2, W m-2 
+225, ncc, noresm, wap, Vertical Wind Velocity in Pressure, 195001, 200512, 3, Pa s-1 
+226, ncc, noresm, rsut, TOA Outgoing Shortwave Radiation, 199501, 200512, 2, W m-2 
+227, ukmo, hadgem2-es, clw, Cloud Liquid Water Content, 198412, 200511, 3, 1 
+228, ukmo, hadgem2-es, cli, Cloud Ice Water Content, 198412, 200511, 3, 1 
+229, ukmo, hadgem2-es, cl, Cloud Area Fraction, 198412, 200511, 3, % 
+230, ukmo, hadgem2-es, rlut, TOA Outgoing Longwave Radiation, 199501, 200511, 2, W m-2 
+231, ukmo, hadgem2-es, clw, Cloud Liquid Water Content, 199501, 200511, 3, 1 
+232, ukmo, hadgem2-es, cli, Cloud Ice Water Content, 199501, 200511, 3, 1 
+233, ukmo, hadgem2-es, rlus, Surface Upwelling Longwave Radiation, 199501, 200511, 2, W m-2 
+234, ukmo, hadgem2-es, rsdt, TOA Incident Shortwave Radiation, 199501, 200511, 2, W m-2 
+235, ukmo, hadgem2-es, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200511, 2, W m-2 
+236, ukmo, hadgem2-es, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200511, 2, W m-2 
+237, ukmo, hadgem2-es, hus, Specific Humidity, 199501, 200511, 3, 1 
+238, ukmo, hadgem2-es, tos, Sea Surface Temperature, 199501, 200512, 2, K 
+239, ukmo, hadgem2-es, sfcWind, Near-Surface Wind Speed, 199501, 200511, 2, m s-1 
+240, ukmo, hadgem2-es, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200511, 2, W m-2 
+241, ukmo, hadgem2-es, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200511, 2, W m-2 
+242, ukmo, hadgem2-es, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200511, 2, W m-2 
+243, ukmo, hadgem2-es, rsds, Surface Downwelling Shortwave Radiation, 199501, 200511, 2, W m-2 
+244, ukmo, hadgem2-es, rlds, Surface Downwelling Longwave Radiation, 199501, 200511, 2, W m-2 
+245, ukmo, hadgem2-es, vas, Northward Near-Surface Wind, 199501, 200511, 2, m s-1 
+246, ukmo, hadgem2-es, rsus, Surface Upwelling Shortwave Radiation, 199501, 200511, 2, W m-2 
+247, ukmo, hadgem2-es, ta, Air Temperature, 199501, 200511, 3, K 
+248, ukmo, hadgem2-es, uas, Eastward Near-Surface Wind, 199501, 200511, 2, m s-1 
+249, ukmo, hadgem2-es, rsut, TOA Outgoing Shortwave Radiation, 199501, 200511, 2, W m-2 
+250, ukmo, hadgem2-es, lai, Leaf Area Index, 199501, 200511, 2, 1 
+251, ukmo, hadgem2-es, hur, Relative Humidity, 198412, 200511, 3, % 
+252, ukmo, hadgem2-es, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200511, 2, W m-2 
+253, ukmo, hadgem2-es, uas, Eastward Near-Surface Wind, 198412, 200511, 2, m s-1 
+254, ukmo, hadgem2-es, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200511, 2, W m-2 
+255, ukmo, hadgem2-es, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200511, 2, W m-2 
+256, ukmo, hadgem2-es, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200511, 2, W m-2 
+257, ukmo, hadgem2-es, pr, Precipitation Flux, 199501, 200511, 2, kg m-2 s-1 
+258, ukmo, hadgem2-es, rlut, TOA Outgoing Longwave Radiation, 199501, 200511, 2, W m-2 
+259, ukmo, hadgem2-es, rlus, Surface Upwelling Longwave Radiation, 199501, 200511, 2, W m-2 
+260, ukmo, hadgem2-es, tos, Sea Surface Temperature, 195912, 200512, 2, K 
+261, ukmo, hadgem2-es, ts, Surface Temperature, 199501, 200511, 2, K 
+262, ukmo, hadgem2-es, zos, Sea Surface Height, 195912, 200512, 2, m 
+263, ukmo, hadgem2-es, clt, Total Cloud Fraction, 198412, 200511, 2, % 
+264, ukmo, hadgem2-es, vas, Northward Near-Surface Wind, 198412, 200511, 2, m s-1 
+265, ukmo, hadgem2-es, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200511, 2, W m-2 
+266, ukmo, hadgem2-es, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 198412, 200511, 2, 1 
+267, ukmo, hadgem2-es, lai, Leaf Area Index, 199501, 200511, 2, 1 
+268, ukmo, hadgem2-es, rsdt, TOA Incident Shortwave Radiation, 199501, 200511, 2, W m-2 
+269, ukmo, hadgem2-es, rsds, Surface Downwelling Shortwave Radiation, 199501, 200511, 2, W m-2 
+270, ukmo, hadgem2-es, sfcWind, Near-Surface Wind Speed, 198412, 200511, 2, m s-1 
+271, ukmo, hadgem2-es, rlds, Surface Downwelling Longwave Radiation, 199501, 200511, 2, W m-2 
+272, ukmo, hadgem2-es, rsus, Surface Upwelling Shortwave Radiation, 199501, 200511, 2, W m-2 
+273, ukmo, hadgem2-es, wap, Vertical Wind Velocity in Pressure, 198412, 200511, 3, Pa s-1 
+274, ukmo, hadgem2-es, rsut, TOA Outgoing Shortwave Radiation, 199501, 200511, 2, W m-2 
+275, cccma, canam4, clw, Cloud Liquid Water Content, 195001, 200912, 3, 1 
+276, cccma, canam4, cli, Cloud Ice Water Content, 195001, 200912, 3, 1 
+277, cccma, canam4, cl, Cloud Area Fraction, 195001, 200912, 3, % 
+278, cccma, canam4, pr, Precipitation Flux, 199501, 200912, 2, kg m-2 s-1 
+279, cccma, canam4, rlut, TOA Outgoing Longwave Radiation, 199501, 200912, 2, W m-2 
+280, cccma, canam4, cli, Cloud Ice Water Content, 199501, 200912, 3, 1 
+281, cccma, canam4, rlus, Surface Upwelling Longwave Radiation, 199501, 200912, 2, W m-2 
+282, cccma, canam4, rsdt, TOA Incident Shortwave Radiation, 199501, 200912, 2, W m-2 
+283, cccma, canam4, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+284, cccma, canam4, uas, Eastward Near-Surface Wind, 199501, 200912, 2, m s-1 
+285, cccma, canam4, hus, Specific Humidity, 199501, 200912, 3, 1 
+286, cccma, canam4, sfcWind, Near-Surface Wind Speed, 199501, 200912, 2, m s-1 
+287, cccma, canam4, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200912, 2, W m-2 
+288, cccma, canam4, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+289, cccma, canam4, rlds, Surface Downwelling Longwave Radiation, 199501, 200912, 2, W m-2 
+290, cccma, canam4, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200912, 2, W m-2 
+291, cccma, canam4, rsds, Surface Downwelling Shortwave Radiation, 199501, 200912, 2, W m-2 
+292, cccma, canam4, vas, Northward Near-Surface Wind, 199501, 200912, 2, m s-1 
+293, cccma, canam4, clt, Total Cloud Fraction, 199501, 200912, 2, % 
+294, cccma, canam4, rsus, Surface Upwelling Shortwave Radiation, 199501, 200912, 2, W m-2 
+295, cccma, canam4, clw, Cloud Liquid Water Content, 199501, 200912, 3, 1 
+296, cccma, canam4, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+297, cccma, canam4, rsut, TOA Outgoing Shortwave Radiation, 199501, 200912, 2, W m-2 
+298, cccma, canam4, ta, Air Temperature, 199501, 200912, 3, K 
+299, cccma, canam4, va, Northward Wind, 195001, 200912, 3, m s-1 
+300, cccma, canam4, rsds, Surface Downwelling Shortwave Radiation, 195001, 200912, 2, W m-2 
+301, cccma, canam4, tas, Near-Surface Air Temperature, 195001, 200912, 2, K 
+302, cccma, canam4, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 195001, 200912, 2, W m-2 
+303, cccma, canam4, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 195001, 200912, 2, W m-2 
+304, cccma, canam4, prw, Water Vapor Path, 195001, 200912, 2, kg m-2 
+305, cccma, canam4, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 195001, 200912, 2, W m-2 
+306, cccma, canam4, pr, Precipitation Flux, 195001, 200912, 2, kg m-2 s-1 
+307, cccma, canam4, rlut, TOA Outgoing Longwave Radiation, 195001, 200912, 2, W m-2 
+308, cccma, canam4, cli, Cloud Ice Water Content, 195001, 200912, 3, 1 
+309, cccma, canam4, rlus, Surface Upwelling Longwave Radiation, 195001, 200912, 2, W m-2 
+310, cccma, canam4, rlds, Surface Downwelling Longwave Radiation, 195001, 200912, 2, W m-2 
+311, cccma, canam4, ts, Surface Temperature, 195001, 200912, 2, K 
+312, cccma, canam4, clt, Total Cloud Fraction, 195001, 200912, 2, % 
+313, cccma, canam4, vas, Northward Near-Surface Wind, 195001, 200912, 2, m s-1 
+314, cccma, canam4, clw, Cloud Liquid Water Content, 195001, 200912, 3, 1 
+315, cccma, canam4, uas, Eastward Near-Surface Wind, 195001, 200912, 2, m s-1 
+316, cccma, canam4, ta, Air Temperature, 195001, 200912, 3, K 
+317, cccma, canam4, zg, Geopotential Height, 195001, 200912, 3, m 
+318, cccma, canam4, hurs, Near-Surface Relative Humidity, 195001, 200912, 2, % 
+319, cccma, canam4, rsdt, TOA Incident Shortwave Radiation, 195001, 200912, 2, W m-2 
+320, cccma, canam4, hur, Relative Humidity, 195001, 200912, 3, % 
+321, cccma, canam4, hus, Specific Humidity, 195001, 200912, 3, 1 
+322, cccma, canam4, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 195001, 200912, 2, W m-2 
+323, cccma, canam4, cct, Cloud Top Pressure, 195001, 200912, 2, Pa 
+324, cccma, canam4, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 195001, 200912, 2, W m-2 
+325, cccma, canam4, sfcWind, Near-Surface Wind Speed, 195001, 200912, 2, m s-1 
+326, cccma, canam4, rsus, Surface Upwelling Shortwave Radiation, 195001, 200912, 2, W m-2 
+327, cccma, canam4, wap, Vertical Wind Velocity in Pressure, 195001, 200912, 3, Pa s-1 
+328, cccma, canam4, ua, Eastward Wind, 195001, 200912, 3, m s-1 
+329, cccma, canam4, rsut, TOA Outgoing Shortwave Radiation, 195001, 200912, 2, W m-2 
+330, csiro, mk3.6, clw, Cloud Liquid Water Content, 199901, 200912, 3, 1 
+331, csiro, mk3.6, cli, Cloud Ice Water Content, 197901, 200912, 3, 1 
+332, csiro, mk3.6, cl, Cloud Area Fraction, 197001, 200512, 3, % 
+333, csiro, mk3.6, rlut, TOA Outgoing Longwave Radiation, 199501, 200912, 2, W m-2 
+334, csiro, mk3.6, cli, Cloud Ice Water Content, 197901, 200912, 3, 1 
+335, csiro, mk3.6, rlus, Surface Upwelling Longwave Radiation, 199501, 200912, 2, W m-2 
+336, csiro, mk3.6, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200912, 2, W m-2 
+337, csiro, mk3.6, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+338, csiro, mk3.6, uas, Eastward Near-Surface Wind, 199501, 200912, 2, m s-1 
+339, csiro, mk3.6, hus, Specific Humidity, 199501, 200912, 3, 1 
+340, csiro, mk3.6, sfcWind, Near-Surface Wind Speed, 199501, 200912, 2, m s-1 
+341, csiro, mk3.6, rsdt, TOA Incident Shortwave Radiation, 199501, 200912, 2, W m-2 
+342, csiro, mk3.6, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+343, csiro, mk3.6, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200912, 2, W m-2 
+344, csiro, mk3.6, rsds, Surface Downwelling Shortwave Radiation, 199501, 200912, 2, W m-2 
+345, csiro, mk3.6, vas, Northward Near-Surface Wind, 199501, 200912, 2, m s-1 
+346, csiro, mk3.6, rsus, Surface Upwelling Shortwave Radiation, 199501, 200912, 2, W m-2 
+347, csiro, mk3.6, clw, Cloud Liquid Water Content, 199501, 199812, 3, 1 
+348, csiro, mk3.6, ta, Air Temperature, 199501, 200912, 3, K 
+349, csiro, mk3.6, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+350, csiro, mk3.6, rsut, TOA Outgoing Shortwave Radiation, 199501, 200912, 2, W m-2 
+351, csiro, mk3.6, rlds, Surface Downwelling Longwave Radiation, 199501, 200912, 2, W m-2 
+352, csiro, mk3.6, pr, Precipitation Flux, 199501, 200912, 2, kg m-2 s-1 
+353, csiro, mk3.6, rlut, TOA Outgoing Longwave Radiation, 197901, 200912, 2, W m-2 
+354, csiro, mk3.6, rsds, Surface Downwelling Shortwave Radiation, 197901, 200912, 2, W m-2 
+355, csiro, mk3.6, rlus, Surface Upwelling Longwave Radiation, 197901, 200912, 2, W m-2 
+356, csiro, mk3.6, rsdt, TOA Incident Shortwave Radiation, 197901, 200912, 2, W m-2 
+357, csiro, mk3.6, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 197901, 200912, 2, W m-2 
+358, csiro, mk3.6, uas, Eastward Near-Surface Wind, 197901, 200912, 2, m s-1 
+359, csiro, mk3.6, ts, Surface Temperature, 199501, 200912, 2, K 
+360, csiro, mk3.6, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 197901, 200912, 2, 1 
+361, csiro, mk3.6, sfcWind, Near-Surface Wind Speed, 197901, 200912, 2, m s-1 
+362, csiro, mk3.6, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200912, 2, W m-2 
+363, csiro, mk3.6, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200912, 2, W m-2 
+364, csiro, mk3.6, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 197901, 200912, 2, W m-2 
+365, csiro, mk3.6, hur, Relative Humidity, 199001, 200512, 3, % 
+366, csiro, mk3.6, rlds, Surface Downwelling Longwave Radiation, 197901, 200912, 2, W m-2 
+367, csiro, mk3.6, clt, Total Cloud Fraction, 199501, 200912, 2, % 
+368, csiro, mk3.6, vas, Northward Near-Surface Wind, 197901, 200912, 2, m s-1 
+369, csiro, mk3.6, rsus, Surface Upwelling Shortwave Radiation, 197901, 200912, 2, W m-2 
+370, csiro, mk3.6, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 197901, 200912, 2, W m-2 
+371, csiro, mk3.6, rsut, TOA Outgoing Shortwave Radiation, 197901, 200912, 2, W m-2 
+372, csiro, mk3.6, wap, Vertical Wind Velocity in Pressure, 199001, 200512, 3, Pa s-1 
+373, gfdl, cm3, clw, Cloud Liquid Water Content, 197901, 200812, 3, 1 
+374, gfdl, cm3, cli, Cloud Ice Water Content, 197901, 200812, 3, 1 
+375, gfdl, cm3, cl, Cloud Area Fraction, 197901, 200812, 3, % 
+376, gfdl, cm3, rlut, TOA Outgoing Longwave Radiation, 199501, 200812, 2, W m-2 
+377, gfdl, cm3, clw, Cloud Liquid Water Content, 199501, 200812, 3, 1 
+378, gfdl, cm3, rlus, Surface Upwelling Longwave Radiation, 199501, 200812, 2, W m-2 
+379, gfdl, cm3, rsdt, TOA Incident Shortwave Radiation, 199501, 200812, 2, W m-2 
+380, gfdl, cm3, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+381, gfdl, cm3, uas, Eastward Near-Surface Wind, 199501, 200812, 2, m s-1 
+382, gfdl, cm3, sfcWind, Near-Surface Wind Speed, 199501, 200812, 2, m s-1 
+383, gfdl, cm3, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200812, 2, W m-2 
+384, gfdl, cm3, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+385, gfdl, cm3, rsds, Surface Downwelling Shortwave Radiation, 199501, 200812, 2, W m-2 
+386, gfdl, cm3, vas, Northward Near-Surface Wind, 199501, 200812, 2, m s-1 
+387, gfdl, cm3, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200812, 2, W m-2 
+388, gfdl, cm3, rsus, Surface Upwelling Shortwave Radiation, 199501, 200812, 2, W m-2 
+389, gfdl, cm3, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+390, gfdl, cm3, rsut, TOA Outgoing Shortwave Radiation, 199501, 200812, 2, W m-2 
+391, gfdl, cm3, rlds, Surface Downwelling Longwave Radiation, 199501, 200812, 2, W m-2 
+392, gfdl, cm3, hur, Relative Humidity, 198901, 200812, 3, % 
+393, gfdl, cm3, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199401, 200812, 2, W m-2 
+394, gfdl, cm3, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199401, 200812, 2, W m-2 
+395, gfdl, cm3, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199401, 200812, 2, W m-2 
+396, gfdl, cm3, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199401, 200812, 2, W m-2 
+397, gfdl, cm3, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199401, 200812, 2, W m-2 
+398, gfdl, cm3, pr, Precipitation Flux, 199401, 200812, 2, kg m-2 s-1 
+399, gfdl, cm3, rlut, TOA Outgoing Longwave Radiation, 199401, 200812, 2, W m-2 
+400, gfdl, cm3, rlus, Surface Upwelling Longwave Radiation, 199401, 200812, 2, W m-2 
+401, gfdl, cm3, rlds, Surface Downwelling Longwave Radiation, 199401, 200812, 2, W m-2 
+402, gfdl, cm3, ts, Surface Temperature, 199401, 200812, 2, K 
+403, gfdl, cm3, clt, Total Cloud Fraction, 199401, 200812, 2, % 
+404, gfdl, cm3, vas, Northward Near-Surface Wind, 199401, 200812, 2, m s-1 
+405, gfdl, cm3, clw, Cloud Liquid Water Content, 198901, 200312, 3, 1 
+406, gfdl, cm3, uas, Eastward Near-Surface Wind, 199401, 200812, 2, m s-1 
+407, gfdl, cm3, wap, Vertical Wind Velocity in Pressure, 198901, 200812, 3, Pa s-1 
+408, gfdl, cm3, rsdt, TOA Incident Shortwave Radiation, 199401, 200812, 2, W m-2 
+409, gfdl, cm3, rsds, Surface Downwelling Shortwave Radiation, 199401, 200812, 2, W m-2 
+410, gfdl, cm3, hus, Specific Humidity, 198901, 200812, 3, 1 
+411, gfdl, cm3, cct, Cloud Top Pressure, 197901, 200812, 2, Pa 
+412, gfdl, cm3, rsus, Surface Upwelling Shortwave Radiation, 199401, 200812, 2, W m-2 
+413, gfdl, cm3, ta, Air Temperature, 198901, 200812, 3, K 
+414, gfdl, cm3, rsut, TOA Outgoing Shortwave Radiation, 199401, 200812, 2, W m-2 
+415, ipsl, cm5a-lr, clw, Cloud Liquid Water Content, 197901, 200912, 3, 1 
+416, ipsl, cm5a-lr, cli, Cloud Ice Water Content, 197901, 200912, 3, 1 
+417, ipsl, cm5a-lr, cl, Cloud Area Fraction, 197901, 200912, 3, % 
+418, ipsl, cm5a-lr, rlut, TOA Outgoing Longwave Radiation, 199501, 200912, 2, W m-2 
+419, ipsl, cm5a-lr, rsus, Surface Upwelling Shortwave Radiation, 199501, 200912, 2, W m-2 
+420, ipsl, cm5a-lr, lai, Leaf Area Index, 199501, 200912, 2, 1 
+421, ipsl, cm5a-lr, rlus, Surface Upwelling Longwave Radiation, 199501, 200912, 2, W m-2 
+422, ipsl, cm5a-lr, rsdt, TOA Incident Shortwave Radiation, 199501, 200912, 2, W m-2 
+423, ipsl, cm5a-lr, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+424, ipsl, cm5a-lr, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+425, ipsl, cm5a-lr, hus, Specific Humidity, 199501, 200912, 3, 1 
+426, ipsl, cm5a-lr, vas, Northward Near-Surface Wind, 199501, 200912, 2, m s-1 
+427, ipsl, cm5a-lr, sfcWind, Near-Surface Wind Speed, 199501, 200912, 2, m s-1 
+428, ipsl, cm5a-lr, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200912, 2, W m-2 
+429, ipsl, cm5a-lr, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+430, ipsl, cm5a-lr, rsds, Surface Downwelling Shortwave Radiation, 199501, 200912, 2, W m-2 
+431, ipsl, cm5a-lr, rlds, Surface Downwelling Longwave Radiation, 199501, 200912, 2, W m-2 
+432, ipsl, cm5a-lr, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200912, 2, W m-2 
+433, ipsl, cm5a-lr, clw, Cloud Liquid Water Content, 199501, 200912, 3, 1 
+434, ipsl, cm5a-lr, ta, Air Temperature, 199501, 200912, 3, K 
+435, ipsl, cm5a-lr, uas, Eastward Near-Surface Wind, 199501, 200912, 2, m s-1 
+436, ipsl, cm5a-lr, rsut, TOA Outgoing Shortwave Radiation, 199501, 200912, 2, W m-2 
+437, ipsl, cm5a-lr, cli, Cloud Ice Water Content, 199501, 200912, 3, 1 
+438, ipsl, cm5a-lr, pr, Precipitation Flux, 199501, 200912, 2, kg m-2 s-1 
+439, ipsl, cm5a-lr, rlut, TOA Outgoing Longwave Radiation, 199501, 200912, 2, W m-2 
+440, ipsl, cm5a-lr, lai, Leaf Area Index, 199501, 200912, 2, 1 
+441, ipsl, cm5a-lr, rlus, Surface Upwelling Longwave Radiation, 199501, 200912, 2, W m-2 
+442, ipsl, cm5a-lr, rsdt, TOA Incident Shortwave Radiation, 199501, 200912, 2, W m-2 
+443, ipsl, cm5a-lr, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+444, ipsl, cm5a-lr, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+445, ipsl, cm5a-lr, ts, Surface Temperature, 199501, 200912, 2, K 
+446, ipsl, cm5a-lr, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200912, 2, W m-2 
+447, ipsl, cm5a-lr, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200912, 2, W m-2 
+448, ipsl, cm5a-lr, rlds, Surface Downwelling Longwave Radiation, 199501, 200912, 2, W m-2 
+449, ipsl, cm5a-lr, rsds, Surface Downwelling Shortwave Radiation, 199501, 200912, 2, W m-2 
+450, ipsl, cm5a-lr, cct, Cloud Top Pressure, 197901, 200912, 2, Pa 
+451, ipsl, cm5a-lr, clt, Total Cloud Fraction, 199501, 200912, 2, % 
+452, ipsl, cm5a-lr, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200912, 2, W m-2 
+453, ipsl, cm5a-lr, rsus, Surface Upwelling Shortwave Radiation, 199501, 200912, 2, W m-2 
+454, ipsl, cm5a-lr, rsut, TOA Outgoing Shortwave Radiation, 199501, 200912, 2, W m-2 
+455, ipsl, cm5a-lr, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 197901, 200912, 2, 1 
+456, miroc, miroc5, clw, Cloud Liquid Water Content, 197901, 200812, 3, 1 
+457, miroc, miroc5, cli, Cloud Ice Water Content, 197901, 199812, 3, 1 
+458, miroc, miroc5, cl, Cloud Area Fraction, 197001, 201212, 3, % 
+459, miroc, miroc5, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+460, miroc, miroc5, rlut, TOA Outgoing Longwave Radiation, 199501, 200812, 2, W m-2 
+461, miroc, miroc5, rsus, Surface Upwelling Shortwave Radiation, 199501, 200812, 2, W m-2 
+462, miroc, miroc5, lai, Leaf Area Index, 199501, 200812, 2, 1 
+463, miroc, miroc5, rlus, Surface Upwelling Longwave Radiation, 199501, 200812, 2, W m-2 
+464, miroc, miroc5, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200812, 2, W m-2 
+465, miroc, miroc5, rlds, Surface Downwelling Longwave Radiation, 199501, 200812, 2, W m-2 
+466, miroc, miroc5, uas, Eastward Near-Surface Wind, 199501, 200812, 2, m s-1 
+467, miroc, miroc5, vas, Northward Near-Surface Wind, 199501, 200812, 2, m s-1 
+468, miroc, miroc5, sfcWind, Near-Surface Wind Speed, 199501, 200812, 2, m s-1 
+469, miroc, miroc5, rsdt, TOA Incident Shortwave Radiation, 199501, 200812, 2, W m-2 
+470, miroc, miroc5, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+471, miroc, miroc5, rsds, Surface Downwelling Shortwave Radiation, 199501, 200812, 2, W m-2 
+472, miroc, miroc5, hus, Specific Humidity, 199501, 199812, 3, 1 
+473, miroc, miroc5, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200812, 2, W m-2 
+474, miroc, miroc5, clw, Cloud Liquid Water Content, 199501, 200812, 3, 1 
+475, miroc, miroc5, ta, Air Temperature, 199501, 199812, 3, K 
+476, miroc, miroc5, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+477, miroc, miroc5, rsut, TOA Outgoing Shortwave Radiation, 199501, 200812, 2, W m-2 
+478, miroc, miroc5, cli, Cloud Ice Water Content, 199501, 199812, 3, 1 
+479, miroc, miroc5, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+480, miroc, miroc5, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+481, miroc, miroc5, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+482, miroc, miroc5, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+483, miroc, miroc5, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+484, miroc, miroc5, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+485, miroc, miroc5, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+486, miroc, miroc5, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+487, miroc, miroc5, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+488, miroc, miroc5, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+489, miroc, miroc5, ts, Surface Temperature, 197901, 200812, 2, K 
+490, miroc, miroc5, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+491, miroc, miroc5, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+492, miroc, miroc5, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+493, miroc, miroc5, wap, Vertical Wind Velocity in Pressure, 192001, 200912, 3, Pa s-1 
+494, miroc, miroc5, lai, Leaf Area Index, 197901, 200812, 2, 1 
+495, miroc, miroc5, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+496, miroc, miroc5, hur, Relative Humidity, 199001, 200912, 3, % 
+497, miroc, miroc5, cct, Cloud Top Pressure, 185001, 201212, 2, Pa 
+498, miroc, miroc5, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+499, miroc, miroc5, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+500, miroc, miroc5, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 197901, 200812, 2, 1 
+501, miroc, miroc5, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+502, ukmo, hadgem2-a, clw, Cloud Liquid Water Content, 197809, 200811, 3, 1 
+503, ukmo, hadgem2-a, cli, Cloud Ice Water Content, 197809, 200811, 3, 1 
+504, ukmo, hadgem2-a, cl, Cloud Area Fraction, 197809, 200812, 3, % 
+505, ukmo, hadgem2-a, rlut, TOA Outgoing Longwave Radiation, 199501, 200812, 2, W m-2 
+506, ukmo, hadgem2-a, clw, Cloud Liquid Water Content, 199501, 200812, 3, 1 
+507, ukmo, hadgem2-a, cli, Cloud Ice Water Content, 199501, 200811, 3, 1 
+508, ukmo, hadgem2-a, rlus, Surface Upwelling Longwave Radiation, 199501, 200812, 2, W m-2 
+509, ukmo, hadgem2-a, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200812, 2, W m-2 
+510, ukmo, hadgem2-a, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+511, ukmo, hadgem2-a, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+512, ukmo, hadgem2-a, hus, Specific Humidity, 199501, 200811, 3, 1 
+513, ukmo, hadgem2-a, sfcWind, Near-Surface Wind Speed, 199501, 200812, 2, m s-1 
+514, ukmo, hadgem2-a, rsdt, TOA Incident Shortwave Radiation, 199501, 200812, 2, W m-2 
+515, ukmo, hadgem2-a, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+516, ukmo, hadgem2-a, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200812, 2, W m-2 
+517, ukmo, hadgem2-a, rsds, Surface Downwelling Shortwave Radiation, 199501, 200812, 2, W m-2 
+518, ukmo, hadgem2-a, rlds, Surface Downwelling Longwave Radiation, 199501, 200812, 2, W m-2 
+519, ukmo, hadgem2-a, vas, Northward Near-Surface Wind, 199501, 200812, 2, m s-1 
+520, ukmo, hadgem2-a, rsus, Surface Upwelling Shortwave Radiation, 199501, 200812, 2, W m-2 
+521, ukmo, hadgem2-a, uas, Eastward Near-Surface Wind, 199501, 200812, 2, m s-1 
+522, ukmo, hadgem2-a, rsut, TOA Outgoing Shortwave Radiation, 199501, 200812, 2, W m-2 
+523, ukmo, hadgem2-a, ta, Air Temperature, 199501, 200811, 3, K 
+524, ukmo, hadgem2-a, hur, Relative Humidity, 197809, 200812, 3, % 
+525, ukmo, hadgem2-a, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+526, ukmo, hadgem2-a, uas, Eastward Near-Surface Wind, 197809, 200812, 2, m s-1 
+527, ukmo, hadgem2-a, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 199501, 200812, 2, W m-2 
+528, ukmo, hadgem2-a, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+529, ukmo, hadgem2-a, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 199501, 200812, 2, W m-2 
+530, ukmo, hadgem2-a, pr, Precipitation Flux, 197809, 200812, 2, kg m-2 s-1 
+531, ukmo, hadgem2-a, rlut, TOA Outgoing Longwave Radiation, 199501, 200812, 2, W m-2 
+532, ukmo, hadgem2-a, rlus, Surface Upwelling Longwave Radiation, 200812, 200812, 2, W m-2 
+533, ukmo, hadgem2-a, rlds, Surface Downwelling Longwave Radiation, 199501, 200812, 2, W m-2 
+534, ukmo, hadgem2-a, ts, Surface Temperature, 199501, 200812, 2, K 
+535, ukmo, hadgem2-a, clt, Total Cloud Fraction, 197809, 200812, 2, % 
+536, ukmo, hadgem2-a, vas, Northward Near-Surface Wind, 197809, 200812, 2, m s-1 
+537, ukmo, hadgem2-a, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 199501, 200812, 2, W m-2 
+538, ukmo, hadgem2-a, wap, Vertical Wind Velocity in Pressure, 197809, 200812, 3, Pa s-1 
+539, ukmo, hadgem2-a, hurs, Near-Surface Relative Humidity, 197809, 200812, 2, % 
+540, ukmo, hadgem2-a, rsdt, TOA Incident Shortwave Radiation, 199501, 200812, 2, W m-2 
+541, ukmo, hadgem2-a, rsds, Surface Downwelling Shortwave Radiation, 199501, 200812, 2, W m-2 
+542, ukmo, hadgem2-a, cct, Cloud Top Pressure, 197809, 200812, 2, Pa 
+543, ukmo, hadgem2-a, sfcWind, Near-Surface Wind Speed, 197809, 200812, 2, m s-1 
+544, ukmo, hadgem2-a, rsus, Surface Upwelling Shortwave Radiation, 199501, 200812, 2, W m-2 
+545, ukmo, hadgem2-a, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 197809, 200811, 2, 1 
+546, ukmo, hadgem2-a, rsut, TOA Outgoing Shortwave Radiation, 199501, 200812, 2, W m-2 
+547, cmcc, cm, clw, Cloud Liquid Water Content, 198901, 200812, 3, 1 
+548, cmcc, cm, cli, Cloud Ice Water Content, 198901, 200812, 3, 1 
+549, cmcc, cm, cl, Cloud Area Fraction, 199901, 200812, 3, % 
+550, cmcc, cm, va, Northward Wind, 197901, 200812, 3, m s-1 
+551, cmcc, cm, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+552, cmcc, cm, tas, Near-Surface Air Temperature, 197901, 200812, 2, K 
+553, cmcc, cm, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+554, cmcc, cm, zg, Geopotential Height, 197901, 200812, 3, m 
+555, cmcc, cm, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+556, cmcc, cm, prw, Water Vapor Path, 197901, 200812, 2, kg m-2 
+557, cmcc, cm, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+558, cmcc, cm, cli, Cloud Ice Water Content, 197901, 198812, 3, 1 
+559, cmcc, cm, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+560, cmcc, cm, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+561, cmcc, cm, cl, Cloud Area Fraction, 197901, 198812, 3, % 
+562, cmcc, cm, ts, Surface Temperature, 197901, 200812, 2, K 
+563, cmcc, cm, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+564, cmcc, cm, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+565, cmcc, cm, clw, Cloud Liquid Water Content, 197901, 198812, 3, 1 
+566, cmcc, cm, wap, Vertical Wind Velocity in Pressure, 197901, 200812, 3, Pa s-1 
+567, cmcc, cm, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+568, cmcc, cm, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+569, cmcc, cm, hur, Relative Humidity, 197901, 200812, 3, % 
+570, cmcc, cm, hus, Specific Humidity, 197901, 200812, 3, 1 
+571, cmcc, cm, cct, Cloud Top Pressure, 197901, 200812, 2, Pa 
+572, cmcc, cm, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+573, cmcc, cm, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+574, cmcc, cm, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+575, cmcc, cm, ta, Air Temperature, 197901, 200812, 3, K 
+576, cmcc, cm, ua, Eastward Wind, 197901, 200812, 3, m s-1 
+577, cmcc, cm, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+578, cmcc, cm, clw, Cloud Liquid Water Content, 198901, 200812, 3, 1 
+579, cmcc, cm, cli, Cloud Ice Water Content, 198901, 200812, 3, 1 
+580, cmcc, cm, cl, Cloud Area Fraction, 199901, 200812, 3, % 
+581, cmcc, cm, va, Northward Wind, 197901, 200812, 3, m s-1 
+582, cmcc, cm, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+583, cmcc, cm, tas, Near-Surface Air Temperature, 197901, 200812, 2, K 
+584, cmcc, cm, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+585, cmcc, cm, zg, Geopotential Height, 197901, 200812, 3, m 
+586, cmcc, cm, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+587, cmcc, cm, prw, Water Vapor Path, 197901, 200812, 2, kg m-2 
+588, cmcc, cm, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+589, cmcc, cm, cli, Cloud Ice Water Content, 197901, 198812, 3, 1 
+590, cmcc, cm, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+591, cmcc, cm, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+592, cmcc, cm, cl, Cloud Area Fraction, 197901, 198812, 3, % 
+593, cmcc, cm, ts, Surface Temperature, 197901, 200812, 2, K 
+594, cmcc, cm, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+595, cmcc, cm, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+596, cmcc, cm, clw, Cloud Liquid Water Content, 197901, 198812, 3, 1 
+597, cmcc, cm, wap, Vertical Wind Velocity in Pressure, 197901, 200812, 3, Pa s-1 
+598, cmcc, cm, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+599, cmcc, cm, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+600, cmcc, cm, hur, Relative Humidity, 197901, 200812, 3, % 
+601, cmcc, cm, hus, Specific Humidity, 197901, 200812, 3, 1 
+602, cmcc, cm, cct, Cloud Top Pressure, 197901, 200812, 2, Pa 
+603, cmcc, cm, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+604, cmcc, cm, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+605, cmcc, cm, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+606, cmcc, cm, ta, Air Temperature, 197901, 200812, 3, K 
+607, cmcc, cm, ua, Eastward Wind, 197901, 200812, 3, m s-1 
+608, cmcc, cm, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+609, cnrm, cm5, clw, Cloud Liquid Water Content, 197901, 200812, 3, 1 
+610, cnrm, cm5, cli, Cloud Ice Water Content, 197901, 200812, 3, 1 
+611, cnrm, cm5, cl, Cloud Area Fraction, 197901, 200812, 3, % 
+612, cnrm, cm5, va, Northward Wind, 197901, 200812, 3, m s-1 
+613, cnrm, cm5, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+614, cnrm, cm5, cltcalipso, CALIPSO Total Cloud Fraction, 200801, 200812, 2, % 
+615, cnrm, cm5, tas, Near-Surface Air Temperature, 197901, 200812, 2, K 
+616, cnrm, cm5, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+617, cnrm, cm5, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+618, cnrm, cm5, zg, Geopotential Height, 197901, 200812, 3, m 
+619, cnrm, cm5, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+620, cnrm, cm5, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+621, cnrm, cm5, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+622, cnrm, cm5, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+623, cnrm, cm5, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+624, cnrm, cm5, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+625, cnrm, cm5, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+626, cnrm, cm5, ts, Surface Temperature, 197901, 200812, 2, K 
+627, cnrm, cm5, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+628, cnrm, cm5, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+629, cnrm, cm5, wap, Vertical Wind Velocity in Pressure, 197901, 200812, 3, Pa s-1 
+630, cnrm, cm5, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+631, cnrm, cm5, hurs, Near-Surface Relative Humidity, 197901, 200812, 2, % 
+632, cnrm, cm5, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+633, cnrm, cm5, hur, Relative Humidity, 197901, 200812, 3, % 
+634, cnrm, cm5, hus, Specific Humidity, 197901, 200812, 3, 1 
+635, cnrm, cm5, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+636, cnrm, cm5, prw, Water Vapor Path, 197901, 200812, 2, kg m-2 
+637, cnrm, cm5, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+638, cnrm, cm5, ta, Air Temperature, 197901, 200812, 3, K 
+639, cnrm, cm5, ua, Eastward Wind, 197901, 200812, 3, m s-1 
+640, cnrm, cm5, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+641, fub-dwd, ssmi-meris, prw, Water Vapor Path, 200301, 200812, 2, kg m-2 
+642, iap, fgoals-s2, clw, Cloud Liquid Water Content, 197901, 200812, 3, 1 
+643, iap, fgoals-s2, cli, Cloud Ice Water Content, 197901, 200812, 3, 1 
+644, iap, fgoals-s2, cl, Cloud Area Fraction, 197901, 200812, 3, % 
+645, iap, fgoals-s2, va, Northward Wind, 197901, 200812, 3, m s-1 
+646, iap, fgoals-s2, hur, Relative Humidity, 197901, 200812, 3, % 
+647, iap, fgoals-s2, tas, Near-Surface Air Temperature, 197901, 200812, 2, K 
+648, iap, fgoals-s2, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+649, iap, fgoals-s2, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+650, iap, fgoals-s2, zg, Geopotential Height, 197901, 200812, 3, m 
+651, iap, fgoals-s2, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+652, iap, fgoals-s2, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+653, iap, fgoals-s2, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+654, iap, fgoals-s2, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+655, iap, fgoals-s2, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+656, iap, fgoals-s2, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+657, iap, fgoals-s2, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+658, iap, fgoals-s2, ts, Surface Temperature, 197901, 200812, 2, K 
+659, iap, fgoals-s2, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+660, iap, fgoals-s2, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+661, iap, fgoals-s2, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+662, iap, fgoals-s2, wap, Vertical Wind Velocity in Pressure, 197901, 200812, 3, Pa s-1 
+663, iap, fgoals-s2, hurs, Near-Surface Relative Humidity, 197901, 200812, 2, % 
+664, iap, fgoals-s2, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+665, iap, fgoals-s2, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+666, iap, fgoals-s2, hus, Specific Humidity, 197901, 200812, 3, 1 
+667, iap, fgoals-s2, cct, Cloud Top Pressure, 197901, 200812, 2, Pa 
+668, iap, fgoals-s2, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+669, iap, fgoals-s2, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+670, iap, fgoals-s2, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+671, iap, fgoals-s2, ta, Air Temperature, 197901, 200812, 3, K 
+672, iap, fgoals-s2, ua, Eastward Wind, 197901, 200812, 3, m s-1 
+673, iap, fgoals-s2, prw, Water Vapor Path, 197901, 200812, 2, kg m-2 
+674, mpi, esm-lr, tos, Sea Surface Temperature, 197901, 200512, 2, K 
+675, mpi, esm-lr, clw, Cloud Liquid Water Content, 198001, 200512, 3, 1 
+676, mpi, esm-lr, zos, Sea Surface Height, 197901, 200512, 2, m 
+677, mpi, esm-lr, cli, Cloud Ice Water Content, 198001, 200512, 3, 1 
+678, mpi, esm-lr, cl, Cloud Area Fraction, 198001, 200512, 3, % 
+679, mpi, esm-lr, va, Northward Wind, 185001, 200512, 3, m s-1 
+680, mpi, esm-lr, rsds, Surface Downwelling Shortwave Radiation, 185001, 200512, 2, W m-2 
+681, mpi, esm-lr, cl, Cloud Area Fraction, 185001, 196912, 3, % 
+682, mpi, esm-lr, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 185001, 200512, 2, W m-2 
+683, mpi, esm-lr, uas, Eastward Near-Surface Wind, 185001, 200512, 2, m s-1 
+684, mpi, esm-lr, zg, Geopotential Height, 185001, 200512, 3, m 
+685, mpi, esm-lr, prw, Water Vapor Path, 185001, 200512, 2, kg m-2 
+686, mpi, esm-lr, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 185001, 200512, 2, W m-2 
+687, mpi, esm-lr, rlds, Surface Downwelling Longwave Radiation, 185001, 200512, 2, W m-2 
+688, mpi, esm-lr, pr, Precipitation Flux, 185001, 200512, 2, kg m-2 s-1 
+689, mpi, esm-lr, rlut, TOA Outgoing Longwave Radiation, 185001, 200512, 2, W m-2 
+690, mpi, esm-lr, cltcalipso, CALIPSO Total Cloud Fraction, 197901, 200512, 2, % 
+691, mpi, esm-lr, rlus, Surface Upwelling Longwave Radiation, 185001, 200512, 2, W m-2 
+692, mpi, esm-lr, tos, Sea Surface Temperature, 185001, 200512, 2, K 
+693, mpi, esm-lr, tas, Near-Surface Air Temperature, 185001, 200512, 2, K 
+694, mpi, esm-lr, ts, Surface Temperature, 185001, 200512, 2, K 
+695, mpi, esm-lr, zos, Sea Surface Height, 185001, 200512, 2, m 
+696, mpi, esm-lr, clt, Total Cloud Fraction, 185001, 200512, 2, % 
+697, mpi, esm-lr, vas, Northward Near-Surface Wind, 185001, 200512, 2, m s-1 
+698, mpi, esm-lr, clw, Cloud Liquid Water Content, 185001, 196912, 3, 1 
+699, mpi, esm-lr, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 185001, 200512, 2, W m-2 
+700, mpi, esm-lr, ta, Air Temperature, 185001, 200512, 3, K 
+701, mpi, esm-lr, lai, Leaf Area Index, 185001, 200512, 2, 1 
+702, mpi, esm-lr, cltisccp, ISCCP Total Cloud Fraction (daytime only), 197901, 200512, 2, % 
+703, mpi, esm-lr, rsdt, TOA Incident Shortwave Radiation, 185001, 200512, 2, W m-2 
+704, mpi, esm-lr, hur, Relative Humidity, 185001, 200512, 3, % 
+705, mpi, esm-lr, hus, Specific Humidity, 185001, 200512, 3, 1 
+706, mpi, esm-lr, cli, Cloud Ice Water Content, 185001, 196912, 3, 1 
+707, mpi, esm-lr, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 185001, 200512, 2, W m-2 
+708, mpi, esm-lr, cct, Cloud Top Pressure, 185001, 200512, 2, Pa 
+709, mpi, esm-lr, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 185001, 200512, 2, W m-2 
+710, mpi, esm-lr, sfcWind, Near-Surface Wind Speed, 185001, 200512, 2, m s-1 
+711, mpi, esm-lr, rsut, TOA Outgoing Shortwave Radiation, 185001, 200512, 2, W m-2 
+712, mpi, esm-lr, rsus, Surface Upwelling Shortwave Radiation, 185001, 200512, 2, W m-2 
+713, mpi, esm-lr, wap, Vertical Wind Velocity in Pressure, 185001, 200512, 3, Pa s-1 
+714, mpi, esm-lr, ua, Eastward Wind, 185001, 200512, 3, m s-1 
+715, mri, cgcm3, cl, Cloud Area Fraction, 198001, 200512, 3, % 
+716, mri, cgcm3, tos, Sea Surface Temperature, 197901, 200512, 2, K 
+717, mri, cgcm3, clw, Cloud Liquid Water Content, 198001, 200512, 3, 1 
+718, mri, cgcm3, zos, Sea Surface Height, 197901, 200512, 2, m 
+719, mri, cgcm3, cli, Cloud Ice Water Content, 198001, 200512, 3, 1 
+720, mri, cgcm3, va, Northward Wind, 197001, 200512, 3, m s-1 
+721, mri, cgcm3, hur, Relative Humidity, 185001, 200512, 3, % 
+722, mri, cgcm3, tas, Near-Surface Air Temperature, 185001, 200512, 2, K 
+723, mri, cgcm3, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 185001, 200512, 2, W m-2 
+724, mri, cgcm3, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 185001, 200512, 2, W m-2 
+725, mri, cgcm3, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 185001, 200512, 2, W m-2 
+726, mri, cgcm3, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 185001, 200512, 2, W m-2 
+727, mri, cgcm3, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 185001, 200512, 2, W m-2 
+728, mri, cgcm3, pr, Precipitation Flux, 185001, 200512, 2, kg m-2 s-1 
+729, mri, cgcm3, rlut, TOA Outgoing Longwave Radiation, 185001, 200512, 2, W m-2 
+730, mri, cgcm3, cli, Cloud Ice Water Content, 185001, 196912, 3, 1 
+731, mri, cgcm3, rlus, Surface Upwelling Longwave Radiation, 185001, 200512, 2, W m-2 
+732, mri, cgcm3, tos, Sea Surface Temperature, 185001, 200512, 2, K 
+733, mri, cgcm3, cl, Cloud Area Fraction, 185001, 196912, 3, % 
+734, mri, cgcm3, ts, Surface Temperature, 185001, 200512, 2, K 
+735, mri, cgcm3, zos, Sea Surface Height, 185001, 200512, 2, m 
+736, mri, cgcm3, clt, Total Cloud Fraction, 185001, 200512, 2, % 
+737, mri, cgcm3, vas, Northward Near-Surface Wind, 185001, 200512, 2, m s-1 
+738, mri, cgcm3, clw, Cloud Liquid Water Content, 186001, 196912, 3, 1 
+739, mri, cgcm3, uas, Eastward Near-Surface Wind, 185001, 200512, 2, m s-1 
+740, mri, cgcm3, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 185001, 200512, 2, 1 
+741, mri, cgcm3, zg, Geopotential Height, 197001, 200512, 3, m 
+742, mri, cgcm3, hurs, Near-Surface Relative Humidity, 185001, 200512, 2, % 
+743, mri, cgcm3, rsdt, TOA Incident Shortwave Radiation, 185001, 200512, 2, W m-2 
+744, mri, cgcm3, ta, Air Temperature, 197001, 200512, 3, K 
+745, mri, cgcm3, rsds, Surface Downwelling Shortwave Radiation, 185001, 200512, 2, W m-2 
+746, mri, cgcm3, hus, Specific Humidity, 185001, 200512, 3, 1 
+747, mri, cgcm3, cct, Cloud Top Pressure, 185001, 200512, 2, Pa 
+748, mri, cgcm3, prw, Water Vapor Path, 185001, 200512, 2, kg m-2 
+749, mri, cgcm3, rlds, Surface Downwelling Longwave Radiation, 185001, 200512, 2, W m-2 
+750, mri, cgcm3, rsus, Surface Upwelling Shortwave Radiation, 185001, 200512, 2, W m-2 
+751, mri, cgcm3, wap, Vertical Wind Velocity in Pressure, 197001, 200512, 3, Pa s-1 
+752, mri, cgcm3, ua, Eastward Wind, 197001, 200512, 3, m s-1 
+753, mri, cgcm3, rsut, TOA Outgoing Shortwave Radiation, 185001, 200512, 2, W m-2 
+754, cmcc, cm, clw, Cloud Liquid Water Content, 198901, 200812, 3, 1 
+755, cmcc, cm, cli, Cloud Ice Water Content, 198901, 200812, 3, 1 
+756, cmcc, cm, cl, Cloud Area Fraction, 199901, 200812, 3, % 
+757, cmcc, cm, va, Northward Wind, 197901, 200812, 3, m s-1 
+758, cmcc, cm, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+759, cmcc, cm, tas, Near-Surface Air Temperature, 197901, 200812, 2, K 
+760, cmcc, cm, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+761, cmcc, cm, zg, Geopotential Height, 197901, 200812, 3, m 
+762, cmcc, cm, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+763, cmcc, cm, prw, Water Vapor Path, 197901, 200812, 2, kg m-2 
+764, cmcc, cm, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+765, cmcc, cm, cli, Cloud Ice Water Content, 197901, 198812, 3, 1 
+766, cmcc, cm, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+767, cmcc, cm, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+768, cmcc, cm, cl, Cloud Area Fraction, 197901, 198812, 3, % 
+769, cmcc, cm, ts, Surface Temperature, 197901, 200812, 2, K 
+770, cmcc, cm, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+771, cmcc, cm, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+772, cmcc, cm, clw, Cloud Liquid Water Content, 197901, 198812, 3, 1 
+773, cmcc, cm, wap, Vertical Wind Velocity in Pressure, 197901, 200812, 3, Pa s-1 
+774, cmcc, cm, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+775, cmcc, cm, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+776, cmcc, cm, hur, Relative Humidity, 197901, 200812, 3, % 
+777, cmcc, cm, hus, Specific Humidity, 197901, 200812, 3, 1 
+778, cmcc, cm, cct, Cloud Top Pressure, 197901, 200812, 2, Pa 
+779, cmcc, cm, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+780, cmcc, cm, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+781, cmcc, cm, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+782, cmcc, cm, ta, Air Temperature, 197901, 200812, 3, K 
+783, cmcc, cm, ua, Eastward Wind, 197901, 200812, 3, m s-1 
+784, cmcc, cm, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+785, cmcc, cm, clw, Cloud Liquid Water Content, 198901, 200812, 3, 1 
+786, cmcc, cm, cli, Cloud Ice Water Content, 198901, 200812, 3, 1 
+787, cmcc, cm, cl, Cloud Area Fraction, 199901, 200812, 3, % 
+788, cmcc, cm, va, Northward Wind, 197901, 200812, 3, m s-1 
+789, cmcc, cm, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+790, cmcc, cm, tas, Near-Surface Air Temperature, 197901, 200812, 2, K 
+791, cmcc, cm, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+792, cmcc, cm, zg, Geopotential Height, 197901, 200812, 3, m 
+793, cmcc, cm, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+794, cmcc, cm, prw, Water Vapor Path, 197901, 200812, 2, kg m-2 
+795, cmcc, cm, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+796, cmcc, cm, cli, Cloud Ice Water Content, 197901, 198812, 3, 1 
+797, cmcc, cm, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+798, cmcc, cm, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+799, cmcc, cm, cl, Cloud Area Fraction, 197901, 198812, 3, % 
+800, cmcc, cm, ts, Surface Temperature, 197901, 200812, 2, K 
+801, cmcc, cm, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+802, cmcc, cm, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+803, cmcc, cm, clw, Cloud Liquid Water Content, 197901, 198812, 3, 1 
+804, cmcc, cm, wap, Vertical Wind Velocity in Pressure, 197901, 200812, 3, Pa s-1 
+805, cmcc, cm, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+806, cmcc, cm, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+807, cmcc, cm, hur, Relative Humidity, 197901, 200812, 3, % 
+808, cmcc, cm, hus, Specific Humidity, 197901, 200812, 3, 1 
+809, cmcc, cm, cct, Cloud Top Pressure, 197901, 200812, 2, Pa 
+810, cmcc, cm, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+811, cmcc, cm, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+812, cmcc, cm, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+813, cmcc, cm, ta, Air Temperature, 197901, 200812, 3, K 
+814, cmcc, cm, ua, Eastward Wind, 197901, 200812, 3, m s-1 
+815, cmcc, cm, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+816, cmcc, cm, clw, Cloud Liquid Water Content, 198901, 200812, 3, 1 
+817, cmcc, cm, cli, Cloud Ice Water Content, 198901, 200812, 3, 1 
+818, cmcc, cm, cl, Cloud Area Fraction, 199901, 200812, 3, % 
+819, cmcc, cm, va, Northward Wind, 197901, 200812, 3, m s-1 
+820, cmcc, cm, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+821, cmcc, cm, tas, Near-Surface Air Temperature, 197901, 200812, 2, K 
+822, cmcc, cm, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+823, cmcc, cm, zg, Geopotential Height, 197901, 200812, 3, m 
+824, cmcc, cm, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+825, cmcc, cm, prw, Water Vapor Path, 197901, 200812, 2, kg m-2 
+826, cmcc, cm, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+827, cmcc, cm, cli, Cloud Ice Water Content, 197901, 198812, 3, 1 
+828, cmcc, cm, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+829, cmcc, cm, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+830, cmcc, cm, cl, Cloud Area Fraction, 197901, 198812, 3, % 
+831, cmcc, cm, ts, Surface Temperature, 197901, 200812, 2, K 
+832, cmcc, cm, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+833, cmcc, cm, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+834, cmcc, cm, clw, Cloud Liquid Water Content, 197901, 198812, 3, 1 
+835, cmcc, cm, wap, Vertical Wind Velocity in Pressure, 197901, 200812, 3, Pa s-1 
+836, cmcc, cm, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+837, cmcc, cm, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+838, cmcc, cm, hur, Relative Humidity, 197901, 200812, 3, % 
+839, cmcc, cm, hus, Specific Humidity, 197901, 200812, 3, 1 
+840, cmcc, cm, cct, Cloud Top Pressure, 197901, 200812, 2, Pa 
+841, cmcc, cm, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+842, cmcc, cm, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+843, cmcc, cm, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+844, cmcc, cm, ta, Air Temperature, 197901, 200812, 3, K 
+845, cmcc, cm, ua, Eastward Wind, 197901, 200812, 3, m s-1 
+846, cmcc, cm, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+847, cmcc, cm, clw, Cloud Liquid Water Content, 198901, 200812, 3, 1 
+848, cmcc, cm, cli, Cloud Ice Water Content, 198901, 200812, 3, 1 
+849, cmcc, cm, cl, Cloud Area Fraction, 199901, 200812, 3, % 
+850, cmcc, cm, va, Northward Wind, 197901, 200812, 3, m s-1 
+851, cmcc, cm, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+852, cmcc, cm, tas, Near-Surface Air Temperature, 197901, 200812, 2, K 
+853, cmcc, cm, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+854, cmcc, cm, zg, Geopotential Height, 197901, 200812, 3, m 
+855, cmcc, cm, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+856, cmcc, cm, prw, Water Vapor Path, 197901, 200812, 2, kg m-2 
+857, cmcc, cm, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+858, cmcc, cm, cli, Cloud Ice Water Content, 197901, 198812, 3, 1 
+859, cmcc, cm, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+860, cmcc, cm, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+861, cmcc, cm, cl, Cloud Area Fraction, 197901, 198812, 3, % 
+862, cmcc, cm, ts, Surface Temperature, 197901, 200812, 2, K 
+863, cmcc, cm, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+864, cmcc, cm, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+865, cmcc, cm, clw, Cloud Liquid Water Content, 197901, 198812, 3, 1 
+866, cmcc, cm, wap, Vertical Wind Velocity in Pressure, 197901, 200812, 3, Pa s-1 
+867, cmcc, cm, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+868, cmcc, cm, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+869, cmcc, cm, hur, Relative Humidity, 197901, 200812, 3, % 
+870, cmcc, cm, hus, Specific Humidity, 197901, 200812, 3, 1 
+871, cmcc, cm, cct, Cloud Top Pressure, 197901, 200812, 2, Pa 
+872, cmcc, cm, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+873, cmcc, cm, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+874, cmcc, cm, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+875, cmcc, cm, ta, Air Temperature, 197901, 200812, 3, K 
+876, cmcc, cm, ua, Eastward Wind, 197901, 200812, 3, m s-1 
+877, cmcc, cm, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+878, cmcc, cm, clw, Cloud Liquid Water Content, 198901, 200812, 3, 1 
+879, cmcc, cm, cli, Cloud Ice Water Content, 198901, 200812, 3, 1 
+880, cmcc, cm, cl, Cloud Area Fraction, 199901, 200812, 3, % 
+881, cmcc, cm, va, Northward Wind, 197901, 200812, 3, m s-1 
+882, cmcc, cm, rsds, Surface Downwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+883, cmcc, cm, tas, Near-Surface Air Temperature, 197901, 200812, 2, K 
+884, cmcc, cm, uas, Eastward Near-Surface Wind, 197901, 200812, 2, m s-1 
+885, cmcc, cm, zg, Geopotential Height, 197901, 200812, 3, m 
+886, cmcc, cm, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 197901, 200812, 2, W m-2 
+887, cmcc, cm, prw, Water Vapor Path, 197901, 200812, 2, kg m-2 
+888, cmcc, cm, pr, Precipitation Flux, 197901, 200812, 2, kg m-2 s-1 
+889, cmcc, cm, cli, Cloud Ice Water Content, 197901, 198812, 3, 1 
+890, cmcc, cm, rlus, Surface Upwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+891, cmcc, cm, rlds, Surface Downwelling Longwave Radiation, 197901, 200812, 2, W m-2 
+892, cmcc, cm, cl, Cloud Area Fraction, 197901, 198812, 3, % 
+893, cmcc, cm, ts, Surface Temperature, 197901, 200812, 2, K 
+894, cmcc, cm, clt, Total Cloud Fraction, 197901, 200812, 2, % 
+895, cmcc, cm, vas, Northward Near-Surface Wind, 197901, 200812, 2, m s-1 
+896, cmcc, cm, clw, Cloud Liquid Water Content, 197901, 198812, 3, 1 
+897, cmcc, cm, wap, Vertical Wind Velocity in Pressure, 197901, 200812, 3, Pa s-1 
+898, cmcc, cm, rlut, TOA Outgoing Longwave Radiation, 197901, 200812, 2, W m-2 
+899, cmcc, cm, rsdt, TOA Incident Shortwave Radiation, 197901, 200812, 2, W m-2 
+900, cmcc, cm, hur, Relative Humidity, 197901, 200812, 3, % 
+901, cmcc, cm, hus, Specific Humidity, 197901, 200812, 3, 1 
+902, cmcc, cm, cct, Cloud Top Pressure, 197901, 200812, 2, Pa 
+903, cmcc, cm, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 197901, 200812, 2, W m-2 
+904, cmcc, cm, sfcWind, Near-Surface Wind Speed, 197901, 200812, 2, m s-1 
+905, cmcc, cm, rsus, Surface Upwelling Shortwave Radiation, 197901, 200812, 2, W m-2 
+906, cmcc, cm, ta, Air Temperature, 197901, 200812, 3, K 
+907, cmcc, cm, ua, Eastward Wind, 197901, 200812, 3, m s-1 
+908, cmcc, cm, rsut, TOA Outgoing Shortwave Radiation, 197901, 200812, 2, W m-2 
+909, nasa, grace, zl, Equivalent Water Height Over Land, 200301, 201112, 2, cm 
+910, nasa, grace, zo, Equivalent Water Height Over Ocean, 200301, 201112, 2, cm 
+911, nasa, modis, cltday, Daytime Total Cloud Area Fraction, 200003, 201512, 2, 1 
+912, nasa, modis, lai, Leaf Area Index, 200002, 200912, 2, 1 
+913, nasa, modis, tauiday, Daytime Ice Cloud Optical Thickness, 200003, 201512, 2, 1 
+914, nasa, modis, cltiday, Daytime Total Ice Cloud Area Fraction, 200003, 201512, 2, 1 
+915, nasa, modis, taulday, Daytime Liquid Cloud Optical Thickness, 200003, 201512, 2, 1 
+916, nasa, modis, reflciday, Daytime Cirrus Reflectance, 200003, 201512, 2, 1 
+917, nasa, modis, cltlday, Daytime Total Liquid Cloud Area Fraction, 200003, 201512, 2, 1 
+918, nasa, modis, clt, Total Cloud Fraction, 200003, 201109, 2, % 
+919, nasa, modis, taucday, Daytime Ice/Liquid Combined Cloud Optical Thickness, 200003, 201512, 2, 1 
+920, nasa, modis, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 200003, 201212, 2, 1 
+921, nasa, amsre, tos, Sea Surface Temperature, 200206, 201012, 2, K 
+922, nasa, trmm, pr, Precipitation Flux, 199801, 201312, 2, kg m-2 s-1 
+923, nasa, gpcp, pr, Precipitation Flux, 197901, 201106, 2, kg m-2 s-1 
+924, nasa, quikscat, uas, Eastward Near-Surface Wind, 199908, 200910, 2, m s-1 
+925, nasa, quikscat, vas, Northward Near-Surface Wind, 199908, 200910, 2, m s-1 
+926, nasa, quikscat, sfcWind, Near-Surface Wind Speed, 199908, 200910, 2, m s-1 
+927, nasa, aviso, zos, Sea Surface Height, 199210, 201012, 2, m 
+928, noaa, nodc, ohc2000, Ocean Heat Content Anomaly within 2000 m Depth, 200501, 201212, 2, 1e18 joules 
+929, noaa, nodc, ohc700, Ocean Heat Content Anomaly within 700 m Depth, 195501, 201212, 2, 1e18 joules 
+930, nasa, ceres, rlut, TOA Outgoing Longwave Radiation, 200003, 201206, 2, W m-2 
+931, nasa, ceres, rlus, Surface Upwelling Longwave Radiation, 200003, 201002, 2, W m-2 
+932, nasa, ceres, rlutcs, TOA Outgoing Clear-Sky Longwave Radiation, 200003, 201206, 2, W m-2 
+933, nasa, ceres, rsuscs, Surface Upwelling Clear-Sky Shortwave Radiation, 200003, 201002, 2, W m-2 
+934, nasa, ceres, rsdscs, Surface Downwelling Clear-Sky Shortwave Radiation, 200003, 201002, 2, W m-2 
+935, nasa, ceres, rsdt, TOA Incident Shortwave Radiation, 200003, 201206, 2, W m-2 
+936, nasa, ceres, rsutcs, TOA Outgoing Clear-Sky Shortwave Radiation, 200003, 201206, 2, W m-2 
+937, nasa, ceres, rldscs, Surface Downwelling Clear-Sky Longwave Radiation, 200003, 201002, 2, W m-2 
+938, nasa, ceres, rsds, Surface Downwelling Shortwave Radiation, 200003, 201002, 2, W m-2 
+939, nasa, ceres, rlds, Surface Downwelling Longwave Radiation, 200003, 201002, 2, W m-2 
+940, nasa, ceres, rsus, Surface Upwelling Shortwave Radiation, 200003, 201002, 2, W m-2 
+941, nasa, ceres, rsut, TOA Outgoing Shortwave Radiation, 200003, 201206, 2, W m-2 
+942, nasa, airs, hus, Specific Humidity, 200209, 201105, 3, 1 
+943, nasa, airs, ta, Air Temperature, 200209, 201105, 3, K 
+944, nasa, mls, ta, Air Temperature, 200408, 201012, 3, K 
+945, nasa, mls, hus, Specific Humidity, 200408, 201012, 3, 1 
+946, nasa, mls, ta, Air Temperature, 200408, 201012, 3, K 
+947, nasa, mls, cli, Cloud Ice Water Content, 200408, 201512, 3, 1 
+948, nasa, mls, hus, Specific Humidity, 200408, 201012, 3, 1 
+949, nasa, misr, od550aer, Ambient Aerosol Optical Thickness at 550 nm, 200003, 201212, 2, 1 
+950, argo, argo, ot, Ocean Temperature, 200101, 201305, 3, K 
+951, argo, argo, os, Ocean Salinity, 200101, 201305, 3, psu 
+952, argo, argo, ot, Ocean Temperature, 200101, 201305, 3, K 
+953, argo, argo, os, Ocean Salinity, 200101, 201305, 3, psu 
+954, uoe, atsr, tos, Sea Surface Temperature, 199701, 201112, 2, K 
+955, wcrp, isccp, cltisccp, ISCCP Total Cloud Fraction (daytime only), 198307, 200806, 2, % 
+956, ecmwf, interim, va, Northward Wind, 197901, 201512, 3, m s-1 
+957, ecmwf, interim, cl, Cloud Area Fraction, 197901, 201512, 3, % 
+958, ecmwf, interim, tos, Sea Surface Temperature, 197901, 201402, 2, K 
+959, ecmwf, interim, uas, Eastward Near-Surface Wind, 197901, 201605, 2, m s-1 
+960, ecmwf, interim, gz, Geopotential, 197901, 201512, 3, m**2 s**-2 
+961, ecmwf, interim, sfcWind, Near-Surface Wind Speed, 197901, 201605, 2, m s-1 
+962, ecmwf, interim, hur, Relative Humidity, 197901, 201402, 3, % 
+963, ecmwf, interim, hus, Specific Humidity, 197901, 201512, 3, 1 
+964, ecmwf, interim, clt, Total Cloud Fraction, 197901, 201404, 2, % 
+965, ecmwf, interim, vas, Northward Near-Surface Wind, 197901, 201605, 2, m s-1 
+966, ecmwf, interim, wap, Vertical Wind Velocity in Pressure, 197901, 201402, 3, Pa s-1 
+967, ecmwf, interim, ua, Eastward Wind, 197901, 201512, 3, m s-1 
+968, ecmwf, interim, ta, Air Temperature, 197901, 201512, 3, K 
+969, wrf, co-kf, pr, Precipitation Flux, 200401, 200412, 2, kg m-2 s-1 
+970, wrf, co-kf, va, Northward Wind, 200401, 200412, 3, m s-1 
+971, wrf, co-kf, w, Vertical Wind Velocity, 200401, 200412, 3, m s-1 
+972, wrf, co-kf, rlut, TOA Outgoing Longwave Radiation, 200401, 200412, 2, W m-2 
+973, wrf, co-kf, cl, Cloud Area Fraction, 200401, 200412, 3, % 
+974, wrf, co-kf, th, Potential Temperature, 200401, 200412, 3, K 
+975, wrf, co-kf, hus, Specific Humidity, 200401, 200412, 3, 1 
+976, wrf, co-kf, ua, Eastward Wind, 200401, 200412, 3, m s-1 
+977, wrf, co-kf, rsut, TOA Outgoing Shortwave Radiation, 200401, 200412, 2, W m-2 
+978, wrf, co-tie, pr, Precipitation Flux, 200401, 200412, 2, kg m-2 s-1 
+979, wrf, co-tie, va, Northward Wind, 200401, 200412, 3, m s-1 
+980, wrf, co-tie, w, Vertical Wind Velocity, 200401, 200412, 3, m s-1 
+981, wrf, co-tie, cl, Cloud Area Fraction, 200401, 200412, 3, % 
+982, wrf, co-tie, rlut, TOA Outgoing Longwave Radiation, 200401, 200412, 2, W m-2 
+983, wrf, co-tie, th, Potential Temperature, 200401, 200412, 3, K 
+984, wrf, co-tie, hus, Specific Humidity, 200401, 200412, 3, 1 
+985, wrf, co-tie, ua, Eastward Wind, 200401, 200412, 3, m s-1 
+986, wrf, co-tie, rsut, TOA Outgoing Shortwave Radiation, 200401, 200412, 2, W m-2 
+987, wrf, mp-mor, pr, Precipitation Flux, 200401, 200412, 2, kg m-2 s-1 
+988, wrf, mp-mor, va, Northward Wind, 200401, 200412, 3, m s-1 
+989, wrf, mp-mor, w, Vertical Wind Velocity, 200401, 200412, 3, m s-1 
+990, wrf, mp-mor, cl, Cloud Area Fraction, 200401, 200412, 3, % 
+991, wrf, mp-mor, rlut, TOA Outgoing Longwave Radiation, 200401, 200412, 2, W m-2 
+992, wrf, mp-mor, th, Potential Temperature, 200401, 200412, 3, K 
+993, wrf, mp-mor, hus, Specific Humidity, 200401, 200412, 3, 1 
+994, wrf, mp-mor, ua, Eastward Wind, 200401, 200412, 3, m s-1 
+995, wrf, mp-mor, rsut, TOA Outgoing Shortwave Radiation, 200401, 200412, 2, W m-2 
+996, wrf, mp-wdm, pr, Precipitation Flux, 200401, 200412, 2, kg m-2 s-1 
+997, wrf, mp-wdm, va, Northward Wind, 200401, 200412, 3, m s-1 
+998, wrf, mp-wdm, w, Vertical Wind Velocity, 200401, 200412, 3, m s-1 
+999, wrf, mp-wdm, cl, Cloud Area Fraction, 200401, 200412, 3, % 
+1000, wrf, mp-wdm, rlut, TOA Outgoing Longwave Radiation, 200401, 200412, 2, W m-2 
+1001, wrf, mp-wdm, th, Potential Temperature, 200401, 200412, 3, K 
+1002, wrf, mp-wdm, hus, Specific Humidity, 200401, 200412, 3, 1 
+1003, wrf, mp-wdm, ua, Eastward Wind, 200401, 200412, 3, m s-1 
+1004, wrf, mp-wdm, rsut, TOA Outgoing Shortwave Radiation, 200401, 200412, 2, W m-2 
+1005, wrf, pbl-nn2, pr, Precipitation Flux, 200401, 200412, 2, kg m-2 s-1 
+1006, wrf, pbl-nn2, va, Northward Wind, 200401, 200412, 3, m s-1 
+1007, wrf, pbl-nn2, th, Potential Temperature, 200401, 200412, 3, K 
+1008, wrf, pbl-nn2, rlut, TOA Outgoing Longwave Radiation, 200401, 200412, 2, W m-2 
+1009, wrf, pbl-nn2, cl, Cloud Area Fraction, 200401, 200412, 3, % 
+1010, wrf, pbl-nn2, w, Vertical Wind Velocity, 200401, 200412, 3, m s-1 
+1011, wrf, pbl-nn2, hus, Specific Humidity, 200401, 200412, 3, 1 
+1012, wrf, pbl-nn2, ua, Eastward Wind, 200401, 200412, 3, m s-1 
+1013, wrf, pbl-nn2, rsut, TOA Outgoing Shortwave Radiation, 200401, 200412, 2, W m-2 
+1014, wrf, pbl-ysu, pr, Precipitation Flux, 200401, 200412, 2, kg m-2 s-1 
+1015, wrf, pbl-ysu, va, Northward Wind, 200401, 200412, 3, m s-1 
+1016, wrf, pbl-ysu, th, Potential Temperature, 200401, 200412, 3, K 
+1017, wrf, pbl-ysu, cl, Cloud Area Fraction, 200401, 200412, 3, % 
+1018, wrf, pbl-ysu, rlut, TOA Outgoing Longwave Radiation, 200401, 200412, 2, W m-2 
+1019, wrf, pbl-ysu, w, Vertical Wind Velocity, 200401, 200412, 3, m s-1 
+1020, wrf, pbl-ysu, hus, Specific Humidity, 200401, 200412, 3, 1 
+1021, wrf, pbl-ysu, ua, Eastward Wind, 200401, 200412, 3, m s-1 
+1022, wrf, pbl-ysu, rsut, TOA Outgoing Shortwave Radiation, 200401, 200412, 2, W m-2 
+1023, wrf, ra-cam, pr, Precipitation Flux, 200401, 200412, 2, kg m-2 s-1 
+1024, wrf, ra-cam, rlut, TOA Outgoing Longwave Radiation, 200401, 200412, 2, W m-2 
+1025, wrf, ra-cam, th, Potential Temperature, 200401, 200412, 3, K 
+1026, wrf, ra-cam, va, Northward Wind, 200401, 200412, 3, m s-1 
+1027, wrf, ra-cam, cl, Cloud Area Fraction, 200401, 200412, 3, % 
+1028, wrf, ra-cam, w, Vertical Wind Velocity, 200401, 200412, 3, m s-1 
+1029, wrf, ra-cam, hus, Specific Humidity, 200401, 200412, 3, 1 
+1030, wrf, ra-cam, ua, Eastward Wind, 200401, 200412, 3, m s-1 
+1031, wrf, ra-cam, rsut, TOA Outgoing Shortwave Radiation, 200401, 200412, 2, W m-2 
+1032, wrf, st, pr, Precipitation Flux, 200401, 200412, 2, kg m-2 s-1 
+1033, wrf, st, rlut, TOA Outgoing Longwave Radiation, 200401, 200412, 2, W m-2 
+1034, wrf, st, w, Vertical Wind Velocity, 200401, 200412, 3, m s-1 
+1035, wrf, st, va, Northward Wind, 200401, 200412, 3, m s-1 
+1036, wrf, st, cl, Cloud Area Fraction, 200401, 200412, 3, % 
+1037, wrf, st, th, Potential Temperature, 200401, 200412, 3, K 
+1038, wrf, st, hus, Specific Humidity, 200401, 200412, 3, 1 
+1039, wrf, st, ua, Eastward Wind, 200401, 200412, 3, m s-1 
+1040, wrf, st, rsut, TOA Outgoing Shortwave Radiation, 200401, 200412, 2, W m-2 

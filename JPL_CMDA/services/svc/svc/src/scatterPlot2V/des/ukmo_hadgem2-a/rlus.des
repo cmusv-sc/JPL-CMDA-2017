@@ -1,0 +1,178 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'HadGEM2-A model output prepared for CMIP5 AMIP',
+   D_T0TIME      = '01-Sep-1978 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_199501-199512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  5895.0000,
+   S_END         =  6225.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_199601-199612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  6255.0000,
+   S_END         =  6585.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_199701-199712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  6615.0000,
+   S_END         =  6945.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_199801-199812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  6975.0000,
+   S_END         =  7305.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_199901-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  7335.0000,
+   S_END         =  7665.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200001-200012.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  7695.0000,
+   S_END         =  8025.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200101-200112.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  8055.0000,
+   S_END         =  8385.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200201-200212.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  8415.0000,
+   S_END         =  8745.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200301-200312.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  8775.0000,
+   S_END         =  9105.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200401-200412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9135.0000,
+   S_END         =  9465.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200501-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9495.0000,
+   S_END         =  9825.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200601-200612.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       =  9855.0000,
+   S_END         = 10185.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200701-200712.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 10215.0000,
+   S_END         = 10545.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200801-200811.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 10575.0000,
+   S_END         = 10875.0000,
+   S_DELTA       =    30.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/ukmo/hadgem2-a/break/rlus_Amon_HadGEM2-A_amip_r1i1p1_200812-200812.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 10905.0000,
+   S_END         = 10905.0000,
+   S_DELTA       =     1.0000,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

@@ -1,0 +1,1 @@
+/mnt/hgfs/cmacws/data1/data/cmip5/nasa/grace/./zo_GRACE_L3_v_xxx_200301-201112.nc

@@ -1,0 +1,265 @@
+On branch master
+Your branch and 'origin/master' have diverged,
+and have 3 and 12 different commits each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   frontend/data/db.h2.db
+	modified:   frontend/logs/application.log
+	modified:   frontend/project/target/streams/$global/ivyConfiguration/$global/out
+	modified:   frontend/project/target/streams/$global/update/$global/inputs
+	modified:   frontend/project/target/streams/$global/update/$global/out
+	modified:   frontend/project/target/streams/$global/update/$global/output
+	modified:   frontend/project/target/streams/compile/exportedProducts/$global/export
+	modified:   frontend/project/target/streams/runtime/dependencyClasspath/$global/export
+	modified:   frontend/project/target/streams/runtime/exportedProducts/$global/export
+	modified:   frontend/project/target/streams/runtime/fullClasspath/$global/export
+	modified:   frontend/project/target/streams/runtime/internalDependencyClasspath/$global/export
+	modified:   frontend/public/html/EOF.html
+	modified:   frontend/public/html/anomaly.html
+	modified:   frontend/public/html/conditionalPdf.html
+	modified:   frontend/public/html/correlationMap.html
+	modified:   frontend/public/html/diffPlot2Vars.html
+	modified:   frontend/public/html/js2/common.js
+	modified:   frontend/public/html/randomForest.html
+	modified:   frontend/public/html/scatterPlot2Vars.html
+	modified:   frontend/public/html/temp1.html
+	modified:   frontend/public/html/twoDimMap.html
+	modified:   frontend/public/html/twoDimSlice3D.html
+	modified:   frontend/target/resolution-cache/apachecmda_frontend/apachecmda_frontend_2.10/1.0-SNAPSHOT/resolved.xml.properties
+	modified:   frontend/target/resolution-cache/apachecmda_frontend/apachecmda_frontend_2.10/1.0-SNAPSHOT/resolved.xml.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-compile-internal.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-compile.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-docs.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-echo-sigar.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-echo-trace-compile.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-echo-trace-test.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-echo-weave.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-optional.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-plugin.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-pom.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-provided.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-runtime-internal.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-runtime.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-scala-tool.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-sources.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-test-internal.xml
+	modified:   frontend/target/resolution-cache/reports/apachecmda_frontend-apachecmda_frontend_2.10-test.xml
+	modified:   frontend/target/scala-2.10/classes/public/html/correlationMap.html
+	modified:   frontend/target/scala-2.10/classes/public/html/diffPlot2Vars.html
+	modified:   frontend/target/scala-2.10/classes/public/html/js2/common.js
+	modified:   frontend/target/scala-2.10/classes/public/html/scatterPlot2Vars.html
+	modified:   frontend/target/scala-2.10/classes/public/html/twoDimMap.html
+	modified:   frontend/target/scala-2.10/classes/public/html/twoDimSlice3D.html
+	modified:   frontend/target/scala-2.10/src_managed/main/controllers/routes.java
+	modified:   frontend/target/scala-2.10/src_managed/main/routes_reverseRouting.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/routes_routing.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/aboutProject.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/aboutus.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/addClimateServices.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/bugReporting.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/bugs.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/climateServices.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/dataRecommend.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/dataSetList.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/datasetTime.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/header.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/home.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/main.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/mostPopularServices.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/mostRecentlyAddedServices.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/mostRecentlyUsedServices.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/oneService.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/recommend.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/searchDataSet.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/climate/tutorial.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/flash_message.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/index.template.scala
+	modified:   frontend/target/scala-2.10/src_managed/main/views/html/main.template.scala
+	modified:   frontend/target/streams/$global/$global/$global/out
+	modified:   frontend/target/streams/$global/ivyConfiguration/$global/out
+	modified:   frontend/target/streams/$global/playCopyAssets/$global/out
+	modified:   frontend/target/streams/$global/update/$global/inputs
+	modified:   frontend/target/streams/$global/update/$global/out
+	modified:   frontend/target/streams/$global/update/$global/output
+	modified:   frontend/target/streams/compile/compile/$global/export
+	modified:   frontend/target/streams/compile/copyResources/$global/copy-resources
+	modified:   frontend/target/streams/compile/copyResources/$global/out
+	modified:   frontend/target/streams/compile/dependencyClasspath/$global/export
+	modified:   frontend/target/streams/compile/exportedProducts/$global/export
+	modified:   frontend/target/streams/compile/externalDependencyClasspath/$global/export
+	modified:   frontend/target/streams/compile/incCompileSetup/$global/inc_compile
+	modified:   frontend/target/streams/compile/managedClasspath/$global/export
+	modified:   frontend/target/streams/compile/unmanagedClasspath/$global/export
+	modified:   frontend/target/streams/compile/unmanagedJars/$global/export
+	modified:   frontend/target/streams/runtime/exportedProducts/$global/export
+	modified:   frontend/target/streams/runtime/internalDependencyClasspath/$global/export
+	modified:   services/svc/svc/services/entry.py
+	modified:   services/svc/svc/src/EOF/pythonWrapper
+	modified:   services/svc/svc/src/anomaly/pythonWrapper
+	modified:   services/svc/svc/src/randomForest/pythonWrapper
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	frontend/data/db.lock.db
+	frontend/project/project/target/config-classes/$45d925fd0da7c302e938$.class
+	frontend/project/project/target/config-classes/$45d925fd0da7c302e938.cache
+	frontend/project/project/target/config-classes/$45d925fd0da7c302e938.class
+	frontend/project/project/target/config-classes/$75cf3f765c45cef0dd7b$$anonfun$$sbtdef$1.class
+	frontend/project/project/target/config-classes/$75cf3f765c45cef0dd7b$.class
+	frontend/project/project/target/config-classes/$75cf3f765c45cef0dd7b.cache
+	frontend/project/project/target/config-classes/$75cf3f765c45cef0dd7b.class
+	frontend/project/project/target/config-classes/$ace231bc8841b947a952$.class
+	frontend/project/project/target/config-classes/$ace231bc8841b947a952.cache
+	frontend/project/project/target/config-classes/$ace231bc8841b947a952.class
+	frontend/project/project/target/config-classes/$c2f40aab663ec13900c6$.class
+	frontend/project/project/target/config-classes/$c2f40aab663ec13900c6.cache
+	frontend/project/project/target/config-classes/$c2f40aab663ec13900c6.class
+	frontend/project/project/target/config-classes/$c51b312c2b3e5ffbd7d8$.class
+	frontend/project/project/target/config-classes/$c51b312c2b3e5ffbd7d8.cache
+	frontend/project/project/target/config-classes/$c51b312c2b3e5ffbd7d8.class
+	frontend/project/project/target/config-classes/$dc6b9d00da3d3d78f98f$$anonfun$$sbtdef$1.class
+	frontend/project/project/target/config-classes/$dc6b9d00da3d3d78f98f$.class
+	frontend/project/project/target/config-classes/$dc6b9d00da3d3d78f98f.cache
+	frontend/project/project/target/config-classes/$dc6b9d00da3d3d78f98f.class
+	frontend/project/project/target/config-classes/$f8ff959c8d5f6aef8b62$.class
+	frontend/project/project/target/config-classes/$f8ff959c8d5f6aef8b62.cache
+	frontend/project/project/target/config-classes/$f8ff959c8d5f6aef8b62.class
+	frontend/project/target/config-classes/$50a97d22efe5efad2908$.class
+	frontend/project/target/config-classes/$50a97d22efe5efad2908.cache
+	frontend/project/target/config-classes/$50a97d22efe5efad2908.class
+	frontend/project/target/config-classes/$a136f70d50b1486b22f8$$anonfun$$sbtdef$1.class
+	frontend/project/target/config-classes/$a136f70d50b1486b22f8$.class
+	frontend/project/target/config-classes/$a136f70d50b1486b22f8.cache
+	frontend/project/target/config-classes/$a136f70d50b1486b22f8.class
+	frontend/project/target/config-classes/$daab78f4a41a4f93f865$.class
+	frontend/project/target/config-classes/$daab78f4a41a4f93f865.cache
+	frontend/project/target/config-classes/$daab78f4a41a4f93f865.class
+	frontend/project/target/config-classes/$dd9de3a60b946d066869$$anonfun$$sbtdef$1.class
+	frontend/project/target/config-classes/$dd9de3a60b946d066869$.class
+	frontend/project/target/config-classes/$dd9de3a60b946d066869.cache
+	frontend/project/target/config-classes/$dd9de3a60b946d066869.class
+	frontend/project/target/config-classes/$feec0cd43527c825072c$$anonfun$$sbtdef$1.class
+	frontend/project/target/config-classes/$feec0cd43527c825072c$.class
+	frontend/project/target/config-classes/$feec0cd43527c825072c.cache
+	frontend/project/target/config-classes/$feec0cd43527c825072c.class
+	frontend/project/target/resolution-cache/default/frontend-build/
+	frontend/project/target/resolution-cache/reports/default-frontend-build-compile-internal.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-compile.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-docs.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-optional.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-plugin.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-pom.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-provided.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-runtime-internal.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-runtime.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-scala-tool.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-sources.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-test-internal.xml
+	frontend/project/target/resolution-cache/reports/default-frontend-build-test.xml
+	frontend/public/html/js2/common-test.js
+	frontend/public/html/js2/common-v4.js
+	frontend/public/html/mapView.html
+	frontend/public/html/mapView1.html
+	frontend/public/html/temp1
+	frontend/public/html/tmp1/
+	frontend/public/html/twoDimSlice3D_.html
+	frontend/target/scala-2.10/cache/frontend/
+	frontend/target/scala-2.10/classes/public/html/EOF.html
+	frontend/target/scala-2.10/classes/public/html/anomaly.html
+	frontend/target/scala-2.10/classes/public/html/cmda_services.html
+	frontend/target/scala-2.10/classes/public/html/conditionalPdf.html
+	frontend/target/scala-2.10/classes/public/html/datasetTable.html
+	frontend/target/scala-2.10/classes/public/html/ddcl/
+	frontend/target/scala-2.10/classes/public/html/group_research_topics.html
+	frontend/target/scala-2.10/classes/public/html/images/
+	frontend/target/scala-2.10/classes/public/html/js2/bootstrap.min.css
+	frontend/target/scala-2.10/classes/public/html/js2/bootstrap.min.js
+	frontend/target/scala-2.10/classes/public/html/js2/common-test.js
+	frontend/target/scala-2.10/classes/public/html/js2/common-v4.js
+	frontend/target/scala-2.10/classes/public/html/js2/jquery.min.js
+	frontend/target/scala-2.10/classes/public/html/mapView.html
+	frontend/target/scala-2.10/classes/public/html/mapView1.html
+	frontend/target/scala-2.10/classes/public/html/randomForest.html
+	frontend/target/scala-2.10/classes/public/html/temp1
+	frontend/target/scala-2.10/classes/public/html/temp1.html
+	frontend/target/scala-2.10/classes/public/html/timeSeries.html
+	frontend/target/scala-2.10/classes/public/html/timeSeriesWorkFlow.html
+	frontend/target/scala-2.10/classes/public/html/tmp1/
+	frontend/target/scala-2.10/classes/public/html/twoDimSlice3D_.html
+	services/svc/.temp1.swo
+	services/svc/.temp1.swp
+	services/svc/svc.pid
+	services/svc/svc/__init__.pyc
+	services/svc/svc/services/__init__.pyc
+	services/svc/svc/services/entry.py.bak
+	services/svc/svc/services/entry.py.edit
+	services/svc/svc/services/entry.py.old
+	services/svc/svc/services/entry.py_save
+	services/svc/svc/services/entry.pyc
+	services/svc/svc/services/list_from_benyang.txt
+	services/svc/svc/services/temp1
+	services/svc/svc/services/tmp.txt
+	services/svc/svc/src/EOF/__init__.pyc
+	services/svc/svc/src/EOF/call_EOF.pyc
+	services/svc/svc/src/__init__.pyc
+	services/svc/svc/src/anomaly/.pythonWrapper.swo
+	services/svc/svc/src/anomaly/.pythonWrapper.swp
+	services/svc/svc/src/anomaly/__init__.pyc
+	services/svc/svc/src/anomaly/call_service.pyc
+	services/svc/svc/src/anomaly/pythonWrapper_
+	services/svc/svc/src/conditionalPdf/__init__.pyc
+	services/svc/svc/src/conditionalPdf/call_service.pyc
+	services/svc/svc/src/conditionalSampling/__init__.pyc
+	services/svc/svc/src/conditionalSampling/call_conditionalSampling.pyc
+	services/svc/svc/src/conditionalSampling2Var/__init__.pyc
+	services/svc/svc/src/conditionalSampling2Var/call_conditionalSampling2Var.pyc
+	services/svc/svc/src/correlationMap/__init__.pyc
+	services/svc/svc/src/correlationMap/call_correlationMap.pyc
+	services/svc/svc/src/py/NC_btang_v4.pyc
+	services/svc/svc/src/py/__init__.pyc
+	services/svc/svc/src/py/cmac.pyc
+	services/svc/svc/src/py/download_file_from_url.py.sav
+	services/svc/svc/src/py/download_file_from_url.pyc
+	services/svc/svc/src/py/pca_v4.pyc
+	services/svc/svc/src/randomForest/__init__.pyc
+	services/svc/svc/src/randomForest/call_randomForest.pyc
+	services/svc/svc/src/regridAndDownload/__init__.pyc
+	services/svc/svc/src/regridAndDownload/call_regridAndDownload.pyc
+	services/svc/svc/src/scatterPlot2V/__init__.pyc
+	services/svc/svc/src/scatterPlot2V/call_scatterPlot2V.pyc
+	services/svc/svc/src/threeDimVerticalProfile/__init__.pyc
+	services/svc/svc/src/threeDimVerticalProfile/call_threeDimVerticalProfile.pyc
+	services/svc/svc/src/threeDimZonalMean/__init__.pyc
+	services/svc/svc/src/threeDimZonalMean/call_threeDimZonalMean.pyc
+	services/svc/svc/src/timeSeries/__init__.pyc
+	services/svc/svc/src/timeSeries/call_timeSeries.pyc
+	services/svc/svc/src/timeSeries/test1
+	services/svc/svc/src/timeSeries2D/__init__.pyc
+	services/svc/svc/src/timeSeries2D/call_timeSeries2D.pyc
+	services/svc/svc/src/timeSeriesWorkFlow/__init__.pyc
+	services/svc/svc/src/timeSeriesWorkFlow/call_timeSeriesWorkFlow.pyc
+	services/svc/svc/src/timeSeriesWorkFlow/ncar_cam5_data1_200001-200412.jpeg
+	services/svc/svc/src/timeSeriesWorkFlow/ncar_cam5_data1_200001-200412.nc
+	services/svc/svc/src/time_bounds/__init__.pyc
+	services/svc/svc/src/time_bounds/getTimeBounds.pyc
+	services/svc/svc/src/twoDimMap/__init__.pyc
+	services/svc/svc/src/twoDimMap/call_twoDimMap.pyc
+	services/svc/svc/src/twoDimSlice3D/__init__.pyc
+	services/svc/svc/src/twoDimSlice3D/call_twoDimSlice3D.pyc
+	services/svc/svc/src/twoDimSlice3D/test1
+	services/svc/svc/src/twoDimZonalMean/__init__.pyc
+	services/svc/svc/src/twoDimZonalMean/call_twoDimZonalMean.pyc
+	services/svc/svc/src/util/readPressureLevels.m.sav
+	services/svc/svc/static/
+	services/svc/svc/views/__init__.pyc
+	services/svc/svc/views/main.pyc
+	services/svc/temp1
+	services/svc/tmp.txt
+	tmp.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")

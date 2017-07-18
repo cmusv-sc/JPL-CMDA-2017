@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <!-- for Bootstrap -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+  <!-- still needed? -->
+<!--
+  <script src="js/jquery.flot.min.js"></script>
+  <script src="js/json2.js"></script>
+  <script src="js/xmisc.js"></script>
+-->
+
+  <!-- cmac related -->
+  <link rel="stylesheet" href="common.css">
+  <script src='js2/dataList1.js'></script>
+  <script src='js2/varList.js'></script>
+  <script src='js2/common.js'></script>
+
+  <title>2D variable time series</title>
+
+  <script>
+
+    var Response = null;
+    var variable1 = "";
+    var variable2 = "";
+
+    var naValue = "-999999";
+    var defaultDataIndex = 0; // not used yet
+
+    
+
+    
+    var pressDf1 = "500";
+    
+    
+
+    
+    var isOnly2d = true;
+    
+
+    
+
+    var displayOpt = 1;
+    displayOpt = displayOpt.toString();
+ 
+    
+    var useQueryStr = true;
+    
+
+    
+      var inputs = {
+'model1':'data1',
+'var1':'var1',
+'lon1':'lon0',
+'lon2':'lon1',
+'lat1':'lat0',
+'lat2':'lat1',
+'startT':'t0',
+'endT':'t1',
+'scale':'scale',
+'purpose':'purpose',
+'Image':'Image',
+'data_url':'data_url',
+};
+
+    
+
+    // called on load or reload
+    window.onload = function() {
+      
+      put_data(1);
+      put_var(1);
+      select_var(1);
+      time_range1();
+      disable_download_button();
+
+      
+      $("#purpose").val("");
+
+      if (typeof useQueryStr == 'undefined') {
+        $("#actionUrl0").hide();
+        $("#showUrl1").hide();
+      } else {
+        processQueryStr(inputs);
+      }
+    }
+
+    $(document).ready(function(){
+      
+      $("a").click(function(event){
+        alert("As you can see, the link no longer took you to jquery.com");
+        event.preventDefault();
+      });
+
+
+      $("#download_data").click(function(event) {
+        var durl = $("#data_url").val();
+        // alert(durl);
+        window.location.assign(durl);
+      });
+
+
+      $("#action1").click(function(event) {
+        if (typeof useQueryStr !== 'undefined') {
+          showUrl(inputs);
+        }
+        Response = null;
+
+        // no data to download yet
+        disable_download_button();
+
+        $("#Response").html("Calculating ...");
+        $("#data_url").html("Calculating ...");
+        $("#Image").html("");
+
+        // form url string
+        var url = "http://" + window.location.hostname + ":8090/svc/timeSeries2D?";
+        // alert("url: " + url);
+
+        var d1 = $("#data1").val();
+        var model1 = d1.replace("/", "_");
+
+        var arglist = "";
+        arglist = arglist.concat("model=");
+        arglist = arglist.concat(model1);
+
+        // alert("arglist: " + arglist);
+
+        var variable1 = $("#var1").val();
+        arglist = arglist.concat("&var=");
+        arglist = arglist.concat(variable1);
+
+        // alert("arglist: " + arglist);
+
+        var t0 = $("#t0").val();
+        var t1 = $("#t1").val();
+
+        t0 = t0.replace("-", "");
+        t1 = t1.replace("-", "");
+
+        arglist = arglist.concat("&start_time=");
+        arglist = arglist.concat(t0);
+
+        arglist = arglist.concat("&end_time=");
+        arglist = arglist.concat(t1);
+
+        // alert("arglist: " + arglist);
+
+        var lon0 = $("#lon0").val();
+        var lon1 = $("#lon1").val();
+        var lat0 = $("#lat0").val();
+        var lat1 = $("#lat1").val();
+
+        arglist = arglist.concat("&lon1=");
+        arglist = arglist.concat(lon0);
+
+        arglist = arglist.concat("&lon2=");
+        arglist = arglist.concat(lon1);
+
+        arglist = arglist.concat("&lat1=");
+        arglist = arglist.concat(lat0);
+
+        arglist = arglist.concat("&lat2=");
+        arglist = arglist.concat(lat1);
+
+        // alert("arglist: " + arglist);
+
+        arglist = arglist.concat("&scale=");
+        var y = document.getElementById("radioLin").checked;
+        // alert(y);
+        if (y == true)
+          arglist = arglist.concat('0');
+        else
+          arglist = arglist.concat('2');
+
+        var purpose = $("#purpose").val();
+        arglist = arglist.concat("&purpose=");
+        arglist = arglist.concat(purpose);
+
+        // url = url + encodeURIComponent(arglist);
+        url = url + encodeURI(arglist);
+        //alert("url: " + url);
+
+        var urlTimeBounds = "http://" + window.location.hostname + ":8090/svc/time_bounds?";
+        var arglistTB = "";
+        arglistTB = arglistTB.concat("serviceType=");
+        arglistTB = arglistTB.concat("1");
+        arglistTB = arglistTB.concat("&source=");
+        arglistTB = arglistTB.concat(d1);
+        arglistTB = arglistTB.concat("&var=");
+        arglistTB = arglistTB.concat(variable1);
+        urlTimeBounds = urlTimeBounds + encodeURI(arglistTB);
+        // alert("urlTimeBounds: " + urlTimeBounds);
+
+
+        $.ajax({
+            type: "GET",
+            url: urlTimeBounds,
+            dataType: "json",
+            data: null,
+            success: function(data, textStatus, xhr) {
+                Response = data;
+                // alert("data: " + data);
+                if (data.success == false) {
+                    // alert(data.error);
+                    Response = null;
+                    var text = JSON.stringify(data, null, 4);
+                    text = "Error in backend: <br>" + text; 
+                    $("#Response").html(text);
+                    $("#data_url").html(text);
+                    return;
+                }
+                var text = JSON.stringify(data, null, 4);
+                // alert("text: " + text);
+                // $("#Response").html("<pre>"+text+"</pre>");
+                // $("#Response").html(text);
+
+                var tb = data.time_bounds;
+                var bds = String(tb).split(",");
+                // alert("tb: " + tb);
+                // alert("bds: " + bds);
+                var lowerT = parseInt(bds[0]);
+                var upperT = parseInt(bds[1]);
+                // alert("lowerT: " + lowerT);
+                // alert("upperT: " + upperT);
+                var t0I = parseInt(t0);
+                var t1I = parseInt(t1);
+                // alert("t0: " + t0I);
+                // alert("t1: " + t1I);
+
+                if ( lowerT == 0 && upperT ==0 ) {
+                  alert("We do not have data for this source and variable configuration.");
+                  return;
+                }
+
+                if (t0I < lowerT && t1I < lowerT ||
+                    t0I > upperT && t1I > upperT) {
+                  alert("We do not have data that span your time range. Try the range inside ["+lowerT+", "+upperT+"].");
+                  return;
+                }
+
+                if (t0I < lowerT && t1I <= upperT) {
+                  alert("Your start year-month is out of bound. It has to be in or later than " + lowerT +
+                        ". We will use the range ["+lowerT+", "+t1I+"] for you.");
+                }
+
+                if (t1I > upperT && t0I >= lowerT) {
+                  alert("Your end year-month is out of bound. It has to be in or earlier than " + upperT +
+                        ". We will use the range ["+t0I+", "+upperT+"] for you.");
+                }
+
+                if (t0I < lowerT && t1I > upperT ) {
+                  alert("Both of your start and end year-months are out of bounds. They have to be in or earlier than " + upperT +
+                        ", and in or later than " + lowerT + ". We will use the range ["+lowerT+", "+upperT+"] for you.");
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+		$("#Response").html("error!");
+		$("#data_url").html("error!");
+                // alert("xhr.status: "+xhr.status);
+                // alert("error status: "+textStatus);
+            },
+            complete: function(xhr, textStatus) {
+                //alert("complete status: "+textStatus);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            data: null,
+            success: function(data, textStatus, xhr) {
+                Response = data;
+                // alert("data: " + data);
+                if (data.success == false) {
+                    // alert(data.error);
+                    Response = null;
+                    var text = JSON.stringify(data, null, 4);
+                    text = "Error in backend: <br>" + text; 
+                    // $("#Response").html("<span style='color:red'>" + text + "</span>");
+                    $("#Response").html(text);
+                    $("#data_url").html(text);
+                    return;
+                }
+                var text = JSON.stringify(data, null, 4);
+                // alert(text);
+                // $("#Response").html("<pre>"+text+"</pre>");
+                $("#Response").html(text);
+
+                var html1 = "<img src='"+data.url+"' width='820'/>";
+                // alert(html1);
+                $("#Image").html(html1);
+
+                // post dataUrl to textarea and enable download button
+                $("#data_url").html(data.dataUrl);
+                enable_download_button();
+                if (typeof useQueryStr !== 'undefined') {
+                  showUrl(inputs);
+                }
+
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                $("#Response").html("error!");
+                $("#data_url").html("error!");
+                // alert("xhr.status: "+xhr.status);
+                // alert("error status: "+textStatus);
+            },
+            complete: function(xhr, textStatus) {
+                //alert("complete status: "+textStatus);
+            }
+        });
+
+      });
+      
+    });
+
+
+
+  </script>
+
+</head>
+
+<body>
+<div class="container-fluid">
+<div class="row center1">
+<div class="col-sm-8 col-sm-offset-2 col-xs-12 color-head">
+<h3>2-D Variable Time Series</h3>
+This service generates a graph of a 2-dimensional variable's time series with monthly averaged values. <br>Select a data source (model or observation), a variable name, a time range, and a spatial range below.
+</div> <!-- col-sm -->
+<div class="col-sm-offset-2">
+</div> <!-- col-sm -->
+</div> <!-- row center1 -->
+
+
+
+<div class="color0">
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Variable
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select name="data1"  id="data1" onchange="put_var(1); select_var(1); time_range1()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select name="var1"  id="var1" onchange="select_var(1); time_range1()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+ 
+
+</div> <!-- color0 -->
+ 
+
+ 
+
+
+ 
+
+
+<div class="color3">
+<div class="row center1 subtitle1" >
+Data Subsetting
+</div> <!-- row -->
+
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id=startYear>start year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="t0" value="2004-01" alt="start" size=7>
+  </div>
+
+  <div class="col-sm-4 right1">
+    <div id=endYear>end year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="t1" value="2004-12" alt="end" size=7>
+  </div>
+</div> <!-- row -->
+
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    start lon (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="lon0" value="0" size=7>
+  </div>
+  <div class="col-sm-4 right1">
+    end lon (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="lon1" value="360" size=7>
+  </div>
+</div> <!-- row -->
+
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    start lat (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="lat0" value="-90" size=7>
+  </div>
+  <div class="col-sm-4 right1">
+    end lat (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="lat1" value="90" size=7>
+  </div>
+</div> <!-- row -->
+
+
+</div> <!-- color3 -->
+
+
+
+
+<div class="color0">
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Display Options:
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6 right1">
+        variable scale: 
+  </div>
+  <div class="col-sm-6 left1">
+        <form>
+          <input type="radio" name="scale1" value="linear" id="radioLin" checked>linear
+          <input type="radio" name="scale1" value="logarithmic" id="radioLog">logarithmic
+        </form>
+  </div>
+</div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+<div class="color2">
+<div class="row">
+  <div class="col-sm-4 right1">
+    Analysis purpose:
+  </div> <!-- col -->
+  <div class="col-sm-8 left1">
+    <form>
+    <textarea name="purpose" id="purpose" rows="4" cols="50"> </textarea>
+    </form>
+  </div> <!-- col -->
+</div> <!-- row -->
+</div> <!-- color2 -->
+
+<div class="color4">
+<div class="row">
+  <div class="col-sm-4 center1">
+    <input id="action1" type="submit" value="Get Plot" style="height:28px"/>
+  </div>
+  <div class="col-sm-4 center1">
+    <button id="showUrl1" onclick="showUrl(inputs)">Show Service URL</button>
+  </div>
+  <div class="col-sm-4 center1">
+    <form>
+      <input id="download_data" type="button" value="Download Data" style="height:28px"/>
+    </form>
+  </div>
+</div> <!-- row -->
+
+</div> <!-- color4 -->
+
+<div class="row" id="actionUrl0">
+  <div class="col-sm-12 center1">
+    <textarea readonly id="actionUrl" >Service URL Here</textarea>
+  </div>
+</div> <!-- row -->
+ 			
+<div class="row" center1>
+  <div class="col-sm-12 center1">
+    <div id="Image">Image Here</div>
+  </div>
+</div> <!-- row -->
+
+<div class="row" >
+  <div class="col-sm-12 center1">
+    <textarea id="data_url" cols="150" rows="1">Data URL Here</textarea>
+  </div>
+</div> <!-- row -->
+
+<div class="row" center1>
+  <div class="col-sm-12 center1">
+    <textarea id="Response" cols="150" rows="6">Service Response Text Here</textarea>
+  </div>
+</div> <!-- row -->
+
+</div> <!-- container -->
+</body>
+</html>

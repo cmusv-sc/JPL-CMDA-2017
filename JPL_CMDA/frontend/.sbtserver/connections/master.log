@@ -1,0 +1,10 @@
+New log file opened at Mon Nov 02 15:38:02 PST 2015 by 11500@Weis-MBP.sv.cmu.local
+Taking next connection to: 57951
+New client attempting to connect on port: 57952-57951
+  Address = /10.0.23.24:57951
+This client on port 57952 has uuid 3b999b30-c605-481e-b044-858c0972882e configName activator humanReadableName Activator protocolVersion 3 featureTags Vector()
+Connected Clients: activator-3b999b30-c605-481e-b044-858c0972882e
+Taking next connection to: 57951
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 57951

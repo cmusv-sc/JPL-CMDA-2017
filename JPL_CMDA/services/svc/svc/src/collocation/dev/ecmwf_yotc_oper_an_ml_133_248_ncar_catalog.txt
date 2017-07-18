@@ -1,0 +1,6 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+ECMWF	YOTC Operational Analysis Model Level, Parameters 133 to 248 (NCAR)	Cloud cover	(0 - 1)
+ECMWF	YOTC Operational Analysis Model Level, Parameters 133 to 248 (NCAR)	Cloud liquid water content	kg kg**-1
+ECMWF	YOTC Operational Analysis Model Level, Parameters 133 to 248 (NCAR)	Cloud ice water content	kg kg**-1
+ECMWF	YOTC Operational Analysis Model Level, Parameters 133 to 248 (NCAR)	Specific humidity	kg kg**-1
+ECMWF	YOTC Operational Analysis Model Level, Parameters 133 to 248 (NCAR)	Ozone mass mixing ratio	kg kg**-1

@@ -1,0 +1,49 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+ECMWF	ERA Interim Daily Pressure Level Fields	Standard deviation of orography	-
+ECMWF	ERA Interim Daily Pressure Level Fields	Ice surface temperature layer 2	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Temperature of snow layer	K
+ECMWF	ERA Interim Daily Pressure Level Fields	10 metre U wind component	m s**-1
+ECMWF	ERA Interim Daily Pressure Level Fields	Skin temperature	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Low cloud cover	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	Ice surface temperature layer 1	K
+ECMWF	ERA Interim Daily Pressure Level Fields	High cloud cover	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	Standard deviation of filtered subgrid orography	m
+ECMWF	ERA Interim Daily Pressure Level Fields	2 metre dewpoint temperature	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Ice surface temperature layer 4	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Volumetric soil water layer 1	m**3 m**-3
+ECMWF	ERA Interim Daily Pressure Level Fields	Soil temperature level 2	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Surface roughness	m
+ECMWF	ERA Interim Daily Pressure Level Fields	Slope of sub-gridscale orography	-
+ECMWF	ERA Interim Daily Pressure Level Fields	Ice surface temperature layer 3	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Volumetric soil water layer 4	m**3 m**-3
+ECMWF	ERA Interim Daily Pressure Level Fields	Soil temperature level 3	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Mean sea level pressure	Pa
+ECMWF	ERA Interim Daily Pressure Level Fields	Angle of sub-gridscale orography	rad
+ECMWF	ERA Interim Daily Pressure Level Fields	Sea surface temperature	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Anisotropy of sub-gridscale orography	-
+ECMWF	ERA Interim Daily Pressure Level Fields	Volumetric soil water layer 3	m**3 m**-3
+ECMWF	ERA Interim Daily Pressure Level Fields	Soil temperature level 4	K
+ECMWF	ERA Interim Daily Pressure Level Fields	10 metre V wind component	m s**-1
+ECMWF	ERA Interim Daily Pressure Level Fields	Soil temperature level 1	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Total cloud cover	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	Land-sea mask	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	Total column water vapour	kg m**-2
+ECMWF	ERA Interim Daily Pressure Level Fields	Skin reservoir content	m of water
+ECMWF	ERA Interim Daily Pressure Level Fields	2 metre temperature	K
+ECMWF	ERA Interim Daily Pressure Level Fields	Type of high vegetation	-
+ECMWF	ERA Interim Daily Pressure Level Fields	Snow density	kg m**-3
+ECMWF	ERA Interim Daily Pressure Level Fields	Volumetric soil water layer 2	m**3 m**-3
+ECMWF	ERA Interim Daily Pressure Level Fields	Albedo	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	High vegetation cover	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	Geopotential	m**2 s**-2
+ECMWF	ERA Interim Daily Pressure Level Fields	Total column ozone	kg m**-2
+ECMWF	ERA Interim Daily Pressure Level Fields	Sea-ice cover	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	Surface pressure	Pa
+ECMWF	ERA Interim Daily Pressure Level Fields	Logarithm of surface roughness length for heat	-
+ECMWF	ERA Interim Daily Pressure Level Fields	Medium cloud cover	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	Total column water	kg m**-2
+ECMWF	ERA Interim Daily Pressure Level Fields	Low vegetation cover	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	Charnock	-
+ECMWF	ERA Interim Daily Pressure Level Fields	Snow albedo	(0 - 1)
+ECMWF	ERA Interim Daily Pressure Level Fields	Snow depth	m of water equivalent
+ECMWF	ERA Interim Daily Pressure Level Fields	Type of low vegetation	-

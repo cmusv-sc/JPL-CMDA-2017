@@ -1,0 +1,8 @@
+mergein.so: mergein.o distance.o
+	gcc -dynamiclib -m32 mergein.o distance.o -lpython2.6 -o _mergein.so
+mergein.o: mergein.c distance.h
+	gcc -c -fPIC -m32 -I/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6/ -O3 mergein.c
+distance.o: distance.c distance.h
+	gcc -c -fPIC -m32 -I/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6/ -O3 distance.c
+clean:
+	rm -f mergein.o distance.o mergein.dylib

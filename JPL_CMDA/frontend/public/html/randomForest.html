@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+
+  
+
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <!-- for Bootstrap -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- /<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+-->
+
+  <script src="js2/jquery.min.js"></script>
+  <link rel="stylesheet" href="js2/bootstrap.min.css">
+  <script src="js2/bootstrap.min.js"></script>
+
+  <!-- cmac related -->
+  <link rel="stylesheet" href="common.css">
+  <script src='js2/dataList2.js'></script>
+  <script src='js2/varList.js'></script>
+  <script src='js2/common-v4.js'></script>
+  <script src='js2/js.cookie-2.1.3.min.js'></script>
+
+  <title>Random Forest Importance</title>
+
+  <script>
+
+  // because they are used in common.js
+  var isNVar = 1;
+  var nVar0 = 11;
+  var nVar = nVar0;
+  var nVarP = 1; 
+  //if ( isNVar==0 ) { nVar = nVar0; }
+  var useQueryStr = 1; 
+
+  var includeDataUrl = true;
+  var DataUrl = "";
+
+var dList = [
+{  "name": "Target Variable", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 1", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 2", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 3", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 4", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 5", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 6", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 7", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 8", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 9", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+{  "name": "Source Variable 10", 
+   "isPressure": 1, 
+   "pressure2url": 1, 
+   "pressureDf": "500", 
+   "pressureDfOcean": "500", 
+   "isPressureRange": 0, 
+   "pressureDfa": "900", 
+   "pressureDfaOcean": "2000", 
+   "only2D": 0, 
+   "only3D": 0,
+   "includeLatLon": 0, 
+   "includeTime": 0, 
+   "pickMonth": 0, 
+},
+];
+
+// format: RestFulName: [htmlId, functionName, additionalParams]
+var inputs = {
+'purpose': ['purpose', 'url2escape'],
+'lonS': ['lonS', 'urlDirect'],
+'lonE': ['lonE', 'urlDirect'],
+'latS': ['latS', 'urlDirect'],
+'latE': ['latE', 'urlDirect'],
+'timeS': ['timeS', 'urlDash'],
+'timeE': ['timeE', 'urlDash'],
+'nVar': ['nVar', 'urlDirect'],
+};
+
+var mapping = {};
+var key99;
+var arg99;
+for (var k in inputs) {
+  key99 = k;
+  arg99 = inputs[k];
+  mapping[k] = eval('new ' + inputs[k][1] + '()');
+}
+
+
+
+
+
+window.onload = function() {
+ addDataList(1); 
+ addVarList(1); 
+ addPres(1); 
+ addDataList(2); 
+ addVarList(2); 
+ addPres(2); 
+ addDataList(3); 
+ addVarList(3); 
+ addPres(3); 
+ addDataList(4); 
+ addVarList(4); 
+ addPres(4); 
+ addDataList(5); 
+ addVarList(5); 
+ addPres(5); 
+ addDataList(6); 
+ addVarList(6); 
+ addPres(6); 
+ addDataList(7); 
+ addVarList(7); 
+ addPres(7); 
+ addDataList(8); 
+ addVarList(8); 
+ addPres(8); 
+ addDataList(9); 
+ addVarList(9); 
+ addPres(9); 
+ addDataList(10); 
+ addVarList(10); 
+ addPres(10); 
+ addDataList(11); 
+ addVarList(11); 
+ addPres(11); 
+
+
+
+
+  disableButton("download_data");
+  enableButton("action1"); 
+
+  if (isNVar==1) {
+    hideVar();
+  }
+
+  if ($("#purpose").val()==" ") {
+    $("#purpose").val("");
+  }
+
+
+
+
+$("#var"+1).change();
+$("#var"+2).change();
+$("#var"+3).change();
+$("#var"+4).change();
+$("#var"+5).change();
+$("#var"+6).change();
+$("#var"+7).change();
+$("#var"+8).change();
+$("#var"+9).change();
+$("#var"+10).change();
+$("#var"+11).change();
+
+processQS4();
+
+}  // onload = function()
+
+$(document).ready(function(){
+
+// remember the last picked variable
+$(".var").click( function() {
+  //console.log(this.id);
+  var id1 = this.id;
+  $("#"+id1).change( function() {
+    $("#"+id1).data("aa", $("#"+id1).val()); 
+  });
+});
+
+$(".inputChange").change(function(){
+displayUrl4();
+disableButton("download_data");
+includeDataUrl = false;
+});
+
+
+
+      $("#download_data").click(function(event) {
+        var durl = $("#data_url").val();
+        // alert(durl);
+        window.location.assign(durl);
+      });
+
+      $("#action1").click(function(event) {
+
+        checkTimeL();
+        checkTimeH();
+
+        displayUrl4();
+
+        Response = null;
+
+        // no data to download yet
+        disableButton("action1");
+        disableButton("download_data");
+
+        $("#Response").val("Calculating ...");
+        $("#data_url").val("Calculating ...");
+        $("#Image").html("Image will appear here.");
+
+        var url = "http://" + window.location.hostname + ":8090/svc/randomForest?";
+        var argList = makeUrl4(true);
+        url = url + argList;
+        console.log("server url:");
+        console.log(url);
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            data: null,
+            success: function(data, textStatus, xhr) {
+                Response = data;
+                // alert("data: " + data);
+                if (data.success == false) {
+                    // alert(data.error);
+                    Response = null;
+                    var text = JSON.stringify(data, null, 4);
+
+                    if (text.indexOf("No Data") != -1) {
+                      $("#Image").val("No Data");
+                      $("#Response").val("No Data");
+                      $("#data_url").val("No Data");
+                      enableButton("action1"); 
+                      return;
+                    }
+
+                    text = "Error in backend: <br>" + text; 
+                    // $("#Response").html("<span style='color:red'>" + text + "</span>");
+                    $("#Response").val(text);
+                    $("#data_url").val("No data file due to backend error.");
+                    enableButton("action1"); 
+                    return;
+                }  // if (data.success == false)
+
+                var text = JSON.stringify(data, null, 4);
+                // alert(text);
+                // $("#Response").html("<pre>"+text+"</pre>");
+                $("#Response").val(text);
+                var html = "<img src='"+data.url+"' />";
+                //var html = "<img src='"+data.url+"' width='820'/>";
+                $("#Image").html(html);
+
+                // post dataUrl to textarea and enable download button
+                $("#data_url").val(data.dataUrl);
+                enableButton("download_data");
+                enableButton("action1"); 
+
+                includeDataUrl = true;
+                dataUrl = data.dataUrl;
+                displayUrl4a();
+
+
+            }, // success: function(data, textStatus, xhr)
+            error: function(xhr, textStatus, errorThrown) {
+                $("#Response").val("error!");
+                $("#data_url").val("error!");
+                enableButton("action1"); 
+                // alert("xhr.status: "+xhr.status);
+                // alert("error status: "+textStatus);
+            },
+            complete: function(xhr, textStatus) {
+                //alert("complete status: "+textStatus);
+            },
+      }); // .ajax
+   }); // action.click
+  });  // ready(function())
+
+  </script>
+
+</head>
+
+<body>
+<div class="container-fluid">
+<div class="row center1">
+<div class="col-sm-8 col-sm-offset-2 col-xs-12 color-head">
+<h3>Service: Random Forest Importance</h3>
+This service computes a random forest model between a target variable and a set of source variables, and then ranks the source variables in terms of their importances in predicting the target variable.
+</div> <!-- col-sm -->
+<div class="col-sm-offset-2">
+</div> <!-- col-sm -->
+</div> <!-- row center1 -->
+
+
+   
+
+
+
+
+
+<div id=dataBlock1 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Target Variable
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data1" class="inputChange" onchange="addVarList(1); addPres(1);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var1" class="inputChange var" onchange="addPres(1);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel1" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres1" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+<div class="color1">
+<div class="row">
+  <div class="col-sm-4 right1">
+    Number of source variables (max 10):
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="nVar" value="2" class="inputChange" autocomplete="off"  size=7 onchange="hideVar()">
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+</div> <!-- color -->
+
+
+
+<div id=dataBlock2 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 1
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data2" class="inputChange" onchange="addVarList(2); addPres(2);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var2" class="inputChange var" onchange="addPres(2);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel2" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres2" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock3 class="color1">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 2
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data3" class="inputChange" onchange="addVarList(3); addPres(3);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var3" class="inputChange var" onchange="addPres(3);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel3" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres3" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock4 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 3
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data4" class="inputChange" onchange="addVarList(4); addPres(4);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var4" class="inputChange var" onchange="addPres(4);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel4" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres4" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock5 class="color1">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 4
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data5" class="inputChange" onchange="addVarList(5); addPres(5);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var5" class="inputChange var" onchange="addPres(5);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel5" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres5" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock6 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 5
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data6" class="inputChange" onchange="addVarList(6); addPres(6);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var6" class="inputChange var" onchange="addPres(6);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel6" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres6" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock7 class="color1">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 6
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data7" class="inputChange" onchange="addVarList(7); addPres(7);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var7" class="inputChange var" onchange="addPres(7);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel7" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres7" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock8 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 7
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data8" class="inputChange" onchange="addVarList(8); addPres(8);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var8" class="inputChange var" onchange="addPres(8);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel8" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres8" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock9 class="color1">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 8
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data9" class="inputChange" onchange="addVarList(9); addPres(9);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var9" class="inputChange var" onchange="addPres(9);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel9" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres9" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock10 class="color0">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 9
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data10" class="inputChange" onchange="addVarList(10); addPres(10);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var10" class="inputChange var" onchange="addPres(10);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel10" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres10" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+
+
+
+<div id=dataBlock11 class="color1">
+
+<div class="row ">
+<div class="col-sm-12 center1 subtitle1">
+Source Variable 10
+</div>
+</div> <!-- row --> 
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   source:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="data11" class="inputChange" onchange="addVarList(11); addPres(11);timeBound(); "></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+<div class="row">
+ <div class="col-sm-4 right1">
+   variable:
+  </div> <!-- col-sm-6 -->
+  <div class="col-sm-8 left1">
+    <select id="var11" class="inputChange var" onchange="addPres(11);timeBound()"></select>
+  </div> <!-- col-sm-6 level2-->
+</div> <!-- row -->
+
+
+
+<div class="row">
+ 
+  <div class="col-sm-4 right1" id="pressureLabel11" >
+    pressure:
+  </div> <!-- col-sm-6 level2-->
+  <div class="col-sm-8 left1">
+    <input id="pres11" class="inputChange" value="500"  size=7>
+  </div> <!-- col-sm-6 level2-->
+ </div> <!-- row -->
+
+</div> <!-- color0 -->
+
+
+ 
+<div class="color3">
+<div class="row center1 subtitle1" >
+Data Subsetting
+</div> <!-- row -->
+
+
+
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    <div id=startYear>start year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeS" value="2004-01" class="inputChange" autocomplete="off" size=7 onchange="checkTimeL()">
+  </div>
+
+  <div class="col-sm-4 right1">
+    <div id=endYear>end year-month:</div>
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="timeE" value="2004-12" class="inputChange" size=7 autocomplete="off" onchange="checkTimeH()">
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    start lon (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="lonS" value="0" class="inputChange" autocomplete="off" size=7>
+  </div>
+  <div class="col-sm-4 right1">
+    end lon (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="lonE" value="360" class="inputChange" autocomplete="off" size=7>
+  </div>
+</div> <!-- row -->
+
+
+<div class="row">
+  <div class="col-sm-4 right1">
+    start lat (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="latS" value="-90" class="inputChange" autocomplete="off" size=7>
+  </div>
+  <div class="col-sm-4 right1">
+    end lat (deg):
+  </div>
+  <div class="col-sm-2 left1">
+    <input id="latE" value="90" class="inputChange" autocomplete="off" size=7>
+  </div>
+</div> <!-- row -->
+
+ </div> <!-- color3 -->
+
+ 
+
+
+
+
+<div class="color2">
+<div class="row">
+  <div class="col-sm-4 right1">
+    Execution purpose:
+  </div> <!-- col -->
+  <div class="col-sm-8 left1">
+    <form>
+    <textarea name="purpose" id="purpose" value="" class="inputChange" rows="4" cols="50"> </textarea>
+    </form>
+  </div> <!-- col -->
+</div> <!-- row -->
+</div> <!-- color2 -->
+
+
+<div class="color4">
+<div class="row">
+  <div class="col-sm-6 center1">
+    <input id="action1" type="submit" value="Get Plot" style="height:28px"/>
+  </div>
+  <div class="col-sm-6 center1">
+    <form>
+      <input id="download_data" type="button" value="Download Data" style="height:28px"/>
+    </form>
+  </div>
+</div> <!-- row -->
+</div> <!-- color4 -->
+
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Browser URL:
+  </div>
+</div>
+<div class="row" id="actionUrl0">
+  <div class="col-sm-12 center1">
+    <textarea id="actionUrl" rows=5></textarea>
+  </div>
+</div> <!-- row -->
+  			
+<div class="row" id="Image0" center1>
+  <div class="col-sm-12 center1">
+    <div id="Image" class="borderedText">Image will be here</div>
+  </div>
+</div> <!-- row -->
+ 
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Data File URL:
+  </div>
+</div>
+<div class="row" >
+  <div class="col-sm-12 center1">
+    <textarea readonly id="data_url" cols="150" rows="2"></textarea>
+  </div>
+</div> <!-- row -->
+
+<div class="row">
+  <div class="col-sm-12 center1 subtitle1">
+    Service Response Text:
+  </div>
+</div>
+<div class="row" center1>
+  <div class="col-sm-12 center1">
+    <textarea id="Response" cols="150" rows="6"></textarea>
+  </div>
+</div> <!-- row -->
+
+</div> <!-- container -->
+</body>
+</html>

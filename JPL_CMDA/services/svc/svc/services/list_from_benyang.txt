@@ -1,0 +1,24 @@
+== ready:
+
+/. 2D map
+/. 3D slice map
+/. scatter
+/. diffPlot
+/. corrMap
+/. eof
+/. random forest
+/. anamaly
+/. conditional pdf
+
+
+== still working on:
+
+.. regridAndDownload
+.. 2D zonal mean
+.. 2D time series
+.. 3D zonal mean
+.. 3D vertical profile
+
+.. conditionalSampling
+.. conditionalSampling2Var
+

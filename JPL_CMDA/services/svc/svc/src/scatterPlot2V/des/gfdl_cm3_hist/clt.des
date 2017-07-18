@@ -1,0 +1,58 @@
+
+*
+* Created by mkdes v1.0
+* 
+ &FORMAT_RECORD
+   D_TYPE        = '  MC',
+   D_FORMAT      = '  1A',
+ /
+
+ &BACKGROUND_RECORD
+   D_TITLE       = 'NOAA GFDL GFDL-CM3, historical (run 1) experiment output for CMIP5 AR5',
+   D_T0TIME      = '01-Jan-1860 00:00:00',
+   D_TIME_UNIT   = 86400.0,
+   D_TIME_MODULO = .false.,
+ /
+
+ &MESSAGE_RECORD
+      D_MESSAGE     = ' ',
+      D_ALERT_ON_OPEN      = F,
+      D_ALERT_ON_OUTPUT    = F,
+ /  
+
+ &EXTRA_RECORD
+ /  
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/cm3_hist/./clt_Amon_GFDL-CM3_historical_r1i1p1_199501-199912.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 49290.5000,
+   S_END         = 51084.5000,
+   S_DELTA       =    30.4068,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/cm3_hist/./clt_Amon_GFDL-CM3_historical_r1i1p1_200001-200412.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 51115.5000,
+   S_END         = 52909.5000,
+   S_DELTA       =    30.4068,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '/mnt/hgfs/cmacws/data1/data/cmip5/gfdl/cm3_hist/./clt_Amon_GFDL-CM3_historical_r1i1p1_200501-200512.nc',
+   S_AUX_SET_NUM = 0,
+   S_START       = 52940.5000,
+   S_END         = 53274.5000,
+   S_DELTA       =    30.3636,
+   S_NUM_OF_FILES       = 1,
+   S_REGVARFLAG  = ' ',
+ /
+
+ &STEPFILE_RECORD
+   S_FILENAME    = '**END OF STEPFILES**'
+ /

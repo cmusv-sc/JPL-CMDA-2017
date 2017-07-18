@@ -1,0 +1,28 @@
+Sensor/Model	Data Product	Variable Name	Variable Unit
+Caliop	40Km Aerosol Profile	Particulate_Depolarization_Ratio_Profile_532	N/A
+Caliop	40Km Aerosol Profile	Temperature	degrees C
+Caliop	40Km Aerosol Profile	Profile_QA_Flag	N/A
+Caliop	40Km Aerosol Profile	Surface_Elevation_Statistics	km
+Caliop	40Km Aerosol Profile	Extinction_Coefficient_Uncertainty_1064	km^-1
+Caliop	40Km Aerosol Profile	Perpendicular_Backscatter_Coefficient_532	sr^-1km^-1
+Caliop	40Km Aerosol Profile	Aerosol_Layer_Fraction	N/A
+Caliop	40Km Aerosol Profile	Aerosol_Multiple_Scattering_Profile_1064	N/A
+Caliop	40Km Aerosol Profile	Particulate_Depolarization_Ratio_Uncertainty_532	N/A
+Caliop	40Km Aerosol Profile	Atmospheric_Volume_Description	N/A
+Caliop	40Km Aerosol Profile	Total_Backscatter_Coefficient_532	sr^-1km^-1
+Caliop	40Km Aerosol Profile	Backscatter_Coefficient_1064	sr^-1km^-1
+Caliop	40Km Aerosol Profile	Relative_Humidity	per
+Caliop	40Km Aerosol Profile	Backscatter_Coefficient_Uncertainty_1064	sr^-1km^-1
+Caliop	40Km Aerosol Profile	Aerosol_Multi_Scattering_Uncertainty_532	N/A
+Caliop	40Km Aerosol Profile	Aerosol_Multi_Scattering_Profile_532	N/A
+Caliop	40Km Aerosol Profile	Samples_Averaged	N/A
+Caliop	40Km Aerosol Profile	Extinction_Coefficient_1064	km^-1
+Caliop	40Km Aerosol Profile	Perpendicular_Backscatter_Coefficient_Uncertainty_532	sr^-1km^-1
+Caliop	40Km Aerosol Profile	Total_Backscatter_Coefficient_Uncertainty_532	sr^-1km^-1
+Caliop	40Km Aerosol Profile	Pressure	hPA
+Caliop	40Km Aerosol Profile	Molecular_Number_Density	m^-3
+Caliop	40Km Aerosol Profile	Tropopause_Temperature	degrees C
+Caliop	40Km Aerosol Profile	Extinction_Coefficient_Uncertainty_532	km^-1
+Caliop	40Km Aerosol Profile	Aerosol_Multiple_Scattering_Uncertainty_1064	N/A
+Caliop	40Km Aerosol Profile	Extinction_Coefficient_532	km^-1
+Caliop	40Km Aerosol Profile	Tropopause_Height	km
